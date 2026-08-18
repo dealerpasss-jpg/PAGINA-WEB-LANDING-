@@ -6,9 +6,6 @@ import { track } from "@/lib/analytics";
 import { marginMethod } from "@/data/margen";
 import CountUp from "@/components/CountUp";
 
-// Prueba temporal: cambia a false para volver al mockup del dashboard.
-const SHOW_HERO_VIDEO = true;
-
 export default function Hero() {
   return (
     <section className="relative overflow-hidden bg-texture-black">
@@ -63,21 +60,8 @@ export default function Hero() {
           initial={{ opacity: 0, scale: 0.96 }}
           animate={{ opacity: 1, scale: 1 }}
           transition={{ duration: 0.6, ease: "easeOut", delay: 0.15 }}
-          className="relative mx-auto w-full max-w-md"
+          className="relative mx-auto hidden w-full max-w-md md:block"
         >
-          {SHOW_HERO_VIDEO ? (
-            <div className="overflow-hidden rounded-card border border-edge bg-black">
-              <video
-                src="/hero-preview.mp4"
-                autoPlay
-                muted
-                loop
-                playsInline
-                className="aspect-[9/16] w-full object-cover"
-              />
-            </div>
-          ) : (
-            <>
           {/* Tarjeta principal: dashboard de evaluación */}
           <div className="card relative z-10">
             <div className="flex items-center justify-between">
@@ -135,8 +119,6 @@ export default function Hero() {
               <div className="h-full w-3/4 rounded-sm bg-neon" />
             </div>
           </div>
-            </>
-          )}
 
           <div aria-hidden className="absolute -right-10 -top-10 -z-10 h-40 w-40 rounded-full bg-neon/10 blur-2xl" />
         </motion.div>

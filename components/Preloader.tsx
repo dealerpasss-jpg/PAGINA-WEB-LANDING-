@@ -1,21 +1,30 @@
 "use client";
 
 import { useEffect, useState } from "react";
-import Logo from "./Logo";
 
-const MIN_DURATION = 1300; // ms — enough to register the brand moment without feeling slow
 const FADE_DURATION = 500; // ms — must match the CSS transition duration below
+const MAX_DURATION = 8000; // ms — safety fallback in case the video fails to load or play
 
 export default function Preloader() {
+  // null = still deciding, true = show (mobile, has video), false = skip (desktop, no video yet)
+  const [shouldShow, setShouldShow] = useState<boolean | null>(null);
   const [hidden, setHidden] = useState(false);
   const [removed, setRemoved] = useState(false);
 
   useEffect(() => {
-    document.body.style.overflow = "hidden";
-
-    const hideTimer = setTimeout(() => setHidden(true), MIN_DURATION);
-    return () => clearTimeout(hideTimer);
+    // Desktop preload video isn't ready yet — only show on mobile-sized viewports for now.
+    const isMobile = window.matchMedia("(max-width: 767px)").matches;
+    setShouldShow(isMobile);
+    if (isMobile) {
+      document.body.style.overflow = "hidden";
+    }
   }, []);
+
+  useEffect(() => {
+    if (!shouldShow) return;
+    const safetyTimer = setTimeout(() => setHidden(true), MAX_DURATION);
+    return () => clearTimeout(safetyTimer);
+  }, [shouldShow]);
 
   useEffect(() => {
     if (!hidden) return;
@@ -24,7 +33,7 @@ export default function Preloader() {
     return () => clearTimeout(removeTimer);
   }, [hidden]);
 
-  if (removed) return null;
+  if (!shouldShow || removed) return null;
 
   return (
     <div
@@ -33,9 +42,14 @@ export default function Preloader() {
       }`}
       aria-hidden={hidden}
     >
-      <div className="preloader-logo-wrap">
-        <Logo variant="dark" className="h-11 sm:h-12" />
-      </div>
+      <video
+        src="/preloader-mobile.mp4"
+        autoPlay
+        muted
+        playsInline
+        onEnded={() => setHidden(true)}
+        className="h-full w-full object-cover"
+      />
     </div>
   );
 }

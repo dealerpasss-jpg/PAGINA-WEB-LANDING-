@@ -170,7 +170,7 @@ h1, h2, h3, h4 {
   .glow-neon { animation: none; }
 }
 
-/* Preloader */
+/* Floating WhatsApp CTA */
 .preloader-overlay {
   transition: opacity 0.5s ease;
   opacity: 1;
@@ -179,40 +179,9 @@ h1, h2, h3, h4 {
   opacity: 0;
   pointer-events: none;
 }
-.preloader-logo-wrap {
-  position: relative;
-  overflow: hidden;
-  display: inline-flex;
-  animation: preloader-pulse 1.8s ease-in-out infinite;
-}
-.preloader-logo-wrap::after {
-  content: "";
-  position: absolute;
-  top: 0;
-  left: -75%;
-  width: 50%;
-  height: 100%;
-  background: linear-gradient(115deg, transparent, rgba(255, 255, 255, 0.55), transparent);
-  transform: skewX(-20deg);
-  animation: preloader-shine 1.8s ease-in-out infinite;
-}
-@keyframes preloader-shine {
-  0% { left: -75%; }
-  55%, 100% { left: 130%; }
-}
-@keyframes preloader-pulse {
-  0%, 100% { transform: scale(1); opacity: 1; }
-  50% { transform: scale(1.04); opacity: 0.92; }
-}
 @media (prefers-reduced-motion: reduce) {
-  .preloader-logo-wrap,
-  .preloader-logo-wrap::after {
-    animation: none;
-  }
   .preloader-overlay { transition: none; }
 }
-
-/* Floating WhatsApp CTA */
 .whatsapp-float {
   position: fixed;
   bottom: 20px;
