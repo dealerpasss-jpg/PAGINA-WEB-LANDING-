@@ -1,0 +1,288 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+:root {
+  --font-display: "Barlow Condensed", sans-serif;
+  --font-body: "Inter", sans-serif;
+  --dealerpass-neon: #DFFF00;
+  --dealerpass-neon-hover: #CBEA00;
+  --dealerpass-black: #101010;
+  --dealerpass-charcoal: #1A1A1A;
+  --dealerpass-cream: #F5F0E6;
+  --dealerpass-gray: #A6A6A0;
+  --dealerpass-border: #343434;
+  --dealerpass-white: #FFFFFF;
+}
+
+html {
+  scroll-behavior: smooth;
+  overflow-x: hidden;
+  max-width: 100vw;
+}
+
+body {
+  @apply bg-cream text-black font-body antialiased;
+  overflow-x: hidden;
+  max-width: 100vw;
+}
+
+h1, h2, h3, h4 {
+  @apply font-display font-extrabold tracking-tight;
+}
+
+::selection {
+  background-color: var(--dealerpass-neon);
+  color: var(--dealerpass-black);
+}
+
+.container-content {
+  @apply mx-auto w-full max-w-content px-5 sm:px-8;
+}
+
+/* Eyebrow labels: neon on dark sections, black on cream sections */
+.eyebrow {
+  @apply inline-flex items-center gap-2 text-xs font-bold uppercase tracking-[0.14em] text-neon;
+}
+.eyebrow-light {
+  @apply inline-flex items-center gap-2 text-xs font-bold uppercase tracking-[0.14em] text-black;
+}
+.eyebrow-light .dot {
+  @apply inline-block h-1.5 w-1.5 rounded-sm bg-neon;
+}
+
+/* Primary CTA: neon fill, black text */
+.btn-primary {
+  @apply relative inline-flex items-center justify-center overflow-hidden rounded-md bg-neon px-6 py-3 text-sm font-bold uppercase tracking-wide text-black transition-all duration-200;
+}
+.btn-primary:hover {
+  background-color: var(--dealerpass-neon-hover);
+  transform: translateY(-2px);
+  box-shadow: 0 10px 24px -8px rgba(223, 255, 0, 0.35);
+}
+
+/* Secondary outline button for use on dark backgrounds */
+.btn-outline {
+  @apply relative inline-flex items-center justify-center overflow-hidden rounded-md border-2 border-cream bg-transparent px-6 py-3 text-sm font-bold uppercase tracking-wide text-cream transition-all duration-200;
+}
+.btn-outline:hover {
+  background-color: var(--dealerpass-cream);
+  color: var(--dealerpass-black);
+  transform: translateY(-2px);
+}
+
+/* Secondary outline button for use on cream backgrounds */
+.btn-outline-dark {
+  @apply relative inline-flex items-center justify-center overflow-hidden rounded-md border-2 border-black/70 bg-transparent px-6 py-3 text-sm font-bold uppercase tracking-wide text-black transition-all duration-200;
+}
+.btn-outline-dark:hover {
+  background-color: var(--dealerpass-black);
+  color: var(--dealerpass-cream);
+  transform: translateY(-2px);
+}
+
+/* Shine sweep: a light passes across the button on hover */
+.btn-primary::after,
+.btn-outline::after,
+.btn-outline-dark::after {
+  content: "";
+  position: absolute;
+  top: 0;
+  left: -75%;
+  width: 40%;
+  height: 100%;
+  background: linear-gradient(115deg, transparent, rgba(255, 255, 255, 0.55), transparent);
+  transform: skewX(-20deg);
+  transition: left 0.55s ease;
+  pointer-events: none;
+}
+.btn-primary:hover::after,
+.btn-outline:hover::after,
+.btn-outline-dark:hover::after {
+  left: 125%;
+}
+
+/* Cards: always charcoal, regardless of section background */
+.card {
+  @apply relative z-0 overflow-hidden rounded-card border border-edge bg-charcoal p-6 text-cream transition-all duration-200;
+}
+.card:hover {
+  border-color: var(--dealerpass-neon);
+  transform: translateY(-4px) !important;
+  box-shadow: 0 16px 32px -16px rgba(0, 0, 0, 0.5);
+}
+.card-dashed {
+  @apply border-dashed;
+}
+/* Cursor-tracking spotlight: a soft light that follows the pointer inside the card.
+   z-index:-1 keeps it above the card's own background but behind the text. */
+.card::before {
+  content: "";
+  position: absolute;
+  inset: 0;
+  z-index: -1;
+  background: radial-gradient(220px circle at var(--mx, 50%) var(--my, -20%), rgba(223, 255, 0, 0.16), transparent 65%);
+  opacity: 0;
+  transition: opacity 0.25s ease;
+}
+.card:hover::before {
+  opacity: 1;
+}
+
+.section-label {
+  @apply text-xs font-semibold uppercase tracking-[0.14em] text-muted;
+}
+
+/* Textured section backgrounds: subtle dot-grid so large color blocks don't feel flat.
+   Dark sections also get a soft vignette for cinematic depth. Kept faint — texture, not decoration. */
+.bg-texture-black {
+  background-color: var(--dealerpass-black);
+  background-image:
+    radial-gradient(ellipse at center, rgba(0, 0, 0, 0) 45%, rgba(0, 0, 0, 0.45) 100%),
+    radial-gradient(rgba(245, 240, 230, 0.05) 1px, transparent 1.5px);
+  background-size: 100% 100%, 22px 22px;
+}
+.bg-texture-charcoal {
+  background-color: var(--dealerpass-charcoal);
+  background-image:
+    radial-gradient(ellipse at center, rgba(0, 0, 0, 0) 45%, rgba(0, 0, 0, 0.35) 100%),
+    radial-gradient(rgba(245, 240, 230, 0.045) 1px, transparent 1.5px);
+  background-size: 100% 100%, 22px 22px;
+}
+.bg-texture-cream {
+  background-color: var(--dealerpass-cream);
+  background-image: radial-gradient(rgba(16, 16, 16, 0.055) 1px, transparent 1.5px);
+  background-size: 22px 22px;
+}
+
+/* Soft glow accent for dark hero-like sections. Slowly breathes for a bit of life. */
+.glow-neon {
+  pointer-events: none;
+  background: radial-gradient(circle, rgba(223, 255, 0, 0.14), transparent 70%);
+  filter: blur(30px);
+  animation: glow-pulse 7s ease-in-out infinite;
+}
+@keyframes glow-pulse {
+  0%, 100% { opacity: 0.7; transform: scale(1); }
+  50% { opacity: 1; transform: scale(1.12); }
+}
+@media (prefers-reduced-motion: reduce) {
+  .glow-neon { animation: none; }
+}
+
+/* Preloader */
+.preloader-overlay {
+  transition: opacity 0.5s ease;
+  opacity: 1;
+}
+.preloader-hidden {
+  opacity: 0;
+  pointer-events: none;
+}
+.preloader-logo-wrap {
+  position: relative;
+  overflow: hidden;
+  display: inline-flex;
+  animation: preloader-pulse 1.8s ease-in-out infinite;
+}
+.preloader-logo-wrap::after {
+  content: "";
+  position: absolute;
+  top: 0;
+  left: -75%;
+  width: 50%;
+  height: 100%;
+  background: linear-gradient(115deg, transparent, rgba(255, 255, 255, 0.55), transparent);
+  transform: skewX(-20deg);
+  animation: preloader-shine 1.8s ease-in-out infinite;
+}
+@keyframes preloader-shine {
+  0% { left: -75%; }
+  55%, 100% { left: 130%; }
+}
+@keyframes preloader-pulse {
+  0%, 100% { transform: scale(1); opacity: 1; }
+  50% { transform: scale(1.04); opacity: 0.92; }
+}
+@media (prefers-reduced-motion: reduce) {
+  .preloader-logo-wrap,
+  .preloader-logo-wrap::after {
+    animation: none;
+  }
+  .preloader-overlay { transition: none; }
+}
+
+/* Floating WhatsApp CTA */
+.whatsapp-float {
+  position: fixed;
+  bottom: 20px;
+  right: 20px;
+  z-index: 50;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 56px;
+  height: 56px;
+  border-radius: 9999px;
+  background: var(--dealerpass-neon);
+  color: var(--dealerpass-black);
+  box-shadow: 0 8px 24px -8px rgba(0, 0, 0, 0.5);
+  transition: transform 0.2s ease;
+}
+.whatsapp-float:hover {
+  transform: scale(1.08);
+  background: var(--dealerpass-neon-hover);
+}
+.whatsapp-pulse {
+  position: absolute;
+  inset: 0;
+  border-radius: 9999px;
+  background: var(--dealerpass-neon);
+  opacity: 0.55;
+  animation: whatsapp-pulse 2.2s ease-out infinite;
+}
+@keyframes whatsapp-pulse {
+  0% { transform: scale(1); opacity: 0.55; }
+  100% { transform: scale(1.8); opacity: 0; }
+}
+
+/* Scrolling ticker for the trust line */
+.ticker-wrap {
+  overflow: hidden;
+  width: 100%;
+  max-width: 100%;
+  min-width: 0;
+  mask-image: linear-gradient(90deg, transparent, black 12%, black 88%, transparent);
+}
+.ticker-track {
+  display: flex;
+  width: max-content;
+  gap: 2.5rem;
+  animation: ticker-scroll 16s linear infinite;
+  white-space: nowrap;
+}
+.ticker-track-slow {
+  gap: 0;
+  white-space: normal;
+  animation-duration: 76s;
+}
+.ticker-wrap:hover .ticker-track {
+  animation-play-state: paused;
+}
+@media (prefers-reduced-motion: reduce) {
+  .ticker-track { animation: none; }
+  .whatsapp-pulse { animation: none; }
+}
+@keyframes ticker-scroll {
+  from { transform: translateX(0); }
+  to { transform: translateX(-50%); }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  * {
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.01ms !important;
+    scroll-behavior: auto !important;
+  }
+}
