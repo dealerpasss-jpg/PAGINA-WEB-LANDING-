@@ -1,15 +1,18 @@
 "use client";
 
-import { useEffect, useState } from "react";
+import { useEffect, useRef, useState } from "react";
 
 const FADE_DURATION = 500; // ms — must match the CSS transition duration below
-const MAX_DURATION = 8000; // ms — safety fallback in case the video fails to load or play
+const PLAY_START_GRACE = 1500; // ms — if playback hasn't started by then, bail out
+const MAX_DURATION = 8000; // ms — absolute safety fallback
 
 export default function Preloader() {
   // null = still deciding, true = show (mobile, has video), false = skip (desktop, no video yet)
   const [shouldShow, setShouldShow] = useState<boolean | null>(null);
   const [hidden, setHidden] = useState(false);
   const [removed, setRemoved] = useState(false);
+  const videoRef = useRef<HTMLVideoElement>(null);
+  const startedRef = useRef(false);
 
   useEffect(() => {
     // Desktop preload video isn't ready yet — only show on mobile-sized viewports for now.
@@ -22,8 +25,18 @@ export default function Preloader() {
 
   useEffect(() => {
     if (!shouldShow) return;
+
+    // If actual playback hasn't started shortly after mount (autoplay blocked,
+    // slow decode, etc.), don't leave the visitor staring at a black screen.
+    const graceTimer = setTimeout(() => {
+      if (!startedRef.current) setHidden(true);
+    }, PLAY_START_GRACE);
+
     const safetyTimer = setTimeout(() => setHidden(true), MAX_DURATION);
-    return () => clearTimeout(safetyTimer);
+    return () => {
+      clearTimeout(graceTimer);
+      clearTimeout(safetyTimer);
+    };
   }, [shouldShow]);
 
   useEffect(() => {
@@ -43,11 +56,16 @@ export default function Preloader() {
       aria-hidden={hidden}
     >
       <video
+        ref={videoRef}
         src="/preloader-mobile.mp4"
         autoPlay
         muted
         playsInline
+        onPlaying={() => {
+          startedRef.current = true;
+        }}
         onEnded={() => setHidden(true)}
+        onError={() => setHidden(true)}
         className="h-full w-full object-cover"
       />
     </div>
