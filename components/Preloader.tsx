@@ -6,21 +6,29 @@ const FADE_DURATION = 500; // ms — must match the CSS transition duration belo
 const PLAY_START_GRACE = 1500; // ms — if playback hasn't started by then, bail out
 const MAX_DURATION = 8000; // ms — absolute safety fallback
 
+const MOBILE_BREAKPOINT = "(max-width: 767px)";
+
 export default function Preloader() {
-  // null = still deciding, true = show (mobile, has video), false = skip (desktop, no video yet)
+  // null = still deciding, true = show, false = skip
   const [shouldShow, setShouldShow] = useState<boolean | null>(null);
+  const [isMobile, setIsMobile] = useState(true);
   const [hidden, setHidden] = useState(false);
   const [removed, setRemoved] = useState(false);
   const videoRef = useRef<HTMLVideoElement>(null);
   const startedRef = useRef(false);
 
   useEffect(() => {
-    // Desktop preload video isn't ready yet — only show on mobile-sized viewports for now.
-    const isMobile = window.matchMedia("(max-width: 767px)").matches;
-    setShouldShow(isMobile);
-    if (isMobile) {
-      document.body.style.overflow = "hidden";
-    }
+    const mql = window.matchMedia(MOBILE_BREAKPOINT);
+    setIsMobile(mql.matches);
+    setShouldShow(true);
+    document.body.style.overflow = "hidden";
+
+    // If the viewport crosses the breakpoint before the preloader has
+    // finished (e.g. device rotation, window resize on load), swap sources
+    // rather than get stuck showing the wrong orientation.
+    const handleChange = (e: MediaQueryListEvent) => setIsMobile(e.matches);
+    mql.addEventListener("change", handleChange);
+    return () => mql.removeEventListener("change", handleChange);
   }, []);
 
   useEffect(() => {
@@ -56,8 +64,9 @@ export default function Preloader() {
       aria-hidden={hidden}
     >
       <video
+        key={isMobile ? "mobile" : "desktop"}
         ref={videoRef}
-        src="/preloader-mobile.mp4"
+        src={isMobile ? "/preloader-mobile.mp4" : "/preloader-desktop.mp4"}
         autoPlay
         muted
         playsInline
