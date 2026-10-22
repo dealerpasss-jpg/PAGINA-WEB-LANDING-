@@ -1,68 +1,86 @@
 "use client";
-
-import { useEffect, useState } from "react";
+import { useEffect, useRef, useState } from "react";
 import Link from "next/link";
+import { usePathname } from "next/navigation";
 import Logo from "./Logo";
-import MobileMenu from "./MobileMenu";
-import { getWhatsappUrl, track } from "@/lib/analytics";
-
 const links = [
-  { href: "/mi-cuenta", label: "Mi cuenta" },
-  { href: "/#como-funciona", label: "Cómo funciona" },
   { href: "/academy", label: "Academia" },
+  { href: "/vehiculos", label: "Vehículos" },
+  { href: "/metodo-margen", label: "El método" },
   { href: "/planes", label: "Planes" },
-  { href: "/metodo-margen", label: "Método MARGEN" },
-  { href: "/#faq", label: "FAQ" },
 ];
-
 export default function Header() {
-  const [scrolled, setScrolled] = useState(false);
-
+  const [open, setOpen] = useState(false);
+  const path = usePathname();
+  const trigger = useRef<HTMLButtonElement>(null);
   useEffect(() => {
-    function onScroll() {
-      setScrolled(window.scrollY > 12);
+    function esc(e: KeyboardEvent) {
+      if (e.key === "Escape") {
+        setOpen(false);
+        trigger.current?.focus();
+      }
     }
-    onScroll();
-    window.addEventListener("scroll", onScroll, { passive: true });
-    return () => window.removeEventListener("scroll", onScroll);
+    document.addEventListener("keydown", esc);
+    return () => document.removeEventListener("keydown", esc);
   }, []);
-
   return (
-    <header
-      className={`sticky top-0 z-40 border-b bg-black/95 backdrop-blur transition-shadow duration-300 ${
-        scrolled ? "border-edge shadow-[0_8px_24px_-12px_rgba(0,0,0,0.6)]" : "border-transparent"
-      }`}
-    >
-      <div className="container-content flex h-16 items-center justify-between md:h-20">
-        <Link href="/" aria-label="DealerPass, inicio">
-          <Logo variant="dark" />
+    <header className="site-header">
+      <a className="skip-link" href="#main-content">
+        Saltar al contenido
+      </a>
+      <div className="header-inner">
+        <Link
+          href="/"
+          aria-label="DealerPass, inicio"
+          onClick={() => setOpen(false)}
+        >
+          <Logo />
         </Link>
-
-        <nav className="hidden items-center gap-7 md:flex">
+        <nav className="desktop-nav" aria-label="Navegación principal">
           {links.map((l) => (
-            <Link key={l.href} href={l.href} className="text-sm font-medium text-cream/85 transition-colors hover:text-neon">
+            <Link
+              key={l.href}
+              href={l.href}
+              aria-current={path === l.href ? "page" : undefined}
+            >
               {l.label}
             </Link>
           ))}
         </nav>
-
-        <div className="hidden items-center gap-3 md:flex">
-          <a
-            href={getWhatsappUrl()}
-            target="_blank"
-            rel="noopener noreferrer"
-            onClick={() => track("click_whatsapp", { source: "header" })}
-            className="text-sm font-semibold text-cream/85 hover:text-neon"
-          >
-            Hablar por WhatsApp
-          </a>
-          <Link href="/planes" className="btn-primary" onClick={() => track("view_pricing", { source: "header" })}>
-            Ver planes
+        <div className="header-actions">
+          <Link className="header-login" href="/mi-cuenta">
+            Mi espacio <span aria-hidden>↗</span>
           </Link>
+          <button
+            ref={trigger}
+            className="menu-toggle"
+            aria-expanded={open}
+            aria-controls="mobile-navigation"
+            aria-label={open ? "Cerrar menú" : "Abrir menú"}
+            onClick={() => setOpen(!open)}
+          >
+            <span />
+            <span />
+          </button>
         </div>
-
-        <MobileMenu />
       </div>
+      {open && (
+        <nav
+          id="mobile-navigation"
+          className="mobile-nav"
+          aria-label="Navegación móvil"
+        >
+          {links.map((l) => (
+            <Link key={l.href} href={l.href} onClick={() => setOpen(false)}>
+              {l.label}
+              <span aria-hidden>↗</span>
+            </Link>
+          ))}
+          <Link href="/contacto" onClick={() => setOpen(false)}>
+            Hablemos <span aria-hidden>↗</span>
+          </Link>
+        </nav>
+      )}
     </header>
   );
 }

@@ -1,17 +1,10 @@
 import type { Metadata } from "next";
-import { Barlow_Condensed, Inter } from "next/font/google";
+import { Inter } from "next/font/google";
 import "./globals.css";
 import Header from "@/components/Header";
 import Footer from "@/components/Footer";
-import CardSpotlight from "@/components/CardSpotlight";
-import WhatsAppFloat from "@/components/WhatsAppFloat";
-import "./account.css";
 
-const display = Barlow_Condensed({
-  subsets: ["latin"],
-  variable: "--font-display",
-  weight: ["700", "800"],
-});
+import "./account.css";
 
 const body = Inter({
   subsets: ["latin"],
@@ -35,14 +28,16 @@ export const metadata: Metadata = {
   ],
 };
 
-export default function RootLayout({ children }: { children: React.ReactNode }) {
+export default function RootLayout({
+  children,
+}: {
+  children: React.ReactNode;
+}) {
   return (
     <html lang="es">
-      <body className={`${display.variable} ${body.variable}`}>
-        <CardSpotlight />
-        <WhatsAppFloat />
+      <body className={body.variable}>
         <Header />
-        <main>{children}</main>
+        <main id="main-content">{children}</main>
         <Footer />
       </body>
     </html>

@@ -30,8 +30,27 @@ export default function CalculatorPreview() {
   const [touched, setTouched] = useState(false);
 
   const maxBid = useMemo(() => {
-    const { salePrice, auctionFees, taxes, transport, repair, documentation, contingency, margin } = values;
-    return Math.max(0, salePrice - auctionFees - taxes - transport - repair - documentation - contingency - margin);
+    const {
+      salePrice,
+      auctionFees,
+      taxes,
+      transport,
+      repair,
+      documentation,
+      contingency,
+      margin,
+    } = values;
+    return Math.max(
+      0,
+      salePrice -
+        auctionFees -
+        taxes -
+        transport -
+        repair -
+        documentation -
+        contingency -
+        margin,
+    );
   }, [values]);
 
   function handleChange(key: keyof typeof initial, raw: string) {
@@ -42,47 +61,51 @@ export default function CalculatorPreview() {
   }
 
   return (
-    <section id="calculadora" className="bg-texture-cream py-16 md:py-24">
-      <div className="container-content">
-        <div className="max-w-2xl">
-          <span className="eyebrow-light"><span className="dot" />DealerPass Bid Calculator</span>
-          <h2 className="mt-4 text-3xl md:text-4xl">
-            Conoce tu oferta máxima antes de pujar.
-          </h2>
-          <p className="mt-4 leading-relaxed text-black/70">
-            El precio ganador nunca es el costo final. Considera el precio de venta, fees, impuestos, transporte,
-            reparación, documentos, contingencia y margen.
-          </p>
+    <section id="calculadora" className="calculator-section">
+      <div className="wrap">
+        <div className="section-heading">
+          <span className="kicker">
+            <i />
+            DEALERPASS / BID CALCULATOR
+          </span>
+          <div>
+            <h2>
+              Antes de pujar,
+              <br />
+              pon los números en orden.
+            </h2>
+            <p>
+              Explora un escenario educativo. Cambia los valores para entender
+              cómo cada costo influye en tu oferta máxima.
+            </p>
+          </div>
         </div>
-
-        <div className="mt-10 grid gap-6 rounded-card border border-edge bg-charcoal p-6 md:grid-cols-[1.3fr_1fr] md:p-8">
-          <div className="grid gap-4 sm:grid-cols-2">
+        <div className="calculator-grid">
+          <div className="calculator-fields">
             {fields.map((f) => (
-              <label key={f.key} className="block">
-                <span className="text-xs font-medium text-muted">{f.label}</span>
-                <div className="mt-1 flex items-center rounded-md border border-edge bg-black px-3 focus-within:border-neon">
-                  <span className="text-sm text-muted">$</span>
+              <label key={f.key}>
+                <span>{f.label}</span>
+                <div>
+                  <span>USD</span>
                   <input
-                    inputMode="numeric"
+                    aria-label={f.label}
+                    inputMode="decimal"
                     value={values[f.key]}
                     onChange={(e) => handleChange(f.key, e.target.value)}
-                    className="w-full bg-transparent px-2 py-2.5 text-sm text-cream outline-none"
                   />
                 </div>
               </label>
             ))}
           </div>
-
-          <div className="flex flex-col justify-between rounded-card border border-edge bg-black p-6">
-            <div>
-              <p className="section-label">Oferta máxima estimada</p>
-              <p className="mt-2 font-display text-4xl font-extrabold text-neon">
-                ${maxBid.toLocaleString("en-US")}
-              </p>
+          <div className="calculator-result">
+            <span className="kicker">OFERTA MÁXIMA ESTIMADA</span>
+            <div aria-live="polite">
+              <strong>${maxBid.toLocaleString("en-US")}</strong>
+              <span>USD / escenario ilustrativo</span>
             </div>
-            <p className="mt-6 text-xs leading-relaxed text-muted">
-              Los resultados son estimaciones educativas y no garantizan el costo definitivo ni la rentabilidad de una
-              operación.
+            <p>
+              El resultado es una estimación educativa. Los costos definitivos y
+              la rentabilidad dependen de cada operación.
             </p>
           </div>
         </div>

@@ -1,24 +1,87 @@
+"use client";
+import { useRef, useState } from "react";
+import Image from "next/image";
+import { testimonials } from "@/data/testimonials";
 export default function Testimonials() {
+  const ref = useRef<HTMLDivElement>(null);
+  const [position, setPosition] = useState(0);
+  function move(direction: number) {
+    const el = ref.current;
+    if (!el) return;
+    const card = el.querySelector("article");
+    el.scrollBy({
+      left: direction * ((card?.clientWidth || 320) + 24),
+      behavior: window.matchMedia("(prefers-reduced-motion: reduce)").matches
+        ? "auto"
+        : "smooth",
+    });
+  }
   return (
-    <section className="border-y border-edge bg-texture-charcoal py-16 md:py-24">
-      <div className="container-content">
-        <div className="flex flex-wrap items-center justify-between gap-3">
-          <span className="eyebrow">Testimonios</span>
-          <span className="rounded-md bg-black px-3 py-1 text-xs font-semibold text-muted">Próximamente</span>
+    <section className="testimonials-section">
+      <div className="wrap">
+        <div className="testimonials-head">
+          <div>
+            <span className="kicker">
+              <i />
+              EN SUS PALABRAS
+            </span>
+            <h2>El valor de entender.</h2>
+          </div>
+          <div className="carousel-controls">
+            <button
+              aria-label="Testimonios anteriores"
+              disabled={position === 0}
+              onClick={() => move(-1)}
+            >
+              ←
+            </button>
+            <button
+              aria-label="Testimonios siguientes"
+              disabled={position === 2}
+              onClick={() => move(1)}
+            >
+              →
+            </button>
+          </div>
         </div>
-        <h2 className="mt-4 max-w-xl text-3xl text-cream md:text-4xl">
-          Esta sección se activará con testimonios verificados.
-        </h2>
-
-        <div className="mt-10 grid gap-4 md:grid-cols-3">
-          {[1, 2, 3].map((n) => (
-            <div key={n} className="card card-dashed text-sm text-muted">
-              <p>[INSERTAR TESTIMONIO VERIFICADO]</p>
-              <p className="mt-4 font-medium text-cream/40">[INSERTAR NOMBRE Y AUTORIZACIÓN]</p>
-              <p className="mt-1 text-xs">[INSERTAR RESULTADO CON CONTEXTO]</p>
-            </div>
+        <div
+          className="testimonial-track"
+          ref={ref}
+          tabIndex={0}
+          aria-label="Testimonios de la comunidad"
+          onScroll={() => {
+            const el = ref.current;
+            if (el)
+              setPosition(
+                el.scrollLeft < 2
+                  ? 0
+                  : el.scrollLeft + el.clientWidth >= el.scrollWidth - 3
+                    ? 2
+                    : 1,
+              );
+          }}
+        >
+          {testimonials.map((t) => (
+            <article className="testimonial" key={t.name}>
+              <span className="quote-mark" aria-hidden>
+                “
+              </span>
+              <blockquote>{t.quote}</blockquote>
+              <div className="testimonial-person">
+                {t.avatarUrl && (
+                  <Image src={t.avatarUrl} alt="" width={44} height={44} />
+                )}
+                <div>
+                  <strong>{t.name}</strong>
+                  <span>Comunidad DealerPass</span>
+                </div>
+              </div>
+            </article>
           ))}
         </div>
+        <p className="carousel-hint">
+          Desliza para conocer más experiencias <span aria-hidden>→</span>
+        </p>
       </div>
     </section>
   );
