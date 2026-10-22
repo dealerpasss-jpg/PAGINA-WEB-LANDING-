@@ -1,4 +1,5 @@
 import Link from "next/link";
+import Image from "next/image";
 import Reveal from "./Reveal";
 export function Experience() {
   return (
@@ -69,24 +70,18 @@ export function AcademyPreview() {
       <div className="wrap academy-feature-grid">
         <Reveal>
           <div
-            className="academy-art"
-            aria-label="Ilustración editorial del método de formación"
+            className="academy-art academy-editorial"
+            aria-label="Un mentor y dos estudiantes aprenden a evaluar un vehículo"
           >
             <div className="art-top">
               DEALERPASS / ACADEMY <span>01—12</span>
             </div>
-            <div className="art-lines" aria-hidden>
-              <span />
-              <span />
-              <span />
-            </div>
-            <div className="art-title">
-              El conocimiento
-              <br />
-              cambia la
-              <br />
-              <em>perspectiva.</em>
-            </div>
+            <Image
+              src="/brand/editorial-academy.webp"
+              alt="Mentor y estudiantes analizando un carro en una subasta"
+              fill
+              sizes="(max-width: 800px) 100vw, 50vw"
+            />
             <div className="art-bottom">
               <span>APRENDE. ANALIZA. AVANZA.</span>
               <span className="orange-square" />

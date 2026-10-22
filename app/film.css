@@ -7,6 +7,9 @@
   position: relative;
   height: 320svh;
   --film-close: 0;
+  --film-open-opacity: 1;
+  --film-half-opacity: 0;
+  --film-closed-opacity: 0;
   --film-leave: 0;
   --film-drive: 0;
   --film-progress: 0;
@@ -37,7 +40,8 @@
   object-position: center;
 }
 .film-road {
-  transform: translateY(calc(var(--film-drive) * 12%)) scale(calc(1 + var(--film-drive) * 0.08));
+  transform: translateY(calc(var(--film-drive) * 12%))
+    scale(calc(1 + var(--film-drive) * 0.08));
   transform-origin: center bottom;
 }
 .film-car img {
@@ -55,15 +59,18 @@
   opacity: calc(1 - var(--film-leave));
 }
 .film-hand-open {
-  opacity: calc(1 - var(--film-close));
+  opacity: var(--film-open-opacity);
+}
+.film-hand-half {
+  opacity: var(--film-half-opacity);
 }
 .film-hand-closed {
-  opacity: var(--film-close);
+  opacity: var(--film-closed-opacity);
 }
 .film-car {
   opacity: var(--film-car-opacity);
   transform: translate(var(--film-car-x), var(--film-car-y))
-    scale(var(--film-car-scale));
+    scale(var(--film-car-scale)) rotate(var(--film-car-angle, -3deg));
   transform-origin: 65% 65%;
 }
 .film-readability {
@@ -482,6 +489,7 @@
   }
   .film-car,
   .film-hand-closed,
+  .film-hand-half,
   .film-scroll-hint,
   .film-chapters,
   .film-progress {
@@ -501,5 +509,169 @@
   }
   .film-arrival {
     display: none;
+  }
+}
+
+/* A single illustration family throughout the homepage. */
+.film-hand,
+.film-car {
+  will-change: transform, opacity;
+}
+.film-hand {
+  opacity: calc(1 - clamp(0, (var(--film-leave) - 0.55) / 0.45, 1));
+}
+.film-copy,
+.film-arrival {
+  transition-timing-function: cubic-bezier(0.22, 1, 0.36, 1);
+}
+.journey-editorial.wrap {
+  background: #eee9e0;
+}
+.journey-editorial .journey-visual {
+  background: #171a1d;
+  color: #f2eee7;
+  border-color: #171a1d;
+}
+.journey-scenes,
+.journey-scene {
+  position: absolute;
+  inset: 0;
+}
+.journey-scene {
+  opacity: 0;
+  transform: scale(1.07) translateY(8px);
+  transition:
+    opacity 0.85s ease,
+    transform 1.4s cubic-bezier(0.22, 1, 0.36, 1);
+}
+.journey-scene.is-current {
+  opacity: 1;
+  transform: scale(1) translateY(0);
+}
+.journey-scene img {
+  object-fit: cover;
+}
+.journey-editorial .journey-visual::after {
+  content: "";
+  position: absolute;
+  inset: 0;
+  background: linear-gradient(
+    180deg,
+    #11131595 0%,
+    transparent 20%,
+    transparent 51%,
+    #111315d9 84%,
+    #111315 100%
+  );
+  pointer-events: none;
+}
+.journey-editorial .journey-top {
+  color: #fff;
+}
+.journey-editorial .journey-overlay {
+  z-index: 2;
+  top: auto;
+  bottom: 77px;
+  left: 27px;
+  right: 27px;
+  background: transparent;
+  color: #fff;
+  padding: 0;
+  border: 0;
+  box-shadow: none;
+  backdrop-filter: none;
+  transform: none;
+}
+.journey-editorial .journey-overlay strong {
+  font-size: clamp(26px, 2.8vw, 38px);
+  margin: 12px 0;
+}
+.journey-editorial .journey-overlay small {
+  color: #d6d1c8;
+}
+.journey-editorial .journey-chip i {
+  background: #ff4d00;
+}
+.journey-editorial .journey-progress a {
+  border-color: #ffffff40;
+  color: #f2eee7;
+}
+.journey-editorial .journey-progress a[aria-current] {
+  border-color: #ff4d00;
+}
+.journey-editorial .journey-step p {
+  color: #56534e;
+}
+.journey-editorial .journey-tags span {
+  background: #f8f5ef;
+  border-color: #d8cfc3;
+}
+.journey-mobile-art {
+  display: none;
+}
+.academy-art.academy-editorial {
+  background: #171a1d;
+  color: #fff;
+  padding: 27px;
+  min-height: 530px;
+  border-radius: 16px;
+}
+.academy-editorial > img {
+  object-fit: cover;
+  transition: transform 1.2s cubic-bezier(0.22, 1, 0.36, 1);
+}
+.academy-editorial:hover > img {
+  transform: scale(1.035);
+}
+.academy-art.academy-editorial::before {
+  inset: 0;
+  background: linear-gradient(
+    180deg,
+    #11131590,
+    transparent 26%,
+    transparent 68%,
+    #111315c9
+  );
+  opacity: 1;
+  z-index: 1;
+  pointer-events: none;
+}
+.academy-editorial .art-top,
+.academy-editorial .art-bottom {
+  position: relative;
+  z-index: 2;
+}
+@media (max-width: 800px) {
+  .journey-editorial .journey-visual {
+    display: none;
+  }
+  .journey-mobile-art {
+    display: block;
+    position: relative;
+    width: 100%;
+    aspect-ratio: 1.15;
+    overflow: hidden;
+    border-radius: 14px;
+    margin-bottom: 28px;
+  }
+  .journey-mobile-art img {
+    object-fit: cover;
+  }
+  .journey-editorial .journey-step {
+    opacity: 1;
+  }
+  .academy-art.academy-editorial {
+    min-height: 420px;
+  }
+}
+@media (prefers-reduced-motion: reduce) {
+  .film-hand,
+  .film-car {
+    will-change: auto;
+  }
+  .journey-scene,
+  .academy-editorial > img {
+    transition: none;
+    transform: none;
   }
 }

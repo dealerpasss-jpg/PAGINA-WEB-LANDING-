@@ -16,33 +16,66 @@ export default function ScrollFilm() {
     if (!el) return;
     const media = matchMedia("(prefers-reduced-motion: reduce)");
     let frame = 0;
-    const draw = () => {
+    let progress = 0;
+    let previousTime = 0;
+    let initialized = false;
+    const draw = (time: number) => {
       frame = 0;
       const rect = el.getBoundingClientRect();
-      const p = media.matches
+      const target = media.matches
         ? 0
         : clamp(-rect.top / Math.max(1, rect.height - innerHeight));
-      const close = smooth((p - 0.12) / 0.2),
-        leave = smooth((p - 0.36) / 0.24),
-        drive = smooth((p - 0.57) / 0.43);
+      const dt = Math.min(48, previousTime ? time - previousTime : 16.67);
+      previousTime = time;
+      if (!initialized || media.matches) {
+        progress = target;
+        initialized = true;
+      } else {
+        progress += (target - progress) * (1 - Math.exp(-dt / 105));
+      }
+      if (Math.abs(target - progress) < 0.0001) progress = target;
+      const p = progress;
+      const close = smooth((p - 0.06) / 0.28),
+        leave = smooth((p - 0.29) / 0.34),
+        drive = smooth((p - 0.48) / 0.52);
+      const firstBlend = smooth(close / 0.55);
+      const lastBlend = smooth((close - 0.45) / 0.55);
+      el.style.setProperty("--film-open-opacity", String(1 - firstBlend));
+      el.style.setProperty(
+        "--film-half-opacity",
+        String(firstBlend * (1 - lastBlend)),
+      );
+      el.style.setProperty("--film-closed-opacity", String(lastBlend));
       el.style.setProperty("--film-close", String(close));
       el.style.setProperty("--film-leave", String(leave));
       el.style.setProperty("--film-drive", String(drive));
       el.style.setProperty("--film-progress", String(p));
-      el.style.setProperty("--film-hand-x", `${leave * 82}%`);
-      el.style.setProperty("--film-hand-y", `${leave * 55}%`);
-      el.style.setProperty("--film-hand-angle", `${leave * 16}deg`);
-      el.style.setProperty("--film-car-x", `${2 + (1 - drive) * 28}%`);
+      el.style.setProperty(
+        "--film-hand-x",
+        `${Math.pow(leave, 1.35) * 82 - close * 1.5}%`,
+      );
+      el.style.setProperty(
+        "--film-hand-y",
+        `${leave * leave * 55 + Math.sin(close * Math.PI) * -1.5}%`,
+      );
+      el.style.setProperty("--film-hand-angle", `${leave * 19 - close * 3}deg`);
+      el.style.setProperty(
+        "--film-car-x",
+        `${2 + (1 - drive) * 28 - Math.sin(drive * Math.PI) * 4}%`,
+      );
       el.style.setProperty("--film-car-y", `${-4 + (1 - drive) * -15}%`);
+      el.style.setProperty("--film-car-angle", `${-3 * (1 - drive)}deg`);
       el.style.setProperty("--film-car-scale", String(0.26 + drive * 0.52));
       el.style.setProperty(
         "--film-car-opacity",
-        String(smooth((p - 0.55) / 0.12)),
+        String(smooth((p - 0.49) / 0.14)),
       );
       setChapter((prev) => {
-        const next = p < 0.3 ? 0 : p < 0.58 ? 1 : 2;
+        const next = p < 0.27 ? 0 : p < 0.56 ? 1 : 2;
         return prev === next ? prev : next;
       });
+      if (progress !== target) frame = requestAnimationFrame(draw);
+      else previousTime = 0;
     };
     const schedule = () => {
       if (!frame) frame = requestAnimationFrame(draw);
@@ -50,7 +83,7 @@ export default function ScrollFilm() {
     window.addEventListener("scroll", schedule, { passive: true });
     window.addEventListener("resize", schedule);
     media.addEventListener("change", schedule);
-    draw();
+    draw(performance.now());
     return () => {
       cancelAnimationFrame(frame);
       window.removeEventListener("scroll", schedule);
@@ -84,6 +117,13 @@ export default function ScrollFilm() {
               alt=""
               fill
               priority
+              sizes="100vw"
+            />
+            <Image
+              className="film-hand-half"
+              src="/brand/film-half.webp"
+              alt=""
+              fill
               sizes="100vw"
             />
             <Image

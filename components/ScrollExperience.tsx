@@ -1,6 +1,6 @@
 "use client";
 import { useEffect, useRef, useState } from "react";
-import AuctionArt from "./AuctionArt";
+import Image from "next/image";
 import Link from "next/link";
 const chapters = [
   {
@@ -75,7 +75,11 @@ export default function ScrollExperience() {
     };
   }, []);
   return (
-    <section id="experiencia" className="journey wrap" ref={root}>
+    <section
+      id="experiencia"
+      className="journey journey-editorial wrap"
+      ref={root}
+    >
       <div className="journey-visual" data-stage={active}>
         <div className="journey-top">
           <span className="kicker">
@@ -84,13 +88,20 @@ export default function ScrollExperience() {
           </span>
           <span>0{active + 1} / 03</span>
         </div>
-        <div className="journey-orbit" aria-hidden="true">
-          <span />
-          <span />
-          <span />
-        </div>
-        <div className="journey-car journey-illustration">
-          <AuctionArt compact />
+        <div className="journey-scenes" aria-hidden="true">
+          {["inspection", "costs", "academy"].map((scene, i) => (
+            <div
+              key={scene}
+              className={`journey-scene ${active === i ? "is-current" : ""}`}
+            >
+              <Image
+                src={`/brand/editorial-${scene}.webp`}
+                alt=""
+                fill
+                sizes="(max-width: 800px) 100vw, 50vw"
+              />
+            </div>
+          ))}
         </div>
         <div className="journey-overlay" aria-hidden="true">
           <span className="journey-chip">
@@ -103,15 +114,6 @@ export default function ScrollExperience() {
                 ? "Los números"
                 : "Tu siguiente nivel"}
           </strong>
-          <div className="journey-bars">
-            <i />
-            <i />
-            <i />
-            <i />
-            <i />
-            <i />
-            <i />
-          </div>
           <small>
             {active === 1
               ? "ANALIZA ANTES DE PUJAR"
@@ -140,6 +142,14 @@ export default function ScrollExperience() {
             id={`etapa-${i}`}
             key={c.label}
           >
+            <div className="journey-mobile-art">
+              <Image
+                src={`/brand/editorial-${["inspection", "costs", "academy"][i]}.webp`}
+                alt=""
+                fill
+                sizes="100vw"
+              />
+            </div>
             <span className="kicker">
               <i />0{i + 1} / {c.label}
             </span>
