@@ -1605,3 +1605,352 @@
     animation: none !important;
   }
 }
+/* Continuous auction world, blended navigation and scroll-driven lane. */
+.site-header {
+  transition:
+    background 0.35s,
+    border-color 0.35s,
+    color 0.35s,
+    box-shadow 0.35s;
+}
+.site-header.header-blended {
+  background: linear-gradient(180deg, #111f22ed, #111f2260 75%, transparent);
+  border-color: transparent;
+  color: #f5f2e8;
+  backdrop-filter: blur(7px);
+  box-shadow: none;
+}
+.header-blended .desktop-nav a,
+.header-blended .header-login {
+  color: #e5e9df;
+}
+.header-blended .header-login {
+  border-color: #ffffff25;
+}
+.header-blended .menu-toggle span {
+  background: #f1f1e4;
+}
+.site-header.header-solid {
+  background: #f3f0e8f5;
+  border-bottom: 1px solid #caccc2;
+  backdrop-filter: blur(16px);
+}
+.hero-auction {
+  margin-top: -88px;
+  padding-top: 0;
+  background: #17282b;
+}
+.hero-auction .auction-scene {
+  margin: 0;
+  border-radius: 0;
+  min-height: 740px;
+  height: calc(100svh - 90px);
+  max-height: 940px;
+  background: radial-gradient(
+    ellipse at 77% 45%,
+    #3a504a 0%,
+    #203638 35%,
+    #142429 75%
+  );
+  padding-top: 88px;
+}
+.auction-content {
+  height: 100%;
+  background: linear-gradient(90deg, #142429 0%, #142429b0 65%, transparent);
+  padding-top: 40px;
+  padding-bottom: 50px;
+}
+.auction-lane-art {
+  top: 75px;
+  height: calc(100% - 75px);
+  right: 0;
+  width: 62%;
+}
+.auction-lane-art .art-halo {
+  background: radial-gradient(ellipse, #7f947135, transparent 70%);
+}
+.auction-truck {
+  transform: translateY(var(--car-travel, 0px));
+  transform-origin: 394px 450px;
+  transition: transform 0.08s linear;
+}
+.lane-dashes {
+  animation: lane-flow 6s linear infinite;
+}
+.truck-scan {
+  animation: scan-glow 4s ease-in-out infinite;
+}
+.bid-signal {
+  animation: bid-flash 3s ease-in-out infinite;
+}
+.bid-paddle {
+  transform-origin: 710px 210px;
+  animation: bid-wave 6s ease-in-out infinite;
+}
+@keyframes lane-flow {
+  to {
+    stroke-dashoffset: -60;
+  }
+}
+@keyframes scan-glow {
+  0%,
+  100% {
+    opacity: 0.4;
+  }
+  50% {
+    opacity: 1;
+  }
+}
+@keyframes bid-flash {
+  0%,
+  65%,
+  100% {
+    opacity: 0.2;
+  }
+  25%,
+  45% {
+    opacity: 1;
+  }
+}
+@keyframes bid-wave {
+  0%,
+  100% {
+    transform: rotate(-3deg);
+  }
+  50% {
+    transform: rotate(4deg);
+  }
+}
+.art-paused .auction-truck {
+  transform: translateY(0);
+}
+.hero-auction .auction-proof {
+  width: 100%;
+  max-width: none;
+  padding: 27px max(48px, calc((100% - 1240px) / 2));
+  background: #d5d8cb;
+  color: #17282b;
+  gap: 25px;
+}
+.auction-proof > div + div,
+.auction-proof > a {
+  border-color: #a8b2a7;
+}
+.auction-proof p > span {
+  color: #4d615b;
+}
+.proof-symbol {
+  color: #597366;
+}
+.hero-auction .kinetic-band {
+  background: #1c3033;
+  border-color: #ffffff17;
+}
+.hero-auction .kinetic-track {
+  color: #aeb8a1;
+}
+.hero-auction .kinetic-track span {
+  color: #ff6a2e;
+}
+.journey.wrap {
+  width: 100%;
+  padding-left: max(48px, calc((100% - 1240px) / 2));
+  padding-right: max(48px, calc((100% - 1240px) / 2));
+  background: #e2e2d7;
+  gap: 7%;
+}
+.journey-visual {
+  background: #bcc6b8;
+  border-color: #aab8aa;
+}
+.journey-visual[data-stage="1"] {
+  background: #8eaaa0;
+}
+.journey-visual[data-stage="2"] {
+  background: #203b3c;
+}
+.journey-step p {
+  color: #4f6159;
+}
+.journey-tags span {
+  border-color: #b0bcb0;
+  background: #ffffff35;
+}
+.journey-illustration {
+  height: 70%;
+  top: 5%;
+}
+.journey-illustration .auction-art {
+  top: 0;
+  height: 100%;
+  width: 100%;
+}
+.journey-visual .journey-overlay {
+  top: 68%;
+  left: 12%;
+  right: 12%;
+  background: #eff0e4eb;
+}
+.journey-visual .journey-overlay strong {
+  font-size: 25px;
+}
+.journey-visual .art-pause {
+  bottom: -10%;
+  right: 8%;
+  font-size: 7px;
+}
+.academy-feature {
+  background: #f0ece2;
+}
+.academy-art {
+  background: #c4c9b8;
+}
+.inventory-intro {
+  background: #d8ddd0;
+  border-radius: 18px;
+  padding: 65px;
+  margin-top: 70px;
+  margin-bottom: 70px;
+}
+.testimonials-section {
+  background: #233a3b;
+  color: #f2f0e5;
+}
+.testimonials-section .testimonial {
+  background: #304849;
+  color: #f2f0e5;
+  border-color: #5d7370;
+}
+.testimonial-person div > span {
+  color: #c0cec5;
+}
+.testimonials-section .round-control {
+  border-color: #a3b4a9;
+  color: #f0f0e2;
+}
+@media (min-width: 1800px) {
+  .auction-content {
+    padding-left: max(70px, calc((100vw - 1540px) / 2));
+  }
+}
+@media (max-width: 1100px) {
+  .auction-lane-art {
+    right: -7%;
+    width: 70%;
+  }
+  .journey.wrap {
+    padding-left: 36px;
+    padding-right: 36px;
+  }
+  .hero-auction .auction-proof {
+    padding-left: 36px;
+    padding-right: 36px;
+  }
+}
+@media (max-width: 800px) {
+  .hero-auction {
+    margin-top: -74px;
+  }
+  .hero-auction .auction-scene {
+    height: auto;
+    max-height: none;
+    min-height: 910px;
+    padding-top: 74px;
+  }
+  .auction-content {
+    padding: 32px 28px 0;
+    width: 100%;
+    height: auto;
+    background: linear-gradient(
+      180deg,
+      #142429 55%,
+      #14242980 90%,
+      transparent
+    );
+  }
+  .auction-lane-art {
+    top: auto;
+    bottom: 8px;
+    width: 85%;
+    right: -1%;
+    height: 480px;
+  }
+  .journey.wrap {
+    padding-left: 24px;
+    padding-right: 24px;
+  }
+  .hero-auction .auction-proof {
+    padding: 25px 24px;
+  }
+  .inventory-intro {
+    width: calc(100% - 48px);
+    padding: 40px 25px;
+    border-radius: 15px;
+  }
+  .journey-visual .art-pause {
+    bottom: -12%;
+  }
+  .journey-illustration .auction-art {
+    width: 100%;
+    height: 100%;
+    right: 0;
+    top: 0;
+  }
+  .art-pause {
+    bottom: 1%;
+  }
+}
+@media (max-width: 500px) {
+  .hero-auction .auction-scene {
+    min-height: 865px;
+    margin: 0;
+    border-radius: 0;
+  }
+  .auction-content {
+    padding: 30px 23px 0;
+  }
+  .auction-lane-art {
+    width: 112%;
+    right: -5%;
+    height: 410px;
+    bottom: 12px;
+  }
+  .auction-content h1 {
+    font-size: clamp(33px, 9vw, 43px);
+  }
+  .journey.wrap {
+    padding-left: 20px;
+    padding-right: 20px;
+  }
+  .hero-auction .auction-proof {
+    padding: 23px 20px;
+  }
+  .inventory-intro {
+    width: calc(100% - 40px);
+  }
+  .journey-illustration {
+    height: 65%;
+  }
+  .journey-visual .journey-overlay {
+    top: 65%;
+  }
+  .auction-lane-art .art-pause {
+    right: 8%;
+  }
+  .journey-illustration .auction-art {
+    width: 100%;
+  }
+}
+@media (prefers-reduced-motion: reduce) {
+  .auction-truck {
+    transform: none !important;
+    transition: none;
+  }
+  .lane-dashes,
+  .truck-scan,
+  .bid-signal,
+  .bid-paddle {
+    animation: none !important;
+  }
+}
+.testimonials-section .carousel-controls button:hover:enabled{background:#e5e7d9;color:#233a3b}

@@ -12,6 +12,14 @@ const links = [
 export default function Header() {
   const [open, setOpen] = useState(false);
   const path = usePathname();
+  const [scrolled, setScrolled] = useState(false);
+  useEffect(() => {
+    const update = () => setScrolled(window.scrollY > 24);
+    update();
+    window.addEventListener("scroll", update, { passive: true });
+    return () => window.removeEventListener("scroll", update);
+  }, []);
+  const blended = path === "/" && !scrolled && !open;
   const trigger = useRef<HTMLButtonElement>(null);
   useEffect(() => {
     function esc(e: KeyboardEvent) {
@@ -24,7 +32,9 @@ export default function Header() {
     return () => document.removeEventListener("keydown", esc);
   }, []);
   return (
-    <header className="site-header">
+    <header
+      className={`site-header ${path === "/" ? "header-home" : ""} ${blended ? "header-blended" : "header-solid"}`}
+    >
       <a className="skip-link" href="#main-content">
         Saltar al contenido
       </a>
@@ -34,7 +44,7 @@ export default function Header() {
           aria-label="DealerPass, inicio"
           onClick={() => setOpen(false)}
         >
-          <Logo />
+          <Logo variant={blended ? "dark" : "light"} />
         </Link>
         <nav className="desktop-nav" aria-label="Navegación principal">
           {links.map((l) => (

@@ -41,6 +41,15 @@ export default function ScrollExperience() {
     const measure = () => {
       frame = 0;
       const center = innerHeight * 0.55;
+      const bounds = el.getBoundingClientRect();
+      const travel = Math.max(
+        0,
+        Math.min(
+          1,
+          (160 - bounds.top) / Math.max(1, bounds.height - innerHeight),
+        ),
+      );
+      el.style.setProperty("--car-travel", `${travel * 135}px`);
       let closest = 0,
         distance = Infinity;
       sections.forEach((s, i) => {

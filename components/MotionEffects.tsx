@@ -24,6 +24,10 @@ export default function MotionEffects() {
         );
         if (hero) {
           const r = hero.getBoundingClientRect();
+          hero.style.setProperty(
+            "--car-travel",
+            `${Math.max(0, Math.min(100, -r.top * 0.2))}px`,
+          );
           if (r.bottom > 0 && r.top < innerHeight)
             hero.style.setProperty(
               "--scene-y",
@@ -92,6 +96,7 @@ export default function MotionEffects() {
         document.removeEventListener("pointermove", move);
         document.documentElement.removeEventListener("pointerleave", reset);
         hero?.style.removeProperty("--scene-y");
+        hero?.style.removeProperty("--car-travel");
         ticker?.style.removeProperty("--ticker-x");
         progress?.style.removeProperty("transform");
       };
