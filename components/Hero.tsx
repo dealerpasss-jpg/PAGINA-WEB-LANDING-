@@ -1,89 +1,88 @@
 import Image from "next/image";
+import AuctionArt from "./AuctionArt";
 import Link from "next/link";
+import { testimonials } from "@/data/testimonials";
 export default function Hero() {
   return (
-    <section className="hero hero-immersive">
-      <div className="wrap hero-top">
-        <div className="hero-heading">
+    <section className="hero hero-auction">
+      <div className="hero-cinema auction-scene hover-scene">
+        <AuctionArt />
+        <div className="auction-content">
           <span className="kicker">
             <i />
-            EL ACCESO ES SOLO EL PRINCIPIO
+            DEALERPASS / ACADEMIA DE SUBASTAS
           </span>
           <h1>
-            Tu próxima oportunidad.
+            Aprende a comprar
             <br />
-            <em>Una nueva perspectiva.</em>
+            en subastas de
+            <br />
+            <em>Estados Unidos.</em>
           </h1>
-        </div>
-        <div className="hero-aside">
           <p>
-            Formación, método y cultura automotriz.
-            <br />
-            Aprende a mirar la subasta con otros ojos.
+            Identifica oportunidades, entiende los costos y aprende a decidir
+            cuánto pujar. Formación en español, paso a paso.
           </p>
-          <Link href="/academy" className="button">
-            Explorar DealerPass <span aria-hidden>↗</span>
-          </Link>
-        </div>
-      </div>
-      <div className="hero-cinema hover-scene">
-        <div className="cinema-photo">
-          <Image
-            src="/brand/editorial-coupe.webp"
-            alt="Composición editorial de un coupé plateado en arquitectura contemporánea"
-            fill
-            priority
-            sizes="100vw"
-          />
-        </div>
-        <div className="cinema-shade" />
-        <div className="cinema-wordmark" aria-hidden="true">
-          DEALERPASS
-        </div>
-        <span className="cinema-edition">THE NEXT PERSPECTIVE / 001</span>
-        <div className="cinema-float cinema-float-left">
-          <span className="mini-label">
-            <i /> EL MÉTODO
-          </span>
-          <strong>
-            MARGEN<span>↗</span>
-          </strong>
-          <div className="mini-bars" aria-hidden="true">
-            <i />
-            <i />
-            <i />
-            <i />
-            <i />
-            <i />
+          <div className="auction-actions">
+            <Link href="/academy" className="button button-light">
+              Conocer la formación <span aria-hidden>↗</span>
+            </Link>
+            <Link href="/planes" className="auction-secondary">
+              Ver planes <span aria-hidden>↗</span>
+            </Link>
           </div>
-          <small>Seis variables. Una visión completa.</small>
-        </div>
-        <Link
-          href="/metodo-margen#calculadora"
-          className="cinema-float cinema-float-right"
-        >
-          <span className="mini-label">
-            ANTES DE PUJAR <span>↗</span>
-          </span>
-          <strong>
-            Haz los
-            <br />
-            números.
-          </strong>
-          <span className="mini-card-link">
-            Explorar la calculadora <span>↗</span>
-          </span>
-        </Link>
-        <div className="cinema-bottom">
-          <span>
-            FORMACIÓN EN ESPAÑOL
-            <br />
-            SUBASTAS EN ESTADOS UNIDOS
-          </span>
-          <a href="#experiencia" className="cinema-discover">
-            Desliza. Cambia la perspectiva.<span aria-hidden>↓</span>
+          <a href="#testimonios" className="hero-social">
+            <span className="hero-avatars" aria-hidden="true">
+              {testimonials.slice(0, 4).map((t) => (
+                <Image
+                  key={t.name}
+                  src={t.avatarUrl!}
+                  alt=""
+                  width={38}
+                  height={38}
+                />
+              ))}
+            </span>
+            <span>
+              <strong>Más de 3.000 personas</strong>
+              <small>se han formado con nosotros.</small>
+            </span>
+            <span className="social-arrow" aria-hidden>
+              ↗
+            </span>
           </a>
         </div>
+      </div>
+      <div className="auction-proof wrap">
+        <div>
+          <span className="proof-symbol" aria-hidden>
+            ↗
+          </span>
+          <p>
+            <strong>Aprende desde cero</strong>
+            <span>Una ruta de formación en español.</span>
+          </p>
+        </div>
+        <div>
+          <span className="proof-symbol" aria-hidden>
+            ◎
+          </span>
+          <p>
+            <strong>Analiza antes de pujar</strong>
+            <span>Historial, costos y oferta máxima.</span>
+          </p>
+        </div>
+        <a href="#testimonios">
+          <span className="proof-number">
+            3.000<span>+</span>
+          </span>
+          <p>
+            <strong>Personas formadas</strong>
+            <span>
+              Conoce sus experiencias <span aria-hidden>↗</span>
+            </span>
+          </p>
+        </a>
       </div>
       <div className="kinetic-band" aria-label="Acceso. Criterio. Control.">
         <div className="kinetic-track" aria-hidden="true">

@@ -1,6 +1,6 @@
 "use client";
 import { useEffect, useRef, useState } from "react";
-import Image from "next/image";
+import AuctionArt from "./AuctionArt";
 import Link from "next/link";
 const chapters = [
   {
@@ -80,13 +80,8 @@ export default function ScrollExperience() {
           <span />
           <span />
         </div>
-        <div className="journey-car">
-          <Image
-            src="/brand/editorial-coupe.webp"
-            alt="Imagen editorial de un vehículo para ilustrar el proceso de análisis"
-            fill
-            sizes="(max-width: 800px) 90vw, 48vw"
-          />
+        <div className="journey-car journey-illustration">
+          <AuctionArt compact />
         </div>
         <div className="journey-overlay" aria-hidden="true">
           <span className="journey-chip">
