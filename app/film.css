@@ -675,3 +675,8 @@
     transform: none;
   }
 }
+/* Keep pose blending opaque where silhouettes overlap. */
+.film-hand { isolation: isolate; }
+.film-hand img { mix-blend-mode: plus-lighter; }
+/* Override the old rotating card treatment in every chapter. */
+.journey-editorial .journey-visual .journey-overlay { transform: none; }
