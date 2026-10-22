@@ -44,7 +44,7 @@ export default function Header() {
           aria-label="DealerPass, inicio"
           onClick={() => setOpen(false)}
         >
-          <Logo variant={blended ? "dark" : "light"} />
+          <Logo />
         </Link>
         <nav className="desktop-nav" aria-label="Navegación principal">
           {links.map((l) => (

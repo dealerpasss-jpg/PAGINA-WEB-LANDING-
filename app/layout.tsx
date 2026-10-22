@@ -7,6 +7,7 @@ import Footer from "@/components/Footer";
 
 import "./account.css";
 import "./motion.css";
+import "./film.css";
 
 const body = Inter({
   subsets: ["latin"],
