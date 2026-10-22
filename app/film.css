@@ -36,6 +36,10 @@
   object-fit: cover;
   object-position: center;
 }
+.film-road {
+  transform: translateY(calc(var(--film-drive) * 12%)) scale(calc(1 + var(--film-drive) * 0.08));
+  transform-origin: center bottom;
+}
 .film-hand,
 .film-car {
   position: absolute;

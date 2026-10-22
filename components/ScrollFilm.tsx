@@ -32,9 +32,9 @@ export default function ScrollFilm() {
       el.style.setProperty("--film-hand-x", `${leave * 82}%`);
       el.style.setProperty("--film-hand-y", `${leave * 55}%`);
       el.style.setProperty("--film-hand-angle", `${leave * 16}deg`);
-      el.style.setProperty("--film-car-x", `${(1 - drive) * 30}%`);
-      el.style.setProperty("--film-car-y", `${(1 - drive) * -19}%`);
-      el.style.setProperty("--film-car-scale", String(0.26 + drive * 0.84));
+      el.style.setProperty("--film-car-x", `${2 + (1 - drive) * 28}%`);
+      el.style.setProperty("--film-car-y", `${-4 + (1 - drive) * -15}%`);
+      el.style.setProperty("--film-car-scale", String(0.26 + drive * 0.52));
       el.style.setProperty(
         "--film-car-opacity",
         String(smooth((p - 0.55) / 0.12)),
