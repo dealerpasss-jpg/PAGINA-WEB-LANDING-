@@ -40,6 +40,9 @@
   transform: translateY(calc(var(--film-drive) * 12%)) scale(calc(1 + var(--film-drive) * 0.08));
   transform-origin: center bottom;
 }
+.film-car img {
+  object-fit: contain;
+}
 .film-hand,
 .film-car {
   position: absolute;
