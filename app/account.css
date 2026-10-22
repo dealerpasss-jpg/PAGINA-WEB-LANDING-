@@ -1,4 +1,5 @@
 .account-shell {
+  color: #101010;
   max-width: 1180px;
   margin: auto;
   padding: 72px 24px 100px;
@@ -11,7 +12,7 @@
   font-size: 11px;
   letter-spacing: 0.14em;
   text-transform: uppercase;
-  color: #dfff00;
+  color: #414438;
   margin-bottom: 28px;
 }
 .account-shell h1 {
@@ -25,11 +26,12 @@
   margin-bottom: 16px;
 }
 .account-shell p {
-  color: #c9c5bc;
+  color: #53554d;
   line-height: 1.7;
   margin-bottom: 20px;
 }
 .account-card {
+  color: #f5f0e6;
   background: #1a1a1a;
   border: 1px solid #363630;
   border-radius: 12px;
@@ -73,11 +75,15 @@
 }
 .account-form .account-check {
   display: flex;
-  align-items: center;
-  flex-wrap: wrap;
+  align-items: flex-start;
+  line-height: 1.6;
 }
 .account-check input {
-  width: auto;
+  width: 18px;
+  height: 18px;
+  flex-shrink: 0;
+  margin-top: 3px;
+  accent-color: #dfff00;
 }
 .account-links {
   display: flex;
@@ -85,13 +91,19 @@
   flex-wrap: wrap;
   margin: 24px 0;
 }
-.account-links a,
+.account-links a {
+  color: #30332a;
+  text-decoration: underline;
+  text-underline-offset: 4px;
+}
+.account-check a,
 .account-shell article a {
   color: #dfff00;
   text-decoration: underline;
   text-underline-offset: 4px;
 }
 .account-notice {
+  color: #f5f0e6;
   padding: 18px;
   border-left: 3px solid #dfff00;
   background: #25271b;
@@ -101,7 +113,7 @@
   font-size: 11px;
   letter-spacing: 0.08em;
   text-transform: uppercase;
-  color: #dfff00;
+  color: #465000;
 }
 .account-row {
   display: flex;
@@ -129,7 +141,58 @@
   background: #000;
 }
 .account-shell small {
-  color: #b8b6ad;
+  color: #53554d;
+}
+.account-card p,
+.account-card small {
+  color: #cbc9c1;
+}
+.account-card .account-tag {
+  color: #dfff00;
+}
+.account-shell .account-notice {
+  color: #f5f0e6;
+}
+.account-form input::placeholder,
+.account-form textarea::placeholder {
+  color: #96988e;
+  opacity: 1;
+}
+.account-shell a:focus-visible {
+  outline: 2px solid currentColor;
+  outline-offset: 5px;
+}
+.account-shell-compact {
+  max-width: 560px;
+  padding-top: 40px;
+  padding-bottom: 64px;
+}
+.account-shell-compact .account-top {
+  font-size: 10px;
+  letter-spacing: 0.08em;
+  margin-bottom: 24px;
+  align-items: center;
+}
+.account-shell-compact h1 {
+  font-size: clamp(36px, 5vw, 48px);
+  margin-bottom: 12px;
+}
+.account-shell-compact > p {
+  font-size: 15px;
+  line-height: 1.6;
+}
+.account-shell-compact .account-form {
+  gap: 20px;
+  box-shadow: 0 12px 32px #10101012;
+}
+.account-shell-compact .btn-primary {
+  width: 100%;
+  min-height: 48px;
+}
+.account-shell-compact .account-links {
+  justify-content: space-between;
+  gap: 16px;
+  font-size: 13px;
 }
 @media (max-width: 600px) {
   .account-shell {

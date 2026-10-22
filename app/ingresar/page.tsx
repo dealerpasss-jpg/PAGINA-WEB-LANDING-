@@ -13,15 +13,17 @@ export default async function Page({
   const reset = searchParams.mode === "recuperar";
   return (
     <AccountShell
+      compact
+      kicker="DEALERPASS / ACADEMIA"
       title={
         reset
-          ? "Recupera tu acceso."
+          ? "Recupera tu acceso"
           : signup
-            ? "Tu próxima etapa empieza aquí."
-            : "Bienvenido de nuevo."
+            ? "Crea tu cuenta"
+            : "Bienvenido de nuevo"
       }
     >
-      <p>Tu formación, tus recursos y tu progreso en un solo lugar.</p>
+      <p>{reset ? "Te enviaremos un enlace para cambiar tu contraseña." : signup ? "Regístrate para elegir tu formación y seguir tu progreso." : "Ingresa para continuar con tu formación."}</p>
       {!configured() ? (
         <div className="account-notice">
           El acceso está en preparación. Todavía no se reciben registros ni
@@ -46,6 +48,7 @@ export default async function Page({
                 name="email"
                 type="email"
                 autoComplete="email"
+                placeholder="tu@correo.com"
                 maxLength={254}
                 required
               />
@@ -56,6 +59,7 @@ export default async function Page({
                 <input
                   name="password"
                   type="password"
+                  placeholder={signup ? "Mínimo 12 caracteres" : "Tu contraseña"}
                   autoComplete={signup ? "new-password" : "current-password"}
                   minLength={signup ? 12 : 1}
                   required
@@ -66,8 +70,8 @@ export default async function Page({
             {signup && (
               <label className="account-check">
                 <input type="checkbox" name="consent" value="yes" required />
-                Acepto los <a href="/legal/terminos">términos</a> y la{" "}
-                <a href="/legal/privacidad">política de privacidad</a>.
+                <span>Acepto los <a href="/legal/terminos">términos</a> y la{" "}
+                <a href="/legal/privacidad">política de privacidad</a>.</span>
               </label>
             )}
             <button className="btn-primary">

@@ -2,17 +2,19 @@ import Link from "next/link";
 export default function AccountShell({
   title,
   kicker = "DEALERPASS / MI ESPACIO",
+  compact = false,
   children,
 }: {
   title: string;
   kicker?: string;
+  compact?: boolean;
   children: React.ReactNode;
 }) {
   return (
-    <section className="account-shell">
+    <section className={`account-shell${compact ? " account-shell-compact" : ""}`}>
       <div className="account-top">
         <span>{kicker}</span>
-        <Link href="/mi-cuenta">Mi cuenta ↗</Link>
+        <Link href={compact ? "/" : "/mi-cuenta"}>{compact ? "Volver al inicio ↗" : "Mi cuenta ↗"}</Link>
       </div>
       <h1>{title}</h1>
       {children}
