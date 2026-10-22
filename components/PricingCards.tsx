@@ -58,11 +58,11 @@ export default function PricingCards() {
               </ul>
 
               <Link
-                href="/contacto"
+                href={plan.id === "elite" ? "/vip" : `/mi-cuenta?plan=${plan.id}`}
                 onClick={() => track(eventByPlan[plan.id], { plan: plan.id })}
                 className="btn-primary mt-6 w-full"
               >
-                {plan.cta}
+                {plan.id === "elite" ? "Solicitar reunión 1 a 1" : plan.cta}
               </Link>
             </motion.div>
           ))}

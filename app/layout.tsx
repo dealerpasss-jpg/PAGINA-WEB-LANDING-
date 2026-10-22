@@ -5,7 +5,7 @@ import Header from "@/components/Header";
 import Footer from "@/components/Footer";
 import CardSpotlight from "@/components/CardSpotlight";
 import WhatsAppFloat from "@/components/WhatsAppFloat";
-import Preloader from "@/components/Preloader";
+import "./account.css";
 
 const display = Barlow_Condensed({
   subsets: ["latin"],
@@ -39,7 +39,6 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
   return (
     <html lang="es">
       <body className={`${display.variable} ${body.variable}`}>
-        <Preloader />
         <CardSpotlight />
         <WhatsAppFloat />
         <Header />
