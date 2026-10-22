@@ -1,6 +1,6 @@
+import ScrollExperience from "@/components/ScrollExperience";
 import Hero from "@/components/Hero";
 import {
-  Experience,
   AcademyPreview,
   InventoryPreview,
   PrivateCTA,
@@ -12,7 +12,7 @@ export default function HomePage() {
   return (
     <>
       <Hero />
-      <Experience />
+      <ScrollExperience />
       <AcademyPreview />
       <MarginMethod compact />
       <InventoryPreview />

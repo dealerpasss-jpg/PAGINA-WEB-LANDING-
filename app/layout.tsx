@@ -2,9 +2,11 @@ import type { Metadata } from "next";
 import { Inter } from "next/font/google";
 import "./globals.css";
 import Header from "@/components/Header";
+import MotionEffects from "@/components/MotionEffects";
 import Footer from "@/components/Footer";
 
 import "./account.css";
+import "./motion.css";
 
 const body = Inter({
   subsets: ["latin"],
@@ -36,6 +38,7 @@ export default function RootLayout({
   return (
     <html lang="es">
       <body className={body.variable}>
+        <MotionEffects />
         <Header />
         <main id="main-content">{children}</main>
         <Footer />
