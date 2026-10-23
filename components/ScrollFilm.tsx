@@ -8,7 +8,7 @@ import { testimonials } from "@/data/testimonials";
 const clamp = (v: number) => Math.max(0, Math.min(1, v));
 const smooth = (v: number) => {
   const t = clamp(v);
-  return t * t * (3 - 2 * t);
+  return t * t * t * (t * (t * 6 - 15) + 10);
 };
 export default function ScrollFilm() {
   const root = useRef<HTMLElement>(null);
@@ -33,15 +33,15 @@ export default function ScrollFilm() {
         progress = target;
         initialized = true;
       } else {
-        progress += (target - progress) * (1 - Math.exp(-dt / 105));
+        progress += (target - progress) * (1 - Math.exp(-dt / 190));
       }
       if (Math.abs(target - progress) < 0.0001) progress = target;
       const p = progress;
       const close = smooth((p - 0.06) / 0.28),
         leave = smooth((p - 0.29) / 0.34),
         drive = smooth((p - 0.48) / 0.52);
-      const firstBlend = smooth(close / 0.55);
-      const lastBlend = smooth((close - 0.45) / 0.55);
+      const firstBlend = smooth(close / 0.5);
+      const lastBlend = smooth((close - 0.5) / 0.5);
       el.style.setProperty("--film-open-opacity", String(1 - firstBlend));
       el.style.setProperty(
         "--film-half-opacity",
@@ -52,6 +52,8 @@ export default function ScrollFilm() {
       el.style.setProperty("--film-leave", String(leave));
       el.style.setProperty("--film-drive", String(drive));
       el.style.setProperty("--film-progress", String(p));
+      el.style.setProperty("--film-copy-fade", String(smooth((p - 0.43) / 0.13)));
+      el.style.setProperty("--film-arrival-fade", String(smooth((p - 0.59) / 0.15)));
       el.style.setProperty(
         "--film-hand-x",
         `${Math.pow(leave, 1.35) * 82 - close * 1.5}%`,
@@ -110,7 +112,7 @@ export default function ScrollFilm() {
             sizes="100vw"
           />
           <div className="film-car">
-            <Image src="/brand/film-car.webp" alt="" fill sizes="100vw" />
+            <Image src="/brand/film-car.webp" alt="" fill priority sizes="100vw" />
           </div>
           <div className="film-hand">
             <Image
@@ -124,6 +126,7 @@ export default function ScrollFilm() {
             <Image
               className="film-hand-half"
               src="/brand/film-half.webp"
+              priority
               alt=""
               fill
               sizes="100vw"
@@ -131,6 +134,7 @@ export default function ScrollFilm() {
             <Image
               className="film-hand-closed"
               src="/brand/film-closed.webp"
+              priority
               alt=""
               fill
               sizes="100vw"

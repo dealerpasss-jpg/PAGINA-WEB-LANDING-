@@ -681,3 +681,17 @@
 .film-hand img { mix-blend-mode: plus-lighter; }
 /* Override the old rotating card treatment in every chapter. */
 .journey-editorial .journey-visual .journey-overlay { transform: none; }
+
+/* Scrub text with the same interpolated timeline as the illustration. */
+@media (prefers-reduced-motion: no-preference) {
+  .film-stage .film-copy {
+    opacity: calc(1 - var(--film-copy-fade, 0));
+    transform: translate3d(0, calc(var(--film-copy-fade, 0) * -18px), 0);
+    transition: none;
+  }
+  .film-stage .film-arrival {
+    opacity: var(--film-arrival-fade, 0);
+    transform: translate3d(0, calc((1 - var(--film-arrival-fade, 0)) * 20px), 0);
+    transition: none;
+  }
+}
