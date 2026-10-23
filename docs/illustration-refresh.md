@@ -26,3 +26,13 @@ Intermediate hand: one half-curled pose between open and closed references. Same
 Native scroll drives a time-based exponential smoothing loop (105 ms time constant). The loop stops once settled and cancels on unmount. Three hand poses blend during closure; hand withdrawal overlaps vehicle arrival. Car follows a shallow curved approach with subtle rotation. Reduced-motion preference uses the static opening composition. This is layered web animation, not a rendered video or articulated 3D model.
 
 Lower desktop illustrations crossfade by chapter. On narrow screens, each chapter has its own inline illustration. The academy preview uses the same visual family.
+
+## Lower homepage continuation
+
+Built-in image generation created `public/brand/editorial-inventory.webp` and `public/brand/editorial-elite.webp`. Same supplied car style reference, landscape 3:2, angular graphic shapes, crisp contours, solid shadows, palette ivory/orange/charcoal/gray, no text or logos.
+
+Inventory prompt: panoramic organized US auction yard with orange coupe, ivory SUV and charcoal pickup in parallel lanes, architectural canopy and orange sun. This is brand illustration, not a claim of actual stock.
+
+Elite prompt: two adults in a thoughtful one-to-one consultation, charcoal desk, ivory document and orange car key, auction hall and car in the distance. Calm professional atmosphere.
+
+New lower artwork pans subtly with native scroll. Testimonial text and real avatars are unchanged. The carousel moves at 18 pixels/second only while visible. Hover, focus, touch, manual navigation and a visible pause button allow reading; reduced-motion preference disables autoplay. It stops at the last card rather than jumping back.

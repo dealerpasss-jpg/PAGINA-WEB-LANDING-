@@ -126,37 +126,49 @@ export function AcademyPreview() {
 }
 export function InventoryPreview() {
   return (
-    <section className="section wrap inventory-intro">
-      <Reveal>
-        <div>
-          <span className="kicker">
-            <i />
-            VEHÍCULOS DEALERPASS
+    <section className="section wrap inventory-intro inventory-editorial">
+      <Reveal className="inventory-art-wrap">
+        <div className="scroll-art inventory-art">
+          <Image
+            src="/brand/editorial-inventory.webp"
+            alt="Ilustración de vehículos en las líneas de una subasta"
+            fill
+            sizes="(max-width: 800px) 100vw, 55vw"
+          />
+          <span className="art-caption">
+            EXPLORA / ENCUENTRA TU SIGUIENTE PASO
           </span>
-          <h2>
-            La información correcta.
-            <br />
-            La decisión es tuya.
-          </h2>
         </div>
       </Reveal>
-      <Reveal>
+      <Reveal className="inventory-editorial-copy">
+        <span className="kicker">
+          <i />
+          VEHÍCULOS DEALERPASS
+        </span>
+        <h2>
+          La información correcta.
+          <br />
+          La decisión es tuya.
+        </h2>
         <p>
           Un espacio para consultar los vehículos que publiquemos, conocer sus
           detalles y hablar directamente con nuestro equipo.
         </p>
-        <Link href="/vehiculos" className="text-link">
+        <Link href="/vehiculos" className="button">
           Explorar vehículos <span aria-hidden>↗</span>
         </Link>
+        <small className="illustration-note">
+          Ilustración de marca. Consulta el inventario disponible.
+        </small>
       </Reveal>
     </section>
   );
 }
 export function PrivateCTA() {
   return (
-    <section className="private-section">
+    <section className="private-section private-editorial">
       <div className="wrap private-grid">
-        <div>
+        <Reveal className="private-editorial-copy">
           <span className="kicker">
             <i />
             DEALERPASS ELITE
@@ -166,8 +178,6 @@ export function PrivateCTA() {
             <br />
             merece una conversación.
           </h2>
-        </div>
-        <div>
           <p>
             Un programa con admisión individual. Primero conocemos tu
             experiencia y tus objetivos en una reunión 1 a 1. Después, evaluamos
@@ -179,7 +189,20 @@ export function PrivateCTA() {
           <span className="private-note">
             Acceso sujeto a evaluación y aprobación.
           </span>
-        </div>
+        </Reveal>
+        <Reveal delay={0.1}>
+          <div className="scroll-art private-art">
+            <Image
+              src="/brand/editorial-elite.webp"
+              alt="Ilustración de una conversación individual con un mentor"
+              fill
+              sizes="(max-width: 800px) 100vw, 50vw"
+            />
+            <span className="art-caption">
+              UNA CONVERSACIÓN / UN NUEVO CAPÍTULO
+            </span>
+          </div>
+        </Reveal>
       </div>
     </section>
   );

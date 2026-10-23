@@ -12,6 +12,9 @@ export default function MotionEffects() {
       const hero = document.querySelector<HTMLElement>(".hero-cinema");
       const ticker = document.querySelector<HTMLElement>(".kinetic-track");
       const progress = document.querySelector<HTMLElement>(".reading-progress");
+      const artworks = Array.from(
+        document.querySelectorAll<HTMLElement>(".scroll-art"),
+      );
       let frame = 0,
         pointerFrame = 0,
         current: HTMLElement | null = null;
@@ -34,6 +37,16 @@ export default function MotionEffects() {
               `${Math.max(-45, Math.min(45, -r.top * 0.09))}px`,
             );
         }
+        artworks.forEach((art) => {
+          const r = art.getBoundingClientRect();
+          if (r.bottom > 0 && r.top < innerHeight) {
+            const p = (innerHeight / 2 - (r.top + r.height / 2)) / innerHeight;
+            art.style.setProperty(
+              "--art-y",
+              `${Math.max(-24, Math.min(24, p * 48))}px`,
+            );
+          }
+        });
         if (ticker) {
           const r = ticker.getBoundingClientRect();
           if (r.bottom > 0 && r.top < innerHeight)
@@ -91,6 +104,7 @@ export default function MotionEffects() {
         cancelAnimationFrame(frame);
         cancelAnimationFrame(pointerFrame);
         reset();
+        artworks.forEach((art) => art.style.removeProperty("--art-y"));
         window.removeEventListener("scroll", schedule);
         window.removeEventListener("resize", schedule);
         document.removeEventListener("pointermove", move);

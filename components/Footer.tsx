@@ -3,6 +3,10 @@ import Logo from "./Logo";
 export default function Footer() {
   return (
     <footer className="site-footer">
+      <div className="footer-signature wrap" aria-hidden="true">
+        TU SIGUIENTE <span>CAPÍTULO.</span>
+        <i>↗</i>
+      </div>
       <div className="wrap footer-top">
         <div>
           <Logo variant="dark" />

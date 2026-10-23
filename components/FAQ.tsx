@@ -1,8 +1,9 @@
+import Reveal from "./Reveal";
 import { faqs } from "@/data/faq";
 export default function FAQ({ compact = false }: { compact?: boolean }) {
   return (
     <section id="faq" className="section wrap faq-grid">
-      <div>
+      <Reveal>
         <span className="kicker">
           <i />
           ANTES DE EMPEZAR
@@ -15,8 +16,8 @@ export default function FAQ({ compact = false }: { compact?: boolean }) {
         <p className="muted">
           Conoce los detalles antes de dar el siguiente paso.
         </p>
-      </div>
-      <div className="faq-list">
+      </Reveal>
+      <Reveal className="faq-list" delay={0.1}>
         {(compact
           ? [faqs[0], faqs[2], faqs[5], faqs[10], faqs[13], faqs[14]]
           : faqs
@@ -29,7 +30,7 @@ export default function FAQ({ compact = false }: { compact?: boolean }) {
             <p>{item.a}</p>
           </details>
         ))}
-      </div>
+      </Reveal>
     </section>
   );
 }
