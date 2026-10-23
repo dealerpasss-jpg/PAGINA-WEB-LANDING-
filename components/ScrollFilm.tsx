@@ -53,7 +53,9 @@ export default function ScrollFilm() {
       const right = end < 0 ? handPoses.length - 1 : end;
       const left = Math.max(0, right - 1);
       const interval = handPoses[right].at - handPoses[left].at;
-      const blend = interval ? (close - handPoses[left].at) / interval : 1;
+      const phase = interval ? (close - handPoses[left].at) / interval : 1;
+      // Keep each drawing crisp; crossfade only in the middle of each interval.
+      const blend = smooth((phase - 0.25) / 0.5);
       handPoses.forEach((pose, i) => {
         const opacity = left === right ? (i === right ? 1 : 0) : i === left ? 1 - blend : i === right ? blend : 0;
         el.style.setProperty(`--film-${pose.name}-opacity`, String(opacity));
