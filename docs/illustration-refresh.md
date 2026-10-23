@@ -36,3 +36,14 @@ Inventory prompt: panoramic organized US auction yard with orange coupe, ivory S
 Elite prompt: two adults in a thoughtful one-to-one consultation, charcoal desk, ivory document and orange car key, auction hall and car in the distance. Calm professional atmosphere.
 
 New lower artwork pans subtly with native scroll. Testimonial text and real avatars are unchanged. The carousel moves at 18 pixels/second only while visible. Hover, focus, touch, manual navigation and a visible pause button allow reading; reduced-motion preference disables autoplay. It stops at the last card rather than jumping back.
+
+## Additional hand in-betweens
+
+Built-in image generation created three transparent aligned poses:
+- `public/brand/film-eighth.webp`: beginning finger curl.
+- `public/brand/film-quarter.webp`: quarter grip.
+- `public/brand/film-three-quarter.webp`: almost closed grip.
+
+Prompt set: precise animation intermediate between supplied adjacent poses, same 1672x941 landscape framing, lock wrist/cuff/key/strap positions and preserve key mark, four fingers and one thumb, ivory/orange/charcoal editorial shapes, transparent left half, no scenery or text. Target closures 12.5%, 25%, and 75%. Converted to WebP with alpha preserved for web delivery.
+
+Six total poses now replace the three-pose closure. Only adjacent frames blend, with normalized opacity; closure occupies a longer portion of the scroll, and withdrawal starts later to reveal the grip. All poses preload. Reduced motion retains the original opening still. This remains an illustrated scroll sequence, not a newly filmed video; crossfades can still reveal differences between independently generated drawings.

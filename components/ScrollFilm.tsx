@@ -10,6 +10,14 @@ const smooth = (v: number) => {
   const t = clamp(v);
   return t * t * t * (t * (t * 6 - 15) + 10);
 };
+const handPoses = [
+  { name: "open", at: 0 },
+  { name: "eighth", at: 0.125 },
+  { name: "quarter", at: 0.25 },
+  { name: "half", at: 0.5 },
+  { name: "three-quarter", at: 0.75 },
+  { name: "closed", at: 1 },
+];
 export default function ScrollFilm() {
   const root = useRef<HTMLElement>(null);
   const [chapter, setChapter] = useState(0);
@@ -37,17 +45,19 @@ export default function ScrollFilm() {
       }
       if (Math.abs(target - progress) < 0.0001) progress = target;
       const p = progress;
-      const close = smooth((p - 0.06) / 0.28),
-        leave = smooth((p - 0.29) / 0.34),
+      const close = smooth((p - 0.04) / 0.38),
+        leave = smooth((p - 0.37) / 0.3),
         drive = smooth((p - 0.48) / 0.52);
-      const firstBlend = smooth(close / 0.5);
-      const lastBlend = smooth((close - 0.5) / 0.5);
-      el.style.setProperty("--film-open-opacity", String(1 - firstBlend));
-      el.style.setProperty(
-        "--film-half-opacity",
-        String(firstBlend * (1 - lastBlend)),
-      );
-      el.style.setProperty("--film-closed-opacity", String(lastBlend));
+      // Blend only adjacent poses; the weights always sum to one.
+      const end = handPoses.findIndex((pose) => pose.at >= close);
+      const right = end < 0 ? handPoses.length - 1 : end;
+      const left = Math.max(0, right - 1);
+      const interval = handPoses[right].at - handPoses[left].at;
+      const blend = interval ? (close - handPoses[left].at) / interval : 1;
+      handPoses.forEach((pose, i) => {
+        const opacity = left === right ? (i === right ? 1 : 0) : i === left ? 1 - blend : i === right ? blend : 0;
+        el.style.setProperty(`--film-${pose.name}-opacity`, String(opacity));
+      });
       el.style.setProperty("--film-close", String(close));
       el.style.setProperty("--film-leave", String(leave));
       el.style.setProperty("--film-drive", String(drive));
@@ -115,30 +125,10 @@ export default function ScrollFilm() {
             <Image src="/brand/film-car.webp" alt="" fill priority sizes="100vw" />
           </div>
           <div className="film-hand">
-            <Image
-              className="film-hand-open"
-              src="/brand/film-open.webp"
-              alt=""
-              fill
-              priority
-              sizes="100vw"
-            />
-            <Image
-              className="film-hand-half"
-              src="/brand/film-half.webp"
-              priority
-              alt=""
-              fill
-              sizes="100vw"
-            />
-            <Image
-              className="film-hand-closed"
-              src="/brand/film-closed.webp"
-              priority
-              alt=""
-              fill
-              sizes="100vw"
-            />
+            {handPoses.map((pose) => (
+              <Image key={pose.name} className={`film-hand-${pose.name}`}
+                src={`/brand/film-${pose.name}.webp`} alt="" fill priority sizes="100vw" />
+            ))}
           </div>
         </div>
         <div className="film-readability" />

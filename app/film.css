@@ -695,3 +695,10 @@
     transition: none;
   }
 }
+
+.film-hand-eighth { opacity: var(--film-eighth-opacity, 0); }
+.film-hand-quarter { opacity: var(--film-quarter-opacity, 0); }
+.film-hand-three-quarter { opacity: var(--film-three-quarter-opacity, 0); }
+@media (prefers-reduced-motion: reduce) {
+  .film-hand-eighth, .film-hand-quarter, .film-hand-three-quarter { display: none; }
+}
