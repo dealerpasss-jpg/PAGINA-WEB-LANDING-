@@ -1,3 +1,4 @@
+import ArrowIcon from "@/components/ArrowIcon";
 import { notFound } from "next/navigation";
 import Link from "next/link";
 import AccountShell from "@/components/AccountShell";
@@ -57,7 +58,9 @@ export default async function Page({
   return (
     <AccountShell kicker={lesson.module_title} title={lesson.title}>
       <div className="account-links">
-        <Link href="/aula">← Volver a mi formación</Link>
+        <Link href="/aula">
+          <ArrowIcon direction="left" /> Volver a mi formación
+        </Link>
       </div>
       {asset &&
         (/\.(mp4|webm)$/i.test(lesson.asset_path) ? (

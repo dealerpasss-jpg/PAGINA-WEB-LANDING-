@@ -1,3 +1,4 @@
+import ArrowIcon from "@/components/ArrowIcon";
 import type { Metadata } from "next";
 import Link from "next/link";
 import { PageIntro } from "@/components/BrandSections";
@@ -26,7 +27,7 @@ export default function Vehicles() {
           al equipo por disponibilidad.
         </p>
         <Link href="/contacto" className="button">
-          Consultar disponibilidad ↗
+          Consultar disponibilidad <ArrowIcon />
         </Link>
       </section>
     </>

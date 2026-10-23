@@ -1,3 +1,4 @@
+import ArrowIcon from "@/components/ArrowIcon";
 import Link from "next/link";
 const modules = [
   "Cómo funciona el negocio",
@@ -31,7 +32,7 @@ export default function AcademySection() {
           y los recursos se confirma para cada plan.
         </p>
         <Link href="/mi-cuenta" className="text-link">
-          Entrar a mi espacio ↗
+          Entrar a mi espacio <ArrowIcon />
         </Link>
       </div>
       <div>

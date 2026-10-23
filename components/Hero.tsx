@@ -1,3 +1,4 @@
+import ArrowIcon from "@/components/ArrowIcon";
 import ScrollFilm from "./ScrollFilm";
 export default function Hero() {
   return (
@@ -6,7 +7,7 @@ export default function Hero() {
       <div className="auction-proof wrap">
         <div>
           <span className="proof-symbol" aria-hidden>
-            ↗
+            <ArrowIcon />
           </span>
           <p>
             <strong>Aprende desde cero</strong>
@@ -29,15 +30,40 @@ export default function Hero() {
           <p>
             <strong>Personas formadas</strong>
             <span>
-              Conoce sus experiencias <span aria-hidden>↗</span>
+              Conoce sus experiencias{" "}
+              <span aria-hidden>
+                <ArrowIcon />
+              </span>
             </span>
           </p>
         </a>
       </div>
       <div className="kinetic-band" aria-label="Acceso. Criterio. Control.">
         <div className="kinetic-track" aria-hidden="true">
-          ACCESO<span>↗</span>CRITERIO<span>↗</span>CONTROL<span>↗</span>ACCESO
-          <span>↗</span>CRITERIO<span>↗</span>CONTROL<span>↗</span>
+          ACCESO
+          <span>
+            <ArrowIcon />
+          </span>
+          CRITERIO
+          <span>
+            <ArrowIcon />
+          </span>
+          CONTROL
+          <span>
+            <ArrowIcon />
+          </span>
+          ACCESO
+          <span>
+            <ArrowIcon />
+          </span>
+          CRITERIO
+          <span>
+            <ArrowIcon />
+          </span>
+          CONTROL
+          <span>
+            <ArrowIcon />
+          </span>
         </div>
       </div>
     </section>

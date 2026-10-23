@@ -1,3 +1,4 @@
+import ArrowIcon from "@/components/ArrowIcon";
 import AccountShell from "@/components/AccountShell";
 import { requireIdentity, database, checked } from "@/lib/academy/server";
 import { accessFor } from "@/lib/academy/billing";
@@ -53,7 +54,9 @@ export default async function Page() {
       {!plans.length && (
         <p className="account-notice">
           No tienes un plan activo.{" "}
-          <Link href="/mi-cuenta">Explorar planes →</Link>
+          <Link href="/mi-cuenta">
+            Explorar planes <ArrowIcon direction="right" />
+          </Link>
         </p>
       )}
       {available.length === 0 && plans.length > 0 && (
@@ -79,7 +82,9 @@ export default async function Page() {
                 </small>
               </div>
               {allowed ? (
-                <Link href={"/aula/" + l.id}>Abrir clase →</Link>
+                <Link href={"/aula/" + l.id}>
+                  Abrir clase <ArrowIcon direction="right" />
+                </Link>
               ) : (
                 <Link href="/mi-cuenta">Ver planes</Link>
               )}

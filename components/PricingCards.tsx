@@ -1,4 +1,6 @@
 "use client";
+import ArrowIcon from "@/components/ArrowIcon";
+
 import Link from "next/link";
 import { plans } from "@/data/plans";
 import { track } from "@/lib/analytics";
@@ -49,7 +51,9 @@ export default function PricingCards() {
                 }
               >
                 Elegir {p.name.replace("DealerPass ", "")}{" "}
-                <span aria-hidden>↗</span>
+                <span aria-hidden>
+                  <ArrowIcon />
+                </span>
               </Link>
             </article>
           ))}
@@ -76,7 +80,7 @@ export default function PricingCards() {
             $2,999 <span>USD / año · Referencia</span>
           </p>
           <Link className="button button-light" href="/vip">
-            Solicitar entrevista ↗
+            Solicitar entrevista <ArrowIcon />
           </Link>
           <small>Sujeto a evaluación y aprobación.</small>
         </div>

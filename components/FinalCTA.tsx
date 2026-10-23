@@ -1,3 +1,4 @@
+import ArrowIcon from "@/components/ArrowIcon";
 import Link from "next/link";
 export default function FinalCTA() {
   return (
@@ -14,7 +15,10 @@ export default function FinalCTA() {
         </h2>
       </div>
       <Link className="button" href="/planes">
-        Explorar los planes <span aria-hidden>↗</span>
+        Explorar los planes{" "}
+        <span aria-hidden>
+          <ArrowIcon />
+        </span>
       </Link>
     </section>
   );

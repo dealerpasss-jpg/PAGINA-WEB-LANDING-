@@ -1,3 +1,4 @@
+import ArrowIcon from "@/components/ArrowIcon";
 import type { Metadata } from "next";
 import { PageIntro, PrivateCTA } from "@/components/BrandSections";
 import AcademySection from "@/components/AcademySection";
@@ -23,7 +24,7 @@ export default function AcademyPage() {
           por lo que sabes.
         </p>
         <Link className="button button-light" href="/planes">
-          Ver planes de formación ↗
+          Ver planes de formación <ArrowIcon />
         </Link>
       </div>
       <AcademySection />

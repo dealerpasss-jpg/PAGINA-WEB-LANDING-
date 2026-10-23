@@ -1,4 +1,6 @@
 "use client";
+import ArrowIcon from "@/components/ArrowIcon";
+
 import { useState } from "react";
 import Link from "next/link";
 import { marginMethod } from "@/data/margen";
@@ -43,7 +45,9 @@ export default function MarginMethod({
             >
               <span>{m.letter}</span>
               <span>{m.word}</span>
-              <span aria-hidden>↗</span>
+              <span aria-hidden>
+                <ArrowIcon />
+              </span>
             </button>
           ))}
         </div>
@@ -60,7 +64,10 @@ export default function MarginMethod({
             href={compact ? "/metodo-margen#calculadora" : "#calculadora"}
             className="text-link"
           >
-            Llevarlo a los números <span aria-hidden>↗</span>
+            Llevarlo a los números{" "}
+            <span aria-hidden>
+              <ArrowIcon />
+            </span>
           </Link>
         </div>
       </div>

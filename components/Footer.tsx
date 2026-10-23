@@ -1,3 +1,4 @@
+import ArrowIcon from "@/components/ArrowIcon";
 import Link from "next/link";
 import Logo from "./Logo";
 export default function Footer() {
@@ -5,7 +6,9 @@ export default function Footer() {
     <footer className="site-footer">
       <div className="footer-signature wrap" aria-hidden="true">
         TU SIGUIENTE <span>CAPÍTULO.</span>
-        <i>↗</i>
+        <i>
+          <ArrowIcon />
+        </i>
       </div>
       <div className="wrap footer-top">
         <div>
@@ -40,7 +43,9 @@ export default function Footer() {
           La formación no garantiza adjudicación, condición ni rentabilidad. El
           acceso a subastas depende del plan y de las condiciones aplicables.
         </p>
-        <Link href="#main-content">Volver arriba ↑</Link>
+        <Link href="#main-content">
+          Volver arriba <ArrowIcon direction="up" />
+        </Link>
       </div>
     </footer>
   );

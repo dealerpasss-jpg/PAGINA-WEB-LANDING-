@@ -60,7 +60,7 @@ export default function AuctionArt({ compact = false }: { compact?: boolean }) {
             AUCTION LANE
           </text>
           <text x="353" y="108" fill="#f1eee5" fontSize="25" letterSpacing="2">
-            03 <tspan fill="#FF4D00">↘</tspan>
+            03
           </text>
           <path d="M345 123v42m142-42v42" stroke="#83908a" />
         </g>

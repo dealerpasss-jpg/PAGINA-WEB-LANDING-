@@ -1,4 +1,6 @@
 "use client";
+import ArrowIcon from "@/components/ArrowIcon";
+
 import { useEffect, useRef, useState } from "react";
 import Link from "next/link";
 import { usePathname } from "next/navigation";
@@ -59,7 +61,10 @@ export default function Header() {
         </nav>
         <div className="header-actions">
           <Link className="header-login" href="/mi-cuenta">
-            Mi espacio <span aria-hidden>↗</span>
+            Mi espacio{" "}
+            <span aria-hidden>
+              <ArrowIcon />
+            </span>
           </Link>
           <button
             ref={trigger}
@@ -83,11 +88,16 @@ export default function Header() {
           {links.map((l) => (
             <Link key={l.href} href={l.href} onClick={() => setOpen(false)}>
               {l.label}
-              <span aria-hidden>↗</span>
+              <span aria-hidden>
+                <ArrowIcon />
+              </span>
             </Link>
           ))}
           <Link href="/contacto" onClick={() => setOpen(false)}>
-            Hablemos <span aria-hidden>↗</span>
+            Hablemos{" "}
+            <span aria-hidden>
+              <ArrowIcon />
+            </span>
           </Link>
         </nav>
       )}

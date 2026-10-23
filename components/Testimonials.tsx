@@ -1,4 +1,6 @@
 "use client";
+import ArrowIcon from "@/components/ArrowIcon";
+
 import { useEffect, useRef, useState } from "react";
 import Image from "next/image";
 import Reveal from "./Reveal";
@@ -129,14 +131,14 @@ export default function Testimonials() {
               disabled={position === 0}
               onClick={() => move(-1)}
             >
-              ←
+              <ArrowIcon direction="left" />
             </button>
             <button
               aria-label="Testimonios siguientes"
               disabled={position === 2}
               onClick={() => move(1)}
             >
-              →
+              <ArrowIcon direction="right" />
             </button>
           </div>
         </Reveal>
@@ -186,7 +188,10 @@ export default function Testimonials() {
         </div>
         <p className="carousel-hint">
           Desliza para leer más. El movimiento se detiene al tocar o pasar el
-          cursor. <span aria-hidden>→</span>
+          cursor.{" "}
+          <span aria-hidden>
+            <ArrowIcon direction="right" />
+          </span>
         </p>
       </div>
     </section>

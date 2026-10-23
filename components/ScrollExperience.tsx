@@ -1,4 +1,6 @@
 "use client";
+import ArrowIcon from "@/components/ArrowIcon";
+
 import { useEffect, useRef, useState } from "react";
 import Image from "next/image";
 import Link from "next/link";
@@ -162,7 +164,9 @@ export default function ScrollExperience() {
             </div>
             <Link className="text-link" href={c.href}>
               {c.cta}
-              <span aria-hidden>↗</span>
+              <span aria-hidden>
+                <ArrowIcon />
+              </span>
             </Link>
           </article>
         ))}

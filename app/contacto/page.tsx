@@ -1,3 +1,4 @@
+import ArrowIcon from "@/components/ArrowIcon";
 import LeadForm from "@/components/LeadForm";
 import { getWhatsappUrl } from "@/lib/analytics";
 export default function ContactoPage() {
@@ -25,7 +26,7 @@ export default function ContactoPage() {
             target="_blank"
             rel="noopener noreferrer"
           >
-            Escribir por WhatsApp ↗
+            Escribir por WhatsApp <ArrowIcon />
           </a>
         )}
         <div className="contact-signature">

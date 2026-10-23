@@ -1,4 +1,6 @@
 "use client";
+import ArrowIcon from "@/components/ArrowIcon";
+
 import { useEffect, useRef, useState } from "react";
 import Image from "next/image";
 import Link from "next/link";
@@ -152,10 +154,16 @@ export default function ScrollFilm() {
           </p>
           <div className="film-actions">
             <Link className="button" href="/academy">
-              Conocer la formación <span aria-hidden>↗</span>
+              Conocer la formación{" "}
+              <span aria-hidden>
+                <ArrowIcon />
+              </span>
             </Link>
             <Link className="text-link" href="/planes">
-              Ver planes <span aria-hidden>↗</span>
+              Ver planes{" "}
+              <span aria-hidden>
+                <ArrowIcon />
+              </span>
             </Link>
           </div>
           <a className="film-trust" href="#testimonios">
@@ -174,7 +182,9 @@ export default function ScrollFilm() {
               <strong>Más de 3.000 personas</strong>
               <small>se han formado con nosotros.</small>
             </span>
-            <span aria-hidden>↗</span>
+            <span aria-hidden>
+              <ArrowIcon />
+            </span>
           </a>
         </div>
         <div className="film-arrival">
@@ -188,7 +198,10 @@ export default function ScrollFilm() {
             empieza aquí.
           </h2>
           <Link className="button" href="/academy">
-            Explorar la academia <span aria-hidden>↗</span>
+            Explorar la academia{" "}
+            <span aria-hidden>
+              <ArrowIcon />
+            </span>
           </Link>
         </div>
         <div className="film-controls">
@@ -204,14 +217,20 @@ export default function ScrollFilm() {
             </span>
           </div>
           <a href="#experiencia">
-            Saltar animación <span aria-hidden>↓</span>
+            Saltar animación{" "}
+            <span aria-hidden>
+              <ArrowIcon direction="down" />
+            </span>
           </a>
           <div className="film-progress" aria-hidden="true">
             <span />
           </div>
         </div>
         <span className="film-scroll-hint">
-          Desliza para continuar <span aria-hidden>↓</span>
+          Desliza para continuar{" "}
+          <span aria-hidden>
+            <ArrowIcon direction="down" />
+          </span>
         </span>
       </div>
     </section>

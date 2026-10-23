@@ -1,3 +1,4 @@
+import ArrowIcon from "@/components/ArrowIcon";
 import AccountShell from "@/components/AccountShell";
 import {
   configured,
@@ -71,7 +72,9 @@ export default async function Page({
         </p>
       )}
       <div className="account-links">
-        <Link href="/aula">Ir a mi formación →</Link>
+        <Link href="/aula">
+          Ir a mi formación <ArrowIcon direction="right" />
+        </Link>
         {who.profile.role !== "student" && (
           <Link href="/equipo">Panel del equipo</Link>
         )}
@@ -102,10 +105,14 @@ export default async function Page({
                   Primero tendremos una reunión 1 a 1. Evaluaremos si este grupo
                   es adecuado para ti antes de ofrecerte el ingreso.
                 </p>
-                <Link href="/vip">Solicitar reunión →</Link>
+                <Link href="/vip">
+                  Solicitar reunión <ArrowIcon direction="right" />
+                </Link>
               </>
             ) : active.includes(plan.id) ? (
-              <Link href="/aula">Ver mi formación →</Link>
+              <Link href="/aula">
+                Ver mi formación <ArrowIcon direction="right" />
+              </Link>
             ) : (
               <form action="/api/checkout" method="post">
                 <input type="hidden" name="plan" value={plan.id} />

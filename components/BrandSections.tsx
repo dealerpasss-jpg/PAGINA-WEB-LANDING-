@@ -1,3 +1,4 @@
+import ArrowIcon from "@/components/ArrowIcon";
 import Link from "next/link";
 import Image from "next/image";
 import Reveal from "./Reveal";
@@ -55,7 +56,9 @@ export function Experience() {
               <p>{s.p}</p>
               <Link className="text-link" href={s.href}>
                 {s.link}
-                <span aria-hidden>↗</span>
+                <span aria-hidden>
+                  <ArrowIcon />
+                </span>
               </Link>
             </article>
           </Reveal>
@@ -116,7 +119,10 @@ export function AcademyPreview() {
               </li>
             </ul>
             <Link href="/academy" className="button">
-              Descubrir la formación <span aria-hidden>↗</span>
+              Descubrir la formación{" "}
+              <span aria-hidden>
+                <ArrowIcon />
+              </span>
             </Link>
           </div>
         </Reveal>
@@ -155,7 +161,10 @@ export function InventoryPreview() {
           detalles y hablar directamente con nuestro equipo.
         </p>
         <Link href="/vehiculos" className="button">
-          Explorar vehículos <span aria-hidden>↗</span>
+          Explorar vehículos{" "}
+          <span aria-hidden>
+            <ArrowIcon />
+          </span>
         </Link>
         <small className="illustration-note">
           Ilustración de marca. Consulta el inventario disponible.
@@ -184,7 +193,10 @@ export function PrivateCTA() {
             juntos si Elite es para ti.
           </p>
           <Link href="/vip" className="button button-light">
-            Solicitar entrevista <span aria-hidden>↗</span>
+            Solicitar entrevista{" "}
+            <span aria-hidden>
+              <ArrowIcon />
+            </span>
           </Link>
           <span className="private-note">
             Acceso sujeto a evaluación y aprobación.

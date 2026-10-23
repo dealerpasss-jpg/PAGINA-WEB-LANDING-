@@ -1,3 +1,4 @@
+import ArrowIcon from "@/components/ArrowIcon";
 import AccountShell from "@/components/AccountShell";
 import { configured, identity, database, checked } from "@/lib/academy/server";
 import Link from "next/link";
@@ -67,7 +68,9 @@ export default async function Page({
         <div className="account-notice">
           <p>{labels[application.status]}</p>
           {application.status === "approved" && (
-            <Link href="/mi-cuenta">Continuar con mi admisión →</Link>
+            <Link href="/mi-cuenta">
+              Continuar con mi admisión <ArrowIcon direction="right" />
+            </Link>
           )}
         </div>
       ) : who ? (
