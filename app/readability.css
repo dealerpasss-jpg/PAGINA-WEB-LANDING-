@@ -287,3 +287,21 @@
     flex-wrap: nowrap;
   }
 }
+
+/* Keep the social-proof card in normal flow, above the animation controls. */
+@media (min-width: 801px) {
+  .film-stage {
+    height: auto;
+    min-height: 100svh;
+    padding-top: clamp(112px, 15svh, 170px);
+    padding-bottom: 160px;
+  }
+  .film-copy {
+    position: relative;
+    top: auto;
+  }
+  .film-scroll-hint {
+    left: auto;
+    right: 4%;
+  }
+}
