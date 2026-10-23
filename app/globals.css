@@ -1727,3 +1727,28 @@ a {
     font-size: 50px;
   }
 }
+
+/* Academy team: quiet editorial layout, balanced portraits and short biographies. */
+.instructors { background: var(--ivory); padding: 80px 0 64px; }
+.instructors-heading { max-width: 660px; margin-bottom: 44px; }
+.instructors-heading h2 { margin: 20px 0 18px; }
+.instructors-heading > p { color: var(--muted); max-width: 560px; }
+.instructors-grid { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 48px; }
+.instructor { min-width: 0; }
+.instructor-photo { position: relative; aspect-ratio: 5 / 4; overflow: hidden; background: #ddd9d1; }
+.instructor-photo img { object-fit: cover; }
+.instructor-photo-sebastian img { object-position: 50% 66%; }
+.instructor-photo-juan img { object-position: 50% 65%; }
+.instructor-copy { padding-top: 26px; }
+.instructor-experience { font-size: 11px; font-weight: 600; letter-spacing: .09em; text-transform: uppercase; color: var(--muted); }
+.instructor-copy h3 { font-size: clamp(28px, 3vw, 36px); margin-top: 10px; }
+.instructor-role { font-size: 14px; margin-top: 8px; font-weight: 600; }
+.instructor-description { max-width: 490px; color: var(--muted); font-size: 15px; margin-top: 18px; }
+.instructors-note { margin-top: 44px; padding-top: 22px; border-top: 1px solid #11131522; font-size: 14px; color: var(--muted); }
+@media (max-width: 700px) {
+  .instructors { padding: 52px 0 42px; }
+  .instructors-heading { margin-bottom: 30px; }
+  .instructors-grid { grid-template-columns: 1fr; gap: 38px; }
+  .instructor-copy { padding-top: 20px; }
+  .instructors-note { margin-top: 32px; }
+}

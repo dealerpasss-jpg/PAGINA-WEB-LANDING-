@@ -32,7 +32,7 @@ export default function AcademySection() {
           y los recursos se confirma para cada plan.
         </p>
         <Link href="/mi-cuenta" className="text-link">
-          Entrar a mi espacio <ArrowIcon />
+          Ver mi formación <ArrowIcon />
         </Link>
       </div>
       <div>
