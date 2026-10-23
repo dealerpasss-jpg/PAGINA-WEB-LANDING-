@@ -353,8 +353,9 @@
     left: -35%;
     right: -10%;
   }
+  /* Fill the mobile canvas; contain left letterboxing on taller phones. */
   .film-canvas img {
-    object-fit: contain;
+    object-fit: cover;
   }
   .film-readability {
     background: linear-gradient(
