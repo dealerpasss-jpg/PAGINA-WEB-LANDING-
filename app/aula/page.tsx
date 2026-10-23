@@ -86,7 +86,7 @@ export default async function Page() {
                   Abrir clase <ArrowIcon direction="right" />
                 </Link>
               ) : (
-                <Link href="/mi-cuenta">Ver planes</Link>
+                <Link href="/planes">Ver planes</Link>
               )}
             </article>
           );

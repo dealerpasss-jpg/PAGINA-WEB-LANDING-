@@ -42,7 +42,7 @@ export default function Header() {
       </a>
       <div className="header-inner">
         <Link
-          href="/"
+          href={path === "/" ? "#main-content" : "/"}
           aria-label="DealerPass, inicio"
           onClick={() => setOpen(false)}
         >

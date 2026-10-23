@@ -12,7 +12,7 @@ export default function Footer() {
       </div>
       <div className="wrap footer-top">
         <div>
-          <Logo variant="dark" />
+          <Link href="/#main-content" aria-label="DealerPass, inicio"><Logo variant="dark" /></Link>
           <p>Acceso. Criterio. Control.</p>
         </div>
         <div>
