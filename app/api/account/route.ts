@@ -69,7 +69,7 @@ export async function POST(request: Request) {
       "Revisa los datos. La contraseña debe tener al menos 12 caracteres.";
   return NextResponse.redirect(
     new URL(
-      "/ingresar?message=" +
+      "/ingresar?mode=" + (action === "signup" ? "registro" : action === "reset" ? "recuperar" : "login") + "&message=" +
         encodeURIComponent(message) +
         "&next=" +
         encodeURIComponent(next),

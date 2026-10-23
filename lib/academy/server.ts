@@ -2,6 +2,7 @@ import "server-only";
 import { createServerClient } from "@supabase/ssr";
 import { createClient } from "@supabase/supabase-js";
 import { cookies } from "next/headers";
+import { safeNext } from "./policy";
 import { redirect } from "next/navigation";
 export function configured() {
   return !!(
@@ -66,9 +67,9 @@ export async function identity() {
   if (error) throw error;
   return { user, profile };
 }
-export async function requireIdentity() {
+export async function requireIdentity(next = "/mi-cuenta") {
   const who = await identity();
-  if (!who) redirect("/ingresar");
+  if (!who) redirect("/ingresar?next=" + encodeURIComponent(safeNext(next)));
   return who;
 }
 export function sameOrigin(request: Request) {

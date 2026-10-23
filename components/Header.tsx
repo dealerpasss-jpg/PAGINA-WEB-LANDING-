@@ -60,8 +60,10 @@ export default function Header() {
           ))}
         </nav>
         <div className="header-actions">
+          <Link className="header-auth-link" href="/ingresar">Ingresar</Link>
+          <Link className="header-signup" href="/ingresar?mode=registro">Crear cuenta</Link>
           <Link className="header-login" href="/mi-cuenta">
-            Mi espacio{" "}
+            Dashboard{" "}
             <span aria-hidden>
               <ArrowIcon />
             </span>
@@ -93,6 +95,9 @@ export default function Header() {
               </span>
             </Link>
           ))}
+          <Link href="/mi-cuenta" onClick={() => setOpen(false)}>Mi dashboard <ArrowIcon /></Link>
+          <Link href="/ingresar" onClick={() => setOpen(false)}>Iniciar sesión <ArrowIcon /></Link>
+          <Link href="/ingresar?mode=registro" onClick={() => setOpen(false)}>Crear cuenta <ArrowIcon /></Link>
           <Link href="/contacto" onClick={() => setOpen(false)}>
             Hablemos{" "}
             <span aria-hidden>

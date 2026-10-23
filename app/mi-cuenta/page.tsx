@@ -33,7 +33,8 @@ export default async function Page({
         </Link>
       </AccountShell>
     );
-  const who = await requireIdentity();
+  const selected = plans.find((p) => p.id === searchParams.plan);
+  const who = await requireIdentity(selected ? `/mi-cuenta?plan=${selected.id}` : "/mi-cuenta");
   let active: string[] = [];
   let failed = false;
   try {
@@ -83,10 +84,11 @@ export default async function Page({
           <button>Cerrar sesión</button>
         </form>
       </div>
+      {selected && <p className="account-notice">Seleccionaste {selected.name}. Revisa sus detalles abajo antes de continuar.</p>}
       <h2>Elige cómo quieres avanzar.</h2>
       <div className="account-grid">
         {plans.map((plan) => (
-          <article key={plan.id} className="account-card">
+          <article key={plan.id} className={`account-card ${selected?.id === plan.id ? "account-plan-selected" : ""}`}>
             <span className="account-tag">
               {active.includes(plan.id)
                 ? "Plan activo"
