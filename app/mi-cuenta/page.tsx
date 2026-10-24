@@ -1,3 +1,4 @@
+import { redirect } from "next/navigation";
 import StudentDashboard from "@/components/StudentDashboard";
 import ArrowIcon from "@/components/ArrowIcon";
 import AccountShell from "@/components/AccountShell";
@@ -21,6 +22,7 @@ export default async function Page({
   }>;
 }) {
   const searchParams = await searchParamsPromise;
+  if (searchParams.password) redirect("/auth/nueva-contrasena");
   if (!configured())
     return (
       <AccountShell title="Tu espacio está en preparación.">
@@ -149,26 +151,7 @@ export default async function Page({
         </p>
       )}
       </section>
-      {searchParams.password && (
-        <form
-          method="post"
-          action="/api/account"
-          className="account-card account-form"
-        >
-          <input type="hidden" name="action" value="password" />
-          <label>
-            Nueva contraseña
-            <input
-              name="password"
-              type="password"
-              minLength={12}
-              autoComplete="new-password"
-              required
-            />
-          </label>
-          <button className="btn-primary">Guardar contraseña</button>
-        </form>
-      )}
+
     </AccountShell>
   );
 }

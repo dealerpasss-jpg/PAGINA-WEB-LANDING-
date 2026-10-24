@@ -100,3 +100,12 @@ test("directory pagination and record identifiers are bounded",()=>{
  for(const n of ["0","-1","NaN","Infinity","1.5","100001"])assert.equal(directoryPage(n),1);
  assert.equal(directoryPage("2"),2);assert.equal(validRecordId("../students"),false);assert.equal(validRecordId("12345678-1234-1234-1234-123456789abc"),true);
 });
+
+import { passwordError } from "../lib/academy/password.ts";
+test("password change validates confirmation and length on both boundaries", () => {
+  assert.ok(passwordError("short", "short"));
+  assert.ok(passwordError("a".repeat(257), "a".repeat(257)));
+  assert.ok(passwordError("a".repeat(12), "b".repeat(12)));
+  assert.equal(passwordError("a".repeat(12), "a".repeat(12)), null);
+  assert.equal(passwordError("a".repeat(256), "a".repeat(256)), null);
+});

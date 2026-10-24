@@ -13,7 +13,7 @@ export async function GET(request: Request) {
   }
   return NextResponse.redirect(
     new URL(
-      "/ingresar?message=El+enlace+no+es+válido+o+ha+caducado.",
+      "/ingresar?mode=recuperar&message=El+enlace+no+es+válido+o+ha+caducado.+Solicita+uno+nuevo+y+ábrelo+en+el+mismo+navegador.",
       origin(),
     ),
   );
