@@ -1,0 +1,356 @@
+/* Consistent drawn arrows: never platform emoji glyphs. */
+.dp-arrow {
+  display: inline-block;
+  width: 1em;
+  height: 1em;
+  min-width: 16px;
+  min-height: 16px;
+  vertical-align: -0.14em;
+  flex-shrink: 0;
+}
+.mobile-nav .dp-arrow {
+  width: 20px;
+  height: 20px;
+  color: #171a1d;
+}
+.button .dp-arrow,
+.text-link .dp-arrow {
+  width: 18px;
+  height: 18px;
+}
+.carousel-controls .dp-arrow {
+  width: 18px;
+  height: 18px;
+}
+.footer-signature .dp-arrow,
+.kinetic-track .dp-arrow {
+  min-width: 0;
+  min-height: 0;
+}
+/* Small labels remain legible on compact displays. */
+.kicker,
+.film-copy .kicker,
+.film-arrival .kicker,
+.journey-top .kicker {
+  font-size: 11px;
+  line-height: 1.6;
+  letter-spacing: 0.1em;
+}
+.film-copy > p {
+  color: #343632;
+  font-size: 15px;
+}
+.film-copy .film-trust {
+  background: #f2eee7f5;
+  border: 1px solid #d5cfc5;
+  border-radius: 10px;
+  padding: 14px;
+  max-width: 405px;
+}
+.film-trust strong {
+  font-size: 13px;
+  color: #171a1d;
+}
+.film-trust small {
+  font-size: 12px;
+  color: #4b4c46;
+  line-height: 1.5;
+}
+.film-controls,
+.film-controls > a,
+.film-chapters {
+  font-size: 11px;
+  line-height: 1.5;
+}
+.film-chapters span {
+  color: #d2cec8;
+}
+.film-chapters span[aria-current] {
+  color: #fff;
+}
+.film-scroll-hint {
+  font-size: 12px;
+  background: #f2eee7;
+  color: #171a1d;
+}
+.film-actions .button,
+.film-actions .text-link,
+.film-arrival .button {
+  font-size: 13px;
+}
+.hero-film .auction-proof p > span {
+  color: #464740;
+  font-size: 12px;
+  line-height: 1.6;
+}
+.hero-film .auction-proof p > strong {
+  font-size: 13px;
+}
+.journey-editorial .journey-top {
+  font-size: 11px;
+}
+.journey-editorial .journey-top .kicker {
+  color: #fff;
+}
+.journey-editorial .journey-top {
+  background: #171a1de8;
+  border-radius: 7px;
+  padding: 10px 12px;
+  top: 18px;
+  left: 18px;
+  right: 18px;
+}
+.journey-editorial .journey-overlay small,
+.journey-editorial .journey-chip {
+  font-size: 11px;
+  line-height: 1.5;
+}
+.journey-editorial .journey-progress a {
+  font-size: 11px;
+}
+.journey-tags span,
+.editorial-list li > span {
+  font-size: 12px;
+}
+.academy-editorial .art-top,
+.academy-editorial .art-bottom {
+  font-size: 11px;
+  line-height: 1.5;
+  background: #171a1de8;
+  color: #fff;
+  padding: 10px 12px;
+  border-radius: 6px;
+}
+.art-caption {
+  font-size: 11px;
+  line-height: 1.6;
+  letter-spacing: 0.06em;
+  background: #171a1df2;
+  padding: 10px 12px;
+  border-radius: 6px;
+}
+.illustration-note {
+  font-size: 12px;
+  line-height: 1.6;
+  color: #55514c;
+}
+.testimonials-section .carousel-controls .carousel-pause {
+  font-size: 12px;
+}
+.testimonials-section .testimonial-person strong {
+  font-size: 13px;
+}
+.testimonials-section .testimonial-person div > span {
+  font-size: 12px;
+  color: #d2ccc4;
+}
+.testimonials-section .carousel-hint {
+  font-size: 12px;
+  color: #d2ccc4;
+}
+.testimonials-section .testimonial blockquote {
+  font-size: 15px;
+}
+.private-editorial .private-note {
+  font-size: 12px;
+  line-height: 1.6;
+  color: #d2ccc4;
+}
+.site-footer .footer-label {
+  font-size: 12px;
+  color: #d2ccc4;
+}
+.site-footer .footer-top a {
+  font-size: 13px;
+}
+.site-footer .footer-bottom {
+  font-size: 12px;
+  color: #c4beb6;
+  line-height: 1.8;
+}
+.site-footer .footer-top > div:first-child p {
+  color: #c4beb6;
+  font-size: 13px;
+}
+.plan-eyebrow,
+.plan-note,
+.pricing-note {
+  font-size: 12px;
+  line-height: 1.6;
+}
+@media (max-width: 800px) {
+  .film-copy > p {
+    font-size: 14px;
+    line-height: 1.65;
+  }
+  .film-copy .kicker,
+  .film-arrival .kicker {
+    font-size: 10px;
+  }
+  .film-actions {
+    flex-wrap: wrap;
+    gap: 16px;
+  }
+  .film-actions .button,
+  .film-actions .text-link {
+    font-size: 13px;
+    min-height: 44px;
+  }
+  .film-copy .film-trust {
+    margin-top: 18px;
+    padding: 12px;
+    gap: 10px;
+  }
+  .film-trust strong {
+    font-size: 12px;
+  }
+  .film-trust small {
+    font-size: 12px;
+  }
+  .film-controls {
+    flex-wrap: wrap;
+    gap: 10px;
+    padding: 12px 14px;
+  }
+  .film-chapters {
+    flex: 1 1 100%;
+    justify-content: space-between;
+    gap: 10px;
+    font-size: 11px;
+  }
+  .film-controls > a {
+    margin-left: auto;
+    font-size: 11px;
+    min-height: 26px;
+    align-items: center;
+  }
+  .film-scroll-hint {
+    bottom: 108px;
+    font-size: 11px;
+  }
+  .testimonials-intro {
+    font-size: 14px;
+  }
+  .journey-step p,
+  .academy-feature-copy p,
+  .inventory-editorial p,
+  .private-grid p,
+  .faq-list p,
+  .faq-grid .muted {
+    font-size: 15px;
+    line-height: 1.75;
+  }
+  .faq-list summary {
+    font-size: 15px;
+  }
+  .private-editorial .private-note {
+    font-size: 12px;
+  }
+}
+@media (max-width: 500px) {
+  .film-stage {
+    min-height: 880px;
+  }
+  .film-canvas {
+    top: 49%;
+    height: 42%;
+  }
+  .film-copy {
+    top: 100px;
+  }
+  .film-copy > p {
+    max-width: 100%;
+  }
+  .film-readability {
+    background: linear-gradient(
+      180deg,
+      #f2eee7 0%,
+      #f2eee7 40%,
+      #f2eee7da 49%,
+      transparent 62%
+    );
+  }
+  .film-copy .film-trust {
+    max-width: 100%;
+  }
+  .film-controls {
+    bottom: 12px;
+  }
+  .art-caption {
+    left: 16px;
+    right: 16px;
+    bottom: 16px;
+  }
+}
+@media (prefers-reduced-motion: reduce) {
+  .film-controls {
+    flex-wrap: nowrap;
+  }
+}
+
+/* Keep the social-proof card in normal flow, above the animation controls. */
+@media (min-width: 801px) {
+  .film-stage {
+    height: auto;
+    min-height: 100svh;
+    padding-top: clamp(112px, 15svh, 170px);
+    padding-bottom: 160px;
+  }
+  .film-copy {
+    position: relative;
+    top: auto;
+  }
+  .film-scroll-hint {
+    left: auto;
+    right: 4%;
+  }
+}
+
+.film-copy .film-trust { background: #111315; border-color: #111315; color: #fff; }
+.film-trust strong { color: #fff; }
+.film-trust small { color: #dedbd5; }
+.film-trust .hero-avatars img { border-color: #111315; }
+.header-auth-link, .header-signup { font-size: 12px; white-space: nowrap; }
+.header-signup { padding: 10px 14px; border: 1px solid #171a1d; border-radius: 5px; }
+.account-plan-selected { outline: 2px solid #ff4d00; outline-offset: 3px; }
+.plans-welcome { display: grid; grid-template-columns: 1fr 1fr; gap: 48px; align-items: center; padding-top: 70px; padding-bottom: 70px; }
+.plans-welcome h1 { font-size: clamp(38px, 4.3vw, 64px); line-height: 1.06; letter-spacing: -.055em; margin: 24px 0; }
+.plans-welcome p, .plans-heading p { max-width: 600px; color: #50514c; line-height: 1.75; }
+.plans-actions { display: flex; gap: 24px; align-items: center; flex-wrap: wrap; margin: 30px 0; }
+.plans-proof { display: flex; gap: 18px; align-items: center; padding-top: 24px; border-top: 1px solid #ccc6bd; }
+.plans-proof strong { font-size: 36px; letter-spacing: -.05em; }
+.plans-proof span { max-width: 200px; font-size: 14px; }
+.plans-hero-art { min-height: 530px; position: relative; overflow: hidden; border-radius: 12px; background: #171a1d; }
+.plans-hero-art img { object-fit: cover; }
+.plans-hero-art > span { position: absolute; bottom: 24px; left: 24px; right: 24px; background: #171a1df2; color: #fff; padding: 16px; font-size: 12px; letter-spacing: .12em; }
+.plans-experience { padding-top: 60px; padding-bottom: 60px; border-top: 1px solid #ccc6bd; }
+.plans-experience h2, .plans-heading h2, .plans-steps h2 { font-size: clamp(30px, 3.4vw, 48px); line-height: 1.12; letter-spacing: -.04em; margin: 20px 0 30px; }
+.experience-gallery { display: grid; grid-template-columns: repeat(3, 1fr); gap: 24px; }
+.experience-gallery article > div { position: relative; aspect-ratio: 4/3; overflow: hidden; border-radius: 8px; }
+.experience-gallery img { object-fit: cover; transition: transform .65s; }
+.experience-gallery article:hover img { transform: scale(1.04); }
+.experience-gallery h3 { font-size: 22px; margin: 22px 0 12px; }
+.experience-gallery p { font-size: 15px; line-height: 1.7; color: #50514c; }
+.plans-experience .illustration-note { margin-top: 24px; }
+.plans-heading { padding-top: 60px; }
+.plans-comparison { padding-bottom: 60px; }
+.plans-comparison details { border: 1px solid #c8c2b9; padding: 24px; border-radius: 10px; }
+.plans-comparison summary { cursor: pointer; font-size: 18px; font-weight: 600; }
+.plans-table-scroll { overflow-x: auto; margin: 24px 0; }
+.plans-comparison table { width: 100%; min-width: 680px; border-collapse: collapse; text-align: left; font-size: 14px; }
+.plans-comparison th, .plans-comparison td { padding: 16px; border-bottom: 1px solid #d7d1c8; }
+.plans-comparison caption { text-align: left; padding: 16px; }
+.plans-comparison p { font-size: 12px; }
+.plans-steps { padding-bottom: 80px; }
+.plans-steps ol { display: grid; grid-template-columns: repeat(3, 1fr); gap: 32px; list-style: none; padding: 0; margin-bottom: 32px; }
+.plans-steps li > span { color: #b83300; font-size: 13px; }
+.plans-steps h3 { margin: 16px 0; font-size: 21px; }
+.plans-steps p { color: #50514c; line-height: 1.7; }
+@media (max-width: 1100px) { .header-auth-link, .header-signup { display: none; } }
+@media (max-width: 800px) {
+  .plans-welcome { grid-template-columns: 1fr; gap: 32px; padding-top: 40px; }
+  .plans-hero-art { min-height: 340px; }
+  .experience-gallery, .plans-steps ol { grid-template-columns: 1fr; }
+  .plans-actions .button { width: 100%; justify-content: space-between; }
+}
+@media (prefers-reduced-motion: reduce) { .experience-gallery img { transition: none; } .experience-gallery article:hover img { transform: none; } }

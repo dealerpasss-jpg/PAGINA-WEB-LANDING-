@@ -53,7 +53,7 @@ export const faqs = [
   },
   {
     q: "¿Qué diferencia existe entre Starter, Academy, Pro y Elite?",
-    a: "Starter prioriza el acceso inicial, Academy prioriza la formación, Pro combina ambos con acompañamiento continuo, y Elite está pensado para compradores frecuentes o pequeños dealers.",
+    a: "Starter prioriza el acceso inicial, Academy prioriza la formación, Pro combina ambos con acompañamiento continuo, y Elite requiere una reunión 1 a 1 y aprobación del equipo antes de contratarlo.",
   },
   {
     q: "¿Puedo cancelar mi membresía?",

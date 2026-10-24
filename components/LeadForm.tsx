@@ -59,7 +59,7 @@ export default function LeadForm() {
   }
 
   return (
-    <form onSubmit={handleSubmit} onFocus={handleFocusOnce} className="card grid gap-4 sm:grid-cols-2">
+    <form onSubmit={handleSubmit} onFocus={handleFocusOnce} className="lead-form card grid gap-4 sm:grid-cols-2">
       <label className="block sm:col-span-1">
         <span className="text-xs font-medium text-muted">Nombre</span>
         <input name="name" required className={inputClass} />

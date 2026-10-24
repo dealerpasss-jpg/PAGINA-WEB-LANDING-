@@ -1,28 +1,23 @@
 import type { Metadata } from "next";
+import { PageIntro, PrivateCTA } from "@/components/BrandSections";
 import AcademySection from "@/components/AcademySection";
-import MarginMethod from "@/components/MarginMethod";
-import FinalCTA from "@/components/FinalCTA";
-import Reveal from "@/components/Reveal";
-
+import Instructors from "@/components/Instructors";
 export const metadata: Metadata = {
-  title: "DealerPass Academy | Educación en español para subastas de vehículos",
-  description: "Aprende a analizar, comprar y comercializar vehículos de subastas estadounidenses con DealerPass Academy.",
+  title: "Academia | DealerPass",
+  description:
+    "Una ruta de formación en español para comprender las subastas de vehículos.",
 };
-
 export default function AcademyPage() {
   return (
     <>
-      <div className="bg-texture-black pt-16 md:pt-24">
-        <div className="container-content">
-          <span className="eyebrow">DealerPass Academy</span>
-          <h1 className="mt-4 max-w-2xl text-4xl text-cream md:text-5xl">
-            Aprende el proceso completo antes de arriesgar tu dinero.
-          </h1>
-        </div>
-      </div>
-      <Reveal><AcademySection /></Reveal>
-      <Reveal><MarginMethod /></Reveal>
-      <FinalCTA />
+      <PageIntro
+        label="DEALERPASS ACADEMY"
+        title="Aprender cambia tu forma de comprar."
+        description="Conecta cada etapa del negocio automotriz. Del primer análisis a una decisión con números, contexto y criterio."
+      />
+      <Instructors />
+      <AcademySection />
+      <PrivateCTA />
     </>
   );
 }

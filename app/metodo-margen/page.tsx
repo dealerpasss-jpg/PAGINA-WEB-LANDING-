@@ -1,19 +1,17 @@
-import type { Metadata } from "next";
+import { PageIntro } from "@/components/BrandSections";
 import MarginMethod from "@/components/MarginMethod";
 import CalculatorPreview from "@/components/CalculatorPreview";
 import FinalCTA from "@/components/FinalCTA";
-import Reveal from "@/components/Reveal";
-
-export const metadata: Metadata = {
-  title: "Método MARGEN | DealerPass",
-  description: "Las seis variables que debes revisar antes de pujar en una subasta de vehículos.",
-};
-
 export default function MetodoMargenPage() {
   return (
     <>
+      <PageIntro
+        label="EL MÉTODO DEALERPASS"
+        title="Compra con números. Decide con criterio."
+        description="MARGEN organiza seis variables para que puedas mirar una oportunidad con perspectiva, antes de comprometer tu capital."
+      />
       <MarginMethod />
-      <Reveal><CalculatorPreview /></Reveal>
+      <CalculatorPreview />
       <FinalCTA />
     </>
   );
