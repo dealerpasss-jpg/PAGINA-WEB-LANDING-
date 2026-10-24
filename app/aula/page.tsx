@@ -46,7 +46,7 @@ export default async function Page() {
           {completed} de {available.length} clases completadas
         </h2>
         <progress
-          style={{ width: "100%", accentColor: "#dfff00" }}
+          style={{ width: "100%", accentColor: "#ff4d00" }}
           max={Math.max(available.length, 1)}
           value={completed}
         />

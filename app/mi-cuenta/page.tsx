@@ -1,10 +1,10 @@
+import StudentDashboard from "@/components/StudentDashboard";
 import ArrowIcon from "@/components/ArrowIcon";
 import AccountShell from "@/components/AccountShell";
 import {
   configured,
   requireIdentity,
   database,
-  checked,
 } from "@/lib/academy/server";
 import { accessFor } from "@/lib/academy/billing";
 import { plans } from "@/data/plans";
@@ -37,20 +37,29 @@ export default async function Page({
   const who = await requireIdentity(selected ? `/mi-cuenta?plan=${selected.id}` : "/mi-cuenta");
   let active: string[] = [];
   let failed = false;
+  let paymentStates: {plan:string;status:string}[] = [];
   try {
-    active = (await accessFor(who.user.id)).plans;
+    const access = await accessFor(who.user.id);
+    active = access.plans;
+    paymentStates = access.states;
   } catch {
     failed = true;
   }
-  const { data: vip } = checked(
-    await database()
-      .from("vip_applications")
-      .select("status")
-      .eq("user_id", who.user.id)
-      .maybeSingle(),
-  );
+  const db = database();
+  const [vipResult, lessonsResult, progressResult] = await Promise.all([
+    db.from("vip_applications").select("status").eq("user_id", who.user.id).maybeSingle(),
+    db.from("lessons").select("id,title,module_title,allowed_plans").eq("published",true).order("position"),
+    db.from("lesson_progress").select("lesson_id").eq("user_id",who.user.id),
+  ]);
+  const vip = vipResult.error ? null : vipResult.data;
+  const learningFailed = !!(lessonsResult.error || progressResult.error);
+  // This force-dynamic server page takes one request-time snapshot for session filtering.
+  // eslint-disable-next-line react-hooks/purity
+  const now = Date.now();
+  const name = typeof who.user.user_metadata?.first_name === "string" ? who.user.user_metadata.first_name.slice(0,100) : "";
+  const profileComplete = ["first_name","last_name","country","region","experience","goal","language"].every(k=>!!who.user.user_metadata?.[k]);
   return (
-    <AccountShell title="Tu siguiente paso, más claro.">
+    <AccountShell title={name ? `Hola, ${name}. Este es tu espacio.` : "Bienvenido a tu espacio."}>
       <p>
         {who.user.email} ·{" "}
         {who.profile.role === "student" ? "Estudiante" : "Equipo DealerPass"}
@@ -85,8 +94,9 @@ export default async function Page({
           <button>Cerrar sesión</button>
         </form>
       </div>
+      <StudentDashboard now={now} active={active} lessons={lessonsResult.data || []} completedIds={(progressResult.data || []).map(p=>p.lesson_id)} unavailable={failed || learningFailed} profileComplete={profileComplete} paymentStates={paymentStates} />
       {selected && <p className="account-notice">Seleccionaste {selected.name}. Revisa sus detalles abajo antes de continuar.</p>}
-      <h2>Elige cómo quieres avanzar.</h2>
+      <section id="planes" className="dashboard-plan-section"><span className="dashboard-eyebrow">TU SIGUIENTE PASO</span><h2>{active.length ? "Explora otras formas de avanzar." : "Elige cómo quieres avanzar."}</h2>
       <div className="account-grid">
         {plans.map((plan) => (
           <article key={plan.id} className={`account-card ${selected?.id === plan.id ? "account-plan-selected" : ""}`}>
@@ -138,12 +148,7 @@ export default async function Page({
           habilitados.
         </p>
       )}
-      <div className="account-links">
-        <form action="/api/billing-portal" method="post">
-          <button>Gestionar pagos y cancelar membresía</button>
-        </form>
-        <Link href="/mi-cuenta?password=1">Cambiar contraseña</Link>
-      </div>
+      </section>
       {searchParams.password && (
         <form
           method="post"

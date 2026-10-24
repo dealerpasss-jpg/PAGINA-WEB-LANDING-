@@ -75,3 +75,18 @@ test("profile ignores privilege fields and rejects unknown learning choices", ()
   form.set("experience","beginner");form.set("goal","personal");form.set("language","es");
   assert.ok(readProfile(form,true).data);
 });
+
+import { learningSummary, purchaseBudget } from "../lib/academy/dashboard.ts";
+test("dashboard counts only published inputs available to current plans",()=>{
+ const lessons=[{id:"a",title:"A",module_title:"M",allowed_plans:["academy"]},{id:"b",title:"B",module_title:"M",allowed_plans:["elite"]}];
+ const state=learningSummary(lessons,["a","b","a"],["academy"]);
+ assert.equal(state.completed,1);assert.equal(state.percent,100);assert.equal(state.next,null);
+ assert.equal(learningSummary(lessons,[],[]).available.length,0);
+ assert.equal(learningSummary(lessons,[],["academy"]).next?.id,"a");
+});
+test("calculator subtracts all costs and preserves an unviable budget",()=>{
+ assert.deepEqual(purchaseBudget([10000,500,200,1000,300,500,2000]),{costs:2500,maximum:5500});
+ assert.equal(purchaseBudget([0,500,0,0,0,0,0])?.maximum,-500);
+ assert.equal(purchaseBudget([NaN,0,0,0,0,0,0]),null);
+ assert.equal(purchaseBudget([-1,0,0,0,0,0,0]),null);
+});
