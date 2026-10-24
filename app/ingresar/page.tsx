@@ -1,3 +1,4 @@
+import ProfileFields from "@/components/ProfileFields";
 import AccountShell from "@/components/AccountShell";
 import { configured } from "@/lib/academy/server";
 import { safeNext } from "@/lib/academy/policy";
@@ -42,6 +43,7 @@ export default async function Page({
               value={reset ? "reset" : signup ? "signup" : "login"}
             />
             <input type="hidden" name="next" value={next} />
+            {signup && <ProfileFields />}
             <label>
               Correo electrónico
               <input

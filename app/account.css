@@ -216,3 +216,10 @@
     letter-spacing: 0.08em;
   }
 }
+
+.profile-fields-grid { display:grid; grid-template-columns:1fr 1fr; gap:18px; }
+.profile-fields-grid label { min-width:0; }
+.profile-consents { border:1px solid #d9d4cd; border-radius:8px; padding:18px; display:grid; gap:16px; margin:0; min-width:0; }
+.profile-consents legend { font-size:14px; padding:0 6px; }
+.profile-consents small { line-height:1.6; }
+@media(max-width:600px) { .profile-fields-grid { grid-template-columns:1fr; } }

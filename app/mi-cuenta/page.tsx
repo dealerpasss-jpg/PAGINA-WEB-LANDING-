@@ -73,6 +73,7 @@ export default async function Page({
         </p>
       )}
       <div className="account-links">
+        <Link href="/mi-cuenta/perfil">Mi perfil y preferencias</Link>
         <Link href="/aula">
           Ir a mi formación <ArrowIcon direction="right" />
         </Link>

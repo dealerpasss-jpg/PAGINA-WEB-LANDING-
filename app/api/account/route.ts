@@ -1,3 +1,4 @@
+import { readProfile } from "@/lib/academy/profile";
 import { NextResponse } from "next/server";
 import { auth, configured, origin, sameOrigin } from "@/lib/academy/server";
 import { safeNext } from "@/lib/academy/policy";
@@ -48,12 +49,16 @@ export async function POST(request: Request) {
     email.length < 255 &&
     form.get("consent") === "yes"
   ) {
+    const profile = readProfile(form);
+    if (profile.error) return NextResponse.redirect(new URL("/ingresar?mode=registro&next=" + encodeURIComponent(next) + "&message=" + encodeURIComponent(profile.error), origin()), 303);
+    const destination = "/mi-cuenta/perfil?welcome=1&next=" + encodeURIComponent(next);
     const { error } = await client.auth.signUp({
       email,
       password,
       options: {
+        data: { ...profile.data, terms_accepted_at: new Date().toISOString(), terms_version: "2026-10-24", preferences_updated_at: new Date().toISOString() },
         emailRedirectTo:
-          origin() + "/auth/callback?next=" + encodeURIComponent(next),
+          origin() + "/auth/callback?next=" + encodeURIComponent(destination),
       },
     });
     message = error

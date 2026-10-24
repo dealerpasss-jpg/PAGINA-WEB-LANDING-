@@ -49,3 +49,29 @@ test("only configured plans can be purchased", () => {
   assert.equal(isPlan("elite"), true);
   assert.equal(isPlan(null), false);
 });
+
+import { readProfile } from "../lib/academy/profile.ts";
+function sampleProfile() {
+  const form = new FormData();
+  for (const [key,value] of Object.entries({first_name:"Juan",last_name:"Peña",country:"Estados Unidos",region:"Florida"})) form.set(key,value);
+  return form;
+}
+test("profile fields are required and opt-ins default off", () => {
+  const form=sampleProfile();
+  assert.equal(readProfile(form).data?.marketing_email,false);
+  assert.equal(readProfile(form).data?.marketing_whatsapp,false);
+  form.delete("first_name"); assert.ok(readProfile(form).error);
+});
+test("WhatsApp opt-in requires an international phone", () => {
+  const form=sampleProfile();form.set("marketing_whatsapp","yes");
+  assert.ok(readProfile(form).error);
+  form.set("phone","8135551234");assert.ok(readProfile(form).error);
+  form.set("phone","+1 (813) 555-1234");assert.equal(readProfile(form).data?.phone,"+18135551234");
+});
+test("profile ignores privilege fields and rejects unknown learning choices", () => {
+  const form=sampleProfile();form.set("role","admin");form.set("plan","elite");
+  assert.equal("role" in readProfile(form).data!,false);
+  assert.ok(readProfile(form,true).error);
+  form.set("experience","beginner");form.set("goal","personal");form.set("language","es");
+  assert.ok(readProfile(form,true).data);
+});
