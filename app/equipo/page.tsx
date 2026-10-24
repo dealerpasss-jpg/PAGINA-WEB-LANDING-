@@ -1,3 +1,5 @@
+import TeamNav from "@/components/TeamNav";
+import { isTeamRole } from "@/lib/academy/team-policy";
 import AccountShell from "@/components/AccountShell";
 import { requireIdentity, database, checked } from "@/lib/academy/server";
 import Link from "next/link";
@@ -8,8 +10,8 @@ export default async function Page({
   searchParams: Promise<{ message?: string }>;
 }) {
   const searchParams = await searchParamsPromise;
-  const who = await requireIdentity();
-  if (who.profile.role === "student")
+  const who = await requireIdentity("/equipo");
+  if (!isTeamRole(who.profile.role))
     return (
       <AccountShell title="Área exclusiva del equipo.">
         <p>Tu cuenta no tiene acceso a la administración.</p>
@@ -36,6 +38,8 @@ export default async function Page({
           ? "Administra las clases, las solicitudes VIP y los permisos del equipo."
           : "Consulta la formación en preparación. Las decisiones de admisión y los permisos requieren un administrador."}
       </p>
+      <TeamNav admin={admin} />
+      <div className="dashboard-stats">{admin && <article><span>ESTUDIANTES</span><strong>Personas y progreso</strong><Link href="/equipo/estudiantes">Abrir directorio</Link></article>}<article><span>FORMACIÓN</span><strong>{lessons?.filter(l=>l.published).length||0} publicadas</strong><Link href="/equipo/clases">Gestionar biblioteca</Link></article><article><span>EN PREPARACIÓN</span><strong>{lessons?.filter(l=>!l.published).length||0} borradores</strong><Link href="/equipo/clases?estado=borrador">Revisar borradores</Link></article></div>
       {searchParams.message && (
         <p className="account-notice" role="status">
           {searchParams.message}
@@ -43,7 +47,7 @@ export default async function Page({
       )}
       {admin && (
         <>
-          <h2>Solicitudes Elite</h2>
+          <h2 id="admisiones">Solicitudes Elite</h2>
           {!applications?.length && <p>No hay solicitudes pendientes.</p>}
           {applications?.map((a) => (
             <article key={a.user_id} className="account-card">
@@ -93,7 +97,7 @@ export default async function Page({
               </form>
             </article>
           ))}
-          <h2 className="mt-12">Permisos de colaboradores</h2>
+          <h2 id="permisos" className="mt-12">Permisos de colaboradores</h2>
           <form
             method="post"
             action="/api/team"
@@ -121,122 +125,9 @@ export default async function Page({
             </label>
             <button className="btn-primary">Actualizar permiso</button>
           </form>
-          <h2 className="mt-12">Publicar formación</h2>
-          <LessonForm />
+
         </>
       )}
-      <h2 className="mt-12">Biblioteca de clases</h2>
-      {!lessons?.length && (
-        <p>No hay clases cargadas. No se han creado contenidos de ejemplo.</p>
-      )}
-      {lessons?.map((l) => (
-        <article className="account-card" key={l.id}>
-          <span className="account-tag">
-            {l.published ? "Publicada" : "Borrador"} ·{" "}
-            {l.allowed_plans.join(", ")}
-          </span>
-          <h2>
-            {l.module_title} / {l.title}
-          </h2>
-          {admin ? (
-            <LessonForm lesson={l} />
-          ) : (
-            <p className="account-prose">{l.body}</p>
-          )}
-        </article>
-      ))}
     </AccountShell>
-  );
-}
-function LessonForm({
-  lesson,
-}: {
-  lesson?: {
-    id: string;
-    title: string;
-    module_title: string;
-    position: number;
-    body: string;
-    asset_path: string;
-    allowed_plans: string[];
-    published: boolean;
-  };
-}) {
-  return (
-    <form method="post" action="/api/team" className="account-form">
-      <input type="hidden" name="action" value="lesson" />
-      <input type="hidden" name="id" value={lesson?.id || ""} />
-      <label>
-        Módulo
-        <input
-          name="module_title"
-          maxLength={160}
-          required
-          defaultValue={lesson?.module_title}
-        />
-      </label>
-      <label>
-        Título de la clase
-        <input
-          name="title"
-          maxLength={160}
-          required
-          defaultValue={lesson?.title}
-        />
-      </label>
-      <label>
-        Orden
-        <input
-          name="position"
-          type="number"
-          min={0}
-          max={10000}
-          defaultValue={lesson?.position || 0}
-        />
-      </label>
-      <label>
-        Contenido
-        <textarea name="body" maxLength={50000} defaultValue={lesson?.body} />
-      </label>
-      <label>
-        Ruta del video o material privado
-        <input
-          name="asset_path"
-          placeholder="modulo-1/clase-1.mp4"
-          maxLength={500}
-          defaultValue={lesson?.asset_path || ""}
-        />
-        <small>
-          Sube primero el archivo al depósito privado academy-private en
-          Supabase.
-        </small>
-      </label>
-      <fieldset>
-        <legend>Planes con acceso</legend>
-        {["starter", "academy", "pro", "elite"].map((p) => (
-          <label className="account-check" key={p}>
-            <input
-              type="checkbox"
-              name="allowed_plans"
-              value={p}
-              defaultChecked={lesson?.allowed_plans.includes(p)}
-            />
-            {p}
-          </label>
-        ))}
-      </fieldset>
-      <label className="account-check">
-        <input
-          type="checkbox"
-          name="published"
-          value="yes"
-          defaultChecked={lesson?.published}
-        />
-        Publicar clase
-      </label>
-      <button className="btn-primary">
-        {lesson ? "Guardar cambios" : "Crear clase"}
-      </button>
-    </form>
   );
 }

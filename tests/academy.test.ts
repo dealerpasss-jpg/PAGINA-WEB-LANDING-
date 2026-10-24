@@ -90,3 +90,13 @@ test("calculator subtracts all costs and preserves an unviable budget",()=>{
  assert.equal(purchaseBudget([NaN,0,0,0,0,0,0]),null);
  assert.equal(purchaseBudget([-1,0,0,0,0,0,0]),null);
 });
+
+import {isTeamRole,isAdminRole,validRecordId,directoryPage} from "../lib/academy/team-policy.ts";
+test("team policies deny unknown roles and restrict student data to admins",()=>{
+ for(const role of [undefined,null,"student","owner",""]) {assert.equal(isTeamRole(role),false);assert.equal(isAdminRole(role),false);}
+ assert.equal(isTeamRole("collaborator"),true);assert.equal(isAdminRole("collaborator"),false);assert.equal(isAdminRole("admin"),true);
+});
+test("directory pagination and record identifiers are bounded",()=>{
+ for(const n of ["0","-1","NaN","Infinity","1.5","100001"])assert.equal(directoryPage(n),1);
+ assert.equal(directoryPage("2"),2);assert.equal(validRecordId("../students"),false);assert.equal(validRecordId("12345678-1234-1234-1234-123456789abc"),true);
+});

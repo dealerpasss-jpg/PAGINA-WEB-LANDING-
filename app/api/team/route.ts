@@ -17,7 +17,7 @@ export async function POST(request: Request) {
   const db = database();
   const back = (message: string) =>
     NextResponse.redirect(
-      new URL("/equipo?message=" + encodeURIComponent(message), origin()),
+      new URL((form.get("return_to") === "classes" ? "/equipo/clases" : "/equipo") + "?message=" + encodeURIComponent(message), origin()),
       303,
     );
   try {
