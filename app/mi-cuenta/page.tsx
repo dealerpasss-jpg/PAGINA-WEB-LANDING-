@@ -1,3 +1,4 @@
+import { greetingName } from "@/lib/academy/profile";
 import { redirect } from "next/navigation";
 import StudentDashboard from "@/components/StudentDashboard";
 import ArrowIcon from "@/components/ArrowIcon";
@@ -58,14 +59,11 @@ export default async function Page({
   // This force-dynamic server page takes one request-time snapshot for session filtering.
   // eslint-disable-next-line react-hooks/purity
   const now = Date.now();
-  const name = typeof who.user.user_metadata?.first_name === "string" ? who.user.user_metadata.first_name.slice(0,100) : "";
+  const name = greetingName(who.user.user_metadata);
   const profileComplete = ["first_name","last_name","country","region","experience","goal","language"].every(k=>!!who.user.user_metadata?.[k]);
   return (
-    <AccountShell title={name ? `Hola, ${name}. Este es tu espacio.` : "Bienvenido a tu espacio."}>
-      <p>
-        {who.user.email} ·{" "}
-        {who.profile.role === "student" ? "Estudiante" : "Equipo DealerPass"}
-      </p>
+    <AccountShell title={name ? `Hola, ${name}.` : "Bienvenido a tu espacio."}>
+      <p className="account-welcome"><span className="account-role">{who.profile.role === "student" ? "Estudiante" : "Equipo DealerPass"}</span> Tu formación y herramientas, en un solo lugar.</p>
       {searchParams.message && (
         <p className="account-notice" role="status">
           {searchParams.message}
@@ -83,17 +81,13 @@ export default async function Page({
           no se concede acceso sin comprobarlos.
         </p>
       )}
-      <div className="account-links">
-        <Link href="/mi-cuenta/perfil">Mi perfil y preferencias</Link>
-        <Link href="/aula">
-          Ir a mi formación <ArrowIcon direction="right" />
-        </Link>
-        {who.profile.role !== "student" && (
-          <Link href="/equipo">Panel del equipo</Link>
-        )}
+      <div className="account-actions" aria-label="Acciones de tu cuenta">
+        <Link className="account-action account-action-primary" href="/aula">Ir a mi formación <ArrowIcon direction="right" /></Link>
+        {who.profile.role !== "student" && <Link className="account-action" href="/equipo">Panel del equipo <ArrowIcon /></Link>}
+        <Link className="account-action" href="/mi-cuenta/perfil">Editar mi perfil <ArrowIcon /></Link>
         <form action="/api/account" method="post">
           <input type="hidden" name="action" value="logout" />
-          <button>Cerrar sesión</button>
+          <button className="account-action account-action-quiet">Cerrar sesión</button>
         </form>
       </div>
       <StudentDashboard now={now} active={active} lessons={lessonsResult.data || []} completedIds={(progressResult.data || []).map(p=>p.lesson_id)} unavailable={failed || learningFailed} profileComplete={profileComplete} paymentStates={paymentStates} />

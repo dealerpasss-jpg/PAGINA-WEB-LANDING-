@@ -1,6 +1,7 @@
 export default function ProfileFields({ values = {} }: { values?: Record<string, unknown> }) {
   const value = (key: string) => typeof values[key] === "string" ? values[key] as string : "";
   return <>
+    <label>¿Cómo quieres que te llamemos? · opcional<input name="nickname" autoComplete="nickname" maxLength={40} placeholder="Ej. Jota" defaultValue={value("nickname")} /><small>Usaremos este nombre o apodo para saludarte. Puedes cambiarlo cuando quieras.</small></label>
     <div className="profile-fields-grid">
       <label>Nombre<input name="first_name" autoComplete="given-name" maxLength={100} defaultValue={value("first_name")} required /></label>
       <label>Apellido<input name="last_name" autoComplete="family-name" maxLength={100} defaultValue={value("last_name")} required /></label>

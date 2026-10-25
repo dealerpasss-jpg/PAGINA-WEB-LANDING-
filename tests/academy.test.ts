@@ -109,3 +109,18 @@ test("password change validates confirmation and length on both boundaries", () 
   assert.equal(passwordError("a".repeat(12), "a".repeat(12)), null);
   assert.equal(passwordError("a".repeat(256), "a".repeat(256)), null);
 });
+
+import { greetingName } from "../lib/academy/profile.ts";
+test("greeting uses chosen nickname, falls back to name, never email", () => {
+  assert.equal(greetingName({nickname:" Jota ",first_name:"Juan",email:"private@example.com"}),"Jota");
+  assert.equal(greetingName({nickname:" ",first_name:"Juan"}),"Juan");
+  assert.equal(greetingName({email:"private@example.com"}),"");
+  assert.equal(greetingName({nickname:42}),"");
+});
+test("profile accepts optional nicknames and rejects oversized or markup names", () => {
+  const form = new FormData();
+  for (const [k,v] of Object.entries({first_name:"Juan",last_name:"Peña",country:"USA",region:"FL",nickname:" Jota "})) form.set(k,v);
+  assert.equal(readProfile(form).data?.nickname,"Jota");
+  for (const value of ["a".repeat(41),"<script>"]) { form.set("nickname",value); assert.ok(readProfile(form).error); }
+  form.set("nickname",""); assert.equal(readProfile(form).data?.nickname,"");
+});

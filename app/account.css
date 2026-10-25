@@ -258,3 +258,35 @@
 .team-search{margin:24px 0;display:grid;gap:10px;font-size:13px}.team-search>div{display:flex;flex-wrap:wrap;gap:12px;align-items:center}.team-search input,.team-search select{padding:13px;border:1px solid #73756e;border-radius:6px;background:white;color:#111315;font:inherit;min-height:48px;max-width:100%}.team-search input{flex:1;min-width:180px}.team-search .btn-primary{min-height:48px}.team-table-wrap{overflow:auto}.team-table{width:100%;border-collapse:collapse;text-align:left;font-size:14px}.team-table th{font-size:11px;text-transform:uppercase;letter-spacing:.06em;color:#555}.team-table th,.team-table td{padding:18px 12px;border-bottom:1px solid #e7e2da}.team-table td:first-child{overflow-wrap:anywhere;min-width:180px}.team-table a{white-space:nowrap;text-decoration:underline}.team-facts{display:grid;grid-template-columns:1fr 1.3fr;gap:15px;font-size:14px;line-height:1.6}.team-facts dt{color:#555}.team-facts dd{margin:0;overflow-wrap:anywhere}.team-editor{margin-top:24px}.team-editor summary{cursor:pointer;font-weight:600;padding:12px 0}.team-editor form{padding-top:24px;max-width:100%}.team-editor fieldset{padding:18px;border:1px solid #ccc;border-radius:8px;display:grid;gap:12px}.team-editor .account-check{align-items:center}
 
 .password-help { font-size: 13px; margin-top: 20px; }
+
+/* Account controls: clear hierarchy and generous touch targets. */
+.account-welcome { display:flex; flex-wrap:wrap; align-items:center; gap:12px; font-size:15px; }
+.account-role { display:inline-flex; padding:6px 11px; border:1px solid #d9d4cd; border-radius:999px; color:#343735; background:#f2eee7; font-size:12px; font-weight:600; }
+.account-actions { display:flex; flex-wrap:wrap; align-items:stretch; gap:12px; margin:28px 0 32px; }
+.account-actions form { display:flex; margin:0; }
+.account-action { display:inline-flex; align-items:center; justify-content:center; gap:16px; min-height:48px; padding:13px 18px; border:1px solid #d0ccc5; border-radius:12px; background:#fff; color:#111314; font-size:14px; font-weight:600; text-decoration:none; cursor:pointer; transition:background .18s ease,border-color .18s ease,transform .18s ease; }
+.account-action-primary { background:#111314; color:#fff; border-color:#111314; }
+.account-action-primary svg { color:#ff4d00; }
+.account-action-quiet { background:transparent; border-color:transparent; color:#5c605b; font-weight:400; }
+.account-action:hover { background:#f2eee7; border-color:#aaa59b; transform:translateY(-1px); }
+.account-action-primary:hover { background:#292d2b; color:#fff; border-color:#292d2b; }
+.account-shell a:focus-visible,.account-shell button:focus-visible { outline:3px solid #ff4d00; outline-offset:4px; }
+.dashboard-nav { padding:8px; border:1px solid #dedad3; border-radius:16px; background:#f2eee7; gap:8px; }
+.dashboard-nav a { flex:1; min-height:46px; justify-content:center; border:1px solid #ddd8d0; border-radius:10px; background:#fff; font-weight:500; white-space:nowrap; }
+.dashboard-nav a:hover { background:#111314; color:#fff; border-color:#111314; }
+.dashboard-profile { align-items:center; padding:20px 0; }
+.dashboard-profile a,.dashboard-section-title a,.dashboard-resources a,.dashboard-help a,.dashboard-text-link { min-height:44px; padding:10px 14px; border:1px solid #d9d4cd; border-radius:10px; text-decoration:none!important; font-weight:500; }
+.dashboard-help a { border-color:#6b716f; }
+.dashboard-profile a:hover,.dashboard-resources a:hover,.dashboard-section-title a:hover { background:#f2eee7; }
+.dashboard-cta { min-height:48px; border-radius:10px; }
+@media(max-width:600px) {
+  .account-actions { display:grid; grid-template-columns:1fr 1fr; gap:10px; margin:24px 0; }
+  .account-action { width:100%; font-size:13px; padding:13px 12px; gap:10px; }
+  .account-action-primary { grid-column:1/-1; }
+  .account-actions form { grid-column:1/-1; justify-content:center; }
+  .account-actions form .account-action { width:auto; }
+  .dashboard-nav { display:grid; grid-template-columns:1fr 1fr; }
+  .dashboard-nav a { font-size:13px; padding:12px; }
+  .account-welcome { font-size:14px; }
+}
+@media(prefers-reduced-motion:reduce) { .account-action,.dashboard-nav a { transition:none; transform:none; } }

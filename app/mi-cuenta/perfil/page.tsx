@@ -11,7 +11,7 @@ export default async function Page({searchParams}: {searchParams: Promise<{next?
   const who = await requireIdentity("/mi-cuenta/perfil?next=" + encodeURIComponent(next));
   const values = who.user.user_metadata || {};
   return <AccountShell compact kicker="DEALERPASS / TU PERFIL" title={query.welcome ? "Cuéntanos sobre ti." : "Tu perfil y preferencias."}>
-    <p>Queremos conocer tu experiencia y lo que buscas. Estos datos no cambian tu plan ni tus permisos.</p>
+    <p>Elige cómo quieres que te llamemos y cuéntanos qué buscas en DealerPass.</p>
     {query.message && <p role="status" className="account-notice">{query.message}</p>}
     <form action="/api/profile" method="post" className="account-card account-form">
       <input type="hidden" name="next" value={next} />
