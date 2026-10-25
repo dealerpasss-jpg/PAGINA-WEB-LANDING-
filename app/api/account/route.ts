@@ -29,7 +29,8 @@ export async function POST(request: Request) {
     const { error } = await client.auth.resetPasswordForEmail(email, {
       redirectTo: origin() + "/auth/callback?next=" + encodeURIComponent("/auth/nueva-contrasena"),
     });
-    message = error ? "No pudimos enviar el enlace en este momento. Espera unos minutos y vuelve a intentarlo." : "Si el correo está registrado, recibirás un enlace para cambiar tu contraseña. Abre el correo más reciente en este mismo navegador.";
+    if (!error) return NextResponse.redirect(new URL("/ingresar?mode=enviado&next=" + encodeURIComponent(next), origin()), 303);
+    message = "No pudimos enviar el enlace en este momento. Espera unos minutos y vuelve a intentarlo.";
   } else if (action === "password") {
     const {
       data: { user },

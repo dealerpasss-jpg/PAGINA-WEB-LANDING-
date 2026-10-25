@@ -290,3 +290,11 @@
   .account-welcome { font-size:14px; }
 }
 @media(prefers-reduced-motion:reduce) { .account-action,.dashboard-nav a { transition:none; transform:none; } }
+
+.recovery-confirmation { background:#f2eee7; border:1px solid #dedad3; border-radius:18px; padding:28px; }
+.recovery-mail-icon { width:64px; height:64px; border-radius:16px; background:#111314; color:#ff4d00; display:grid; place-items:center; margin-bottom:24px; }
+.account-shell .recovery-confirmation h2 { font-size:24px; line-height:1.25; margin:0 0 16px; }
+.recovery-confirmation ol { list-style:decimal; padding-left:22px; margin:22px 0; }
+.recovery-confirmation li { padding-left:5px; margin-bottom:12px; font-size:15px; line-height:1.6; }
+.account-shell .recovery-help { font-size:13px; margin-bottom:0; border-top:1px solid #d5d0c7; padding-top:20px; }
+@media(max-width:600px) { .recovery-confirmation { padding:22px; } .account-shell-compact .account-actions { grid-template-columns:1fr; } }
