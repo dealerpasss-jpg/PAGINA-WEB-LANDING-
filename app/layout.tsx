@@ -10,6 +10,7 @@ import "./motion.css";
 import "./film.css";
 import "./lower.css";
 import "./readability.css";
+import "./plan-comparison.css";
 
 const body = Inter({
   subsets: ["latin"],

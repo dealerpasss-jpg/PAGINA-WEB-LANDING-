@@ -1,4 +1,5 @@
 "use client";
+import PlanComparison from "@/components/PlanComparison";
 import ArrowIcon from "@/components/ArrowIcon";
 
 import Link from "next/link";
@@ -7,6 +8,7 @@ import { track } from "@/lib/analytics";
 export default function PricingCards() {
   return (
     <section className="wrap pricing-section" id="planes">
+      <PlanComparison />
       <div className="pricing-grid">
         {plans
           .filter((p) => p.id !== "elite")
