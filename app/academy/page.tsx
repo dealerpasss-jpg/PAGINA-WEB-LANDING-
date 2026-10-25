@@ -1,3 +1,4 @@
+import AcademyPresentation from "@/components/AcademyPresentation";
 import type { Metadata } from "next";
 import { PageIntro, PrivateCTA } from "@/components/BrandSections";
 import AcademySection from "@/components/AcademySection";
@@ -15,6 +16,7 @@ export default function AcademyPage() {
         title="Aprender cambia tu forma de comprar."
         description="Conecta cada etapa del negocio automotriz. Del primer análisis a una decisión con números, contexto y criterio."
       />
+      <AcademyPresentation />
       <Instructors />
       <AcademySection />
       <PrivateCTA />

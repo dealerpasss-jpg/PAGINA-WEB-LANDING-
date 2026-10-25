@@ -1,3 +1,4 @@
+import AcademyPresentation from "@/components/AcademyPresentation";
 import type { Metadata } from "next";
 import Image from "next/image";
 import Link from "next/link";
@@ -23,6 +24,7 @@ export default function PlanesPage() {
       </div>
       <div className="plans-hero-art"><Image src="/brand/editorial-academy.webp" alt="Ilustración de un mentor y estudiantes analizando un vehículo" fill priority sizes="(max-width: 800px) 100vw, 50vw" /><span>EL CONOCIMIENTO SE COMPARTE.</span></div>
     </section>
+    <AcademyPresentation plansPage />
     <section className="wrap plans-experience" aria-labelledby="experience-title">
       <span className="kicker"><i /> APRENDER. COMPARTIR. APLICAR.</span>
       <h2 id="experience-title">Más contexto para cada decisión.</h2>
