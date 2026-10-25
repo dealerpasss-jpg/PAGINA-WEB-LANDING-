@@ -31,8 +31,8 @@ export default function AcademySection() {
           Estos son los ejes de la formación. La disponibilidad de las lecciones
           y los recursos se confirma para cada plan.
         </p>
-        <Link href="/aula" className="text-link">
-          Ver mi formación <ArrowIcon />
+        <Link href="#academy-oferta" className="text-link">
+          Ver qué incluye Academy <ArrowIcon />
         </Link>
       </div>
       <div>

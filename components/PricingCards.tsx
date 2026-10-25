@@ -5,10 +5,10 @@ import ArrowIcon from "@/components/ArrowIcon";
 import Link from "next/link";
 import { plans } from "@/data/plans";
 import { track } from "@/lib/analytics";
-export default function PricingCards() {
+export default function PricingCards({ comparison = true }: { comparison?: boolean }) {
   return (
-    <section className="wrap pricing-section" id="planes">
-      <PlanComparison />
+    <section className="wrap pricing-section" id={comparison ? "planes" : "detalle-planes"}>
+      {comparison && <PlanComparison />}
       <div className="pricing-grid">
         {plans
           .filter((p) => p.id !== "elite")

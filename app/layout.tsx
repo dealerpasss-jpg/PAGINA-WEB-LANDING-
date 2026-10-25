@@ -11,6 +11,7 @@ import "./film.css";
 import "./lower.css";
 import "./readability.css";
 import "./plan-comparison.css";
+import "./sales-journey.css";
 
 const body = Inter({
   subsets: ["latin"],

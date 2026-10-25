@@ -81,6 +81,7 @@ export default async function Page({
           no se concede acceso sin comprobarlos.
         </p>
       )}
+      {!selected && <>
       <div className="account-actions" aria-label="Acciones de tu cuenta">
         <Link className="account-action account-action-primary" href="/aula">Ir a mi formación <ArrowIcon direction="right" /></Link>
         {who.profile.role !== "student" && <Link className="account-action" href="/equipo">Panel del equipo <ArrowIcon /></Link>}
@@ -91,10 +92,11 @@ export default async function Page({
         </form>
       </div>
       <StudentDashboard now={now} active={active} lessons={lessonsResult.data || []} completedIds={(progressResult.data || []).map(p=>p.lesson_id)} unavailable={failed || learningFailed} profileComplete={profileComplete} paymentStates={paymentStates} />
+      </>}
       {selected && <p className="account-notice">Seleccionaste {selected.name}. Revisa sus detalles abajo antes de continuar.</p>}
-      <section id="planes" className="dashboard-plan-section"><span className="dashboard-eyebrow">TU SIGUIENTE PASO</span><h2>{active.length ? "Explora otras formas de avanzar." : "Elige cómo quieres avanzar."}</h2>
+      <section id="planes" className={`dashboard-plan-section ${selected ? "selected-purchase" : ""}`}><span className="dashboard-eyebrow">TU SIGUIENTE PASO</span><h2>{selected ? "Revisa tu elección." : active.length ? "Explora otras formas de avanzar." : "Elige cómo quieres avanzar."}</h2>
       <div className="account-grid">
-        {plans.map((plan) => (
+        {(selected ? [selected] : plans).map((plan) => (
           <article key={plan.id} className={`account-card ${selected?.id === plan.id ? "account-plan-selected" : ""}`}>
             <span className="account-tag">
               {active.includes(plan.id)
@@ -108,6 +110,7 @@ export default async function Page({
               {plan.price} {plan.priceSuffix}
             </p>
             <p>{plan.tagline}</p>
+            {selected && <><ul>{plan.features.map(feature => <li key={feature}>{feature.replace("[INSERTAR TARIFA]", "(por confirmar)")}</li>)}</ul><p>Costos de subasta, impuestos, transporte y terceros no incluidos salvo indicación expresa.</p><p><Link href="/legal/membresias">Membresías y cancelación</Link> · <Link href="/legal/reembolsos">Reembolsos</Link> · <Link href="/legal/terminos">Términos</Link></p></>}
             {plan.id === "elite" && vip?.status !== "approved" ? (
               <>
                 <p>
@@ -144,8 +147,8 @@ export default async function Page({
           habilitados.
         </p>
       )}
+      {selected && <p><Link className="text-link" href="/planes#comparar">Cambiar de plan</Link> · <Link className="text-link" href="/mi-cuenta">Volver a mi espacio</Link></p>}
       </section>
-
     </AccountShell>
   );
 }

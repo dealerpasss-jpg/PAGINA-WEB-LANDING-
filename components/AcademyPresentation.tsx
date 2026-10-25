@@ -6,6 +6,7 @@ import styles from "./AcademyPresentation.module.css";
 const presentationVideoUrl = "";
 
 export default function AcademyPresentation({ plansPage = false }: { plansPage?: boolean }) {
+  if (!presentationVideoUrl) return null;
   return (
     <section id="presentacion" className={`wrap ${styles.section}`} aria-labelledby="presentation-title">
       <div className={styles.heading}>
