@@ -1,7 +1,8 @@
 import type { Metadata } from "next";
 import Link from "next/link";
 import AcademyPresentation from "@/components/AcademyPresentation";
-import { PageIntro } from "@/components/BrandSections";
+import ArrowIcon from "@/components/ArrowIcon";
+import styles from "./academy.module.css";
 import AcademySection from "@/components/AcademySection";
 import Instructors from "@/components/Instructors";
 import FAQ from "@/components/FAQ";
@@ -10,9 +11,17 @@ import { plans } from "@/data/plans";
 export const metadata: Metadata = { title: "Academia | DealerPass", description: "Conoce el temario, los instructores y lo que incluye DealerPass Academy." };
 export default function AcademyPage() {
   const academy = plans.find(plan => plan.id === "academy")!;
-  return <>
-    <PageIntro label="DEALERPASS ACADEMY" title="Aprende a mirar más allá del precio de un carro." description="Una formación en español para conectar historial, condición, costos y comercialización antes de tomar una decisión." />
-    <div className="wrap plans-actions"><a className="button" href="#academy-oferta">Ver qué incluye Academy ↓</a><a className="text-link" href="#temario">Explorar el temario</a></div>
+  return <div className={styles.page}>
+    <section className={`wrap ${styles.hero}`} aria-labelledby="academy-title">
+      <span className="kicker"><i /> DEALERPASS ACADEMY</span>
+      <h1 id="academy-title">Aprende a mirar más allá del precio de un carro.</h1>
+      <p className={styles.description}>Una formación en español para conectar historial, condición, costos y comercialización antes de tomar una decisión.</p>
+      <nav className={styles.actions} aria-label="Explorar Academy">
+        <a className={styles.primary} href="#academy-oferta">Ver qué incluye Academy <ArrowIcon direction="down" /></a>
+        <a className={styles.secondary} href="#temario">Explorar el temario <ArrowIcon direction="down" /></a>
+      </nav>
+      <div className={styles.overview} aria-label="Tu recorrido por la academia"><span><b>01</b> Conoce DealerPass</span><span><b>02</b> Explora la formación</span><span><b>03</b> Elige tu siguiente paso</span></div>
+    </section>
     <AcademyPresentation />
     <LearningPreview />
     <div id="temario"><AcademySection /></div>
@@ -28,5 +37,5 @@ export default function AcademyPage() {
     <PurchaseGuide />
     <FAQ compact />
     <SalesClose academy />
-  </>;
+  </div>;
 }
