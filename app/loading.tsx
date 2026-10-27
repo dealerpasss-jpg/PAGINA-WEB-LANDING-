@@ -1,0 +1,1 @@
+export default function Loading() { return <section className="system-state wrap" role="status" aria-live="polite"><span className="kicker">DEALERPASS</span><h2>Preparando tu siguiente paso…</h2><p>Estamos cargando la información.</p></section>; }

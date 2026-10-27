@@ -1,6 +1,8 @@
 import ArrowIcon from "@/components/ArrowIcon";
 import LeadForm from "@/components/LeadForm";
 import { getWhatsappUrl } from "@/lib/analytics";
+export const dynamic = "force-dynamic";
+export const metadata = { title: "Contacto | DealerPass", description: "Consulta las opciones de formación y atención de DealerPass." };
 export default function ContactoPage() {
   const wa = getWhatsappUrl();
   return (
@@ -38,7 +40,7 @@ export default function ContactoPage() {
           <span />
         </div>
       </div>
-      <LeadForm />
+      <LeadForm available={!!process.env.LEAD_FORM_WEBHOOK_URL} />
     </section>
   );
 }

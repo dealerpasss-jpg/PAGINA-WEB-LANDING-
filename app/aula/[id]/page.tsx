@@ -12,7 +12,7 @@ export default async function Page({
   params: Promise<{ id: string }>;
 }) {
   const params = await paramsPromise;
-  const who = await requireIdentity();
+  const who = await requireIdentity("/aula/" + encodeURIComponent(params.id));
   const db = database();
   const { data: lesson } = checked(
     await db

@@ -14,7 +14,7 @@ const timelines = ["Esta semana", "Este mes", "En los próximos 3 meses", "Todav
 const inputClass =
   "mt-1 w-full rounded-md border border-edge bg-black px-3 py-2.5 text-sm text-cream outline-none focus:border-neon";
 
-export default function LeadForm() {
+export default function LeadForm({ available = true }: { available?: boolean }) {
   const [status, setStatus] = useState<Status>("idle");
   const [started, setStarted] = useState(false);
 
@@ -37,7 +37,8 @@ export default function LeadForm() {
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify(payload),
       });
-      if (!res.ok) throw new Error("request_failed");
+      const result = await res.json();
+      if (!res.ok || result.forwarded !== true) throw new Error("request_failed");
       track("submit_lead", { objective: payload.objective, experience: payload.experience });
       setStatus("success");
       (e.target as HTMLFormElement).reset();
@@ -47,9 +48,11 @@ export default function LeadForm() {
     }
   }
 
+  if (!available) return <div className="contact-unavailable"><span className="kicker">CONTACTO EN PREPARACIÓN</span><h2>Estamos organizando la atención.</h2><p>El formulario estará disponible cuando podamos recibir y responder tus solicitudes. Mientras tanto, puedes consultar la formación y comparar los planes.</p><Link className="button" href="/planes">Explorar planes</Link><Link className="text-link" href="/academy">Conocer la academia</Link></div>;
+
   if (status === "success") {
     return (
-      <div className="card border-neon text-center">
+      <div className="card border-neon text-center" role="status">
         <p className="font-display text-lg font-extrabold text-neon">Recibimos tu información.</p>
         <p className="mt-2 text-sm text-cream/70">
           Un asesor de DealerPass se pondrá en contacto contigo por WhatsApp o correo electrónico.
@@ -124,8 +127,8 @@ export default function LeadForm() {
       </label>
 
       {status === "error" && (
-        <p className="text-sm text-red-400 sm:col-span-2">
-          No pudimos enviar tu información. Inténtalo nuevamente o escríbenos por WhatsApp.
+        <p role="alert" className="text-sm text-red-400 sm:col-span-2">
+          No pudimos enviar tu información. Tus datos siguen en el formulario; vuelve a intentarlo en unos minutos.
         </p>
       )}
 

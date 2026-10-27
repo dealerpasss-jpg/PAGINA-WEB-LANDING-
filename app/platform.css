@@ -1,0 +1,64 @@
+/* Platform layout: clear navigation, restrained surfaces and readable controls. */
+.workspace-shell { display:grid; grid-template-columns:232px minmax(0,1fr); max-width:1600px; margin:0 auto; min-height:calc(100svh - 88px); background:#f7f7f5; }
+.workspace-sidebar { position:sticky; top:88px; align-self:start; height:calc(100svh - 88px); padding:32px 18px; border-right:1px solid #e3e1db; background:#fff; overflow-y:auto; }
+.workspace-label { display:flex; align-items:center; gap:9px; padding:0 12px 24px; font-size:11px; letter-spacing:.12em; font-weight:700; }
+.workspace-dot { width:7px; height:7px; background:#ff4d00; border-radius:50%; }
+.workspace-sidebar nav { display:grid; gap:6px; }
+.workspace-sidebar nav a,.workspace-team { display:flex; align-items:center; gap:12px; padding:14px 12px; border:1px solid transparent; border-radius:10px; min-height:48px; font-size:13px; font-weight:500; }
+.workspace-sidebar nav a>span { font-size:10px; color:#77736c; }
+.workspace-sidebar nav a>svg { margin-left:auto; width:16px; }
+.workspace-sidebar nav a:hover { background:#f2eee7; }
+.workspace-sidebar nav a[aria-current="page"],.workspace-team { background:#fff0e8; border-color:#f8c7ad; color:#842b00; font-weight:600; }
+.workspace-support { border-top:1px solid #e3e1db; margin:30px 12px 20px; padding-top:24px; font-size:12px; }
+.workspace-support p { color:#5b5c56; line-height:1.6; margin:10px 0 16px; }
+.workspace-support a,.workspace-site { display:flex; align-items:center; gap:12px; min-height:44px; font-size:12px; text-decoration:underline; text-underline-offset:4px; }
+.workspace-site { margin:0 12px; }
+.workspace-content { min-width:0; }
+.workspace-content .account-shell { max-width:1200px; padding:40px clamp(20px,3vw,48px) 48px; min-height:70vh; }
+.workspace-content .account-top { font-size:11px; margin-bottom:24px; }
+.workspace-content .account-shell h1 { font-size:clamp(30px,3.2vw,44px); margin-bottom:16px; }
+.workspace-content .account-welcome { font-size:15px; }
+.workspace-content .account-actions { margin:24px 0; }
+.workspace-content .dashboard-nav { background:white; border-color:#e1ded7; }
+.workspace-content .dashboard-nav a { border-color:transparent; background:transparent; }
+.workspace-content .dashboard-nav a:hover { background:#fff0e8; color:#842b00; }
+.workspace-content .dashboard-stats article,.workspace-content .dashboard-panel { background:white; border:1px solid #e1ded7; box-shadow:0 2px 6px #11131403; }
+.workspace-content .dashboard-dark { background:#111315; color:#fff; }
+.workspace-content .dashboard-dark p { color:#d6d5ce; }
+.workspace-content .dashboard-dark a { color:#fff; }
+.workspace-content .dashboard-dark .dashboard-help a { border-color:#777; }
+.workspace-content .dashboard-hero h2 { font-size:clamp(26px,2.8vw,36px); }
+.workspace-content .dashboard-hero>div:first-child { padding:30px; }
+.workspace-content .dashboard-panel h2 { font-size:25px; }
+.workspace-content .dashboard-plan-section { padding-top:36px; border-top:1px solid #dedbd4; }
+.workspace-footer { display:flex; flex-wrap:wrap; gap:20px; padding:20px 32px; border-top:1px solid #e3e1db; font-size:12px; color:#5b5c56; }
+.workspace-footer>span { margin-right:auto; }
+body:has(.workspace-shell) .site-footer { display:none; }
+body:has(.workspace-shell) .page-transition { animation:none; transform:none; }
+.launch-note { border-left:3px solid #ff4d00; background:#f7f5f0; border-radius:0 10px 10px 0; padding:14px 18px; margin-top:24px; font-size:14px; max-width:760px; }
+.contact-unavailable { padding:36px; background:#f7f5f0; border:1px solid #dedbd4; border-radius:20px; }
+.contact-unavailable h2 { font-size:32px; margin:18px 0; }
+.contact-unavailable p { margin-bottom:24px; }
+.contact-unavailable .text-link { margin-left:18px; }
+.system-state { padding-top:80px; padding-bottom:100px; min-height:60vh; }
+.system-state h1,.system-state h2 { margin:24px 0; max-width:800px; }
+.system-state p { max-width:620px; color:#555650; }
+.account-links a.btn-primary { color:#111314; text-decoration:none; }
+[id]:is(#formacion,#recursos,#sesiones,#compras,#admisiones,#permisos) { scroll-margin-top:115px; }
+@media(max-width:1100px) { .workspace-shell { grid-template-columns:190px minmax(0,1fr); } .workspace-sidebar { padding:24px 10px; } .workspace-sidebar nav a { font-size:12px; gap:8px; } .workspace-content .dashboard-columns { grid-template-columns:1fr; } }
+@media(max-width:800px) {
+ .workspace-shell { display:block; }
+ .workspace-sidebar { position:relative; top:0; height:auto; padding:16px 20px; border-right:0; border-bottom:1px solid #e3e1db; }
+ .workspace-label { padding:0 0 12px; }
+ .workspace-sidebar nav { display:flex; overflow-x:auto; gap:8px; padding:3px 3px 8px; }
+ .workspace-sidebar nav a { flex:0 0 auto; border-color:#dedbd4; white-space:nowrap; font-size:13px; }
+ .workspace-sidebar nav a>span,.workspace-sidebar nav a>svg,.workspace-support,.workspace-site { display:none; }
+ .workspace-team { margin-top:8px; }
+ .workspace-content .account-shell { padding:28px 20px 40px; }
+ .workspace-content .dashboard-stats { grid-template-columns:1fr; }
+ .workspace-footer { padding:20px; }
+ .contact-unavailable { padding:24px; }
+ .contact-unavailable .text-link { display:flex; margin:16px 0 0; }
+}
+
+.calculator-warning { color:#fff; border:1px solid #ff8c58; border-radius:10px; padding:14px; margin-top:18px; font-size:14px; }

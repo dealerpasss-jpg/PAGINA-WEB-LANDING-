@@ -8,10 +8,10 @@ const presentationVideoUrl = "";
 export default function AcademyPresentation({ plansPage = false }: { plansPage?: boolean }) {
   return (
     <section id="presentacion" className={`wrap ${styles.section}`} aria-labelledby="presentation-title">
-      <div className={styles.heading}>
+      <div className={styles.introduction}><div className={styles.heading}>
         <span className="kicker"><i /> CONOCE DEALERPASS</span>
-        <h2 id="presentation-title">Entiende el camino antes de elegir tu plan.</h2>
-        <p>Jota y Sebastián te presentarán la academia, su enfoque y las opciones de formación para dar tu próximo paso.</p>
+        <h2 id="presentation-title">Antes de tu primera puja, cambia tu forma de mirar.</h2>
+        <p>Un carro barato puede esconder una compra costosa. Conoce con Jota y Sebastián qué revisar, qué sumar y qué preguntas hacer antes de decidir. Nuestro video de presentación está en preparación.</p>
       </div>
       {presentationVideoUrl ? (
         <video className={styles.video} controls playsInline preload="metadata" aria-label="Presentación de DealerPass con Jota y Sebastián">
@@ -25,6 +25,7 @@ export default function AcademyPresentation({ plansPage = false }: { plansPage?:
           <span>Con Jota y Sebastián</span>
         </div>
       )}
+      </div>
       <ul className={styles.topics} aria-label="Áreas de formación">
         <li><strong>Subastas en Estados Unidos</strong><span>Análisis de vehículos, costos y proceso de compra.</span></li>
         <li><strong>Exportación de vehículos</strong><span>Una visión del proceso, la logística y los costos.</span></li>

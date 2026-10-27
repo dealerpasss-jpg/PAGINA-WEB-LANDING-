@@ -43,7 +43,7 @@ export default function PlanComparison() {
       </div>
       <p className="plan-compare-note">✓ Incluido con el alcance indicado · — No incluido. Precios de referencia en revisión; pagos en preparación. Plataformas sujetas a disponibilidad y condiciones de acceso. Consulta los detalles de cada plan abajo.</p>
       <div className="plan-compare-elite"><span>¿Buscas una opción anual? <strong>Elite requiere entrevista y aprobación.</strong></span><Link href="/vip">Conocer Elite <span aria-hidden="true">↗</span></Link></div>
-      <div className="plan-compare-divider"><span>EXPLORA CADA PLAN EN DETALLE</span><span aria-hidden="true">↓</span></div>
+      <div className="plan-compare-divider"><span>CONOCE EL ENFOQUE Y LOS DETALLES</span><span aria-hidden="true">↓</span></div>
     </div>
   );
 }

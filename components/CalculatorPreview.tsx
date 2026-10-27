@@ -40,8 +40,7 @@ export default function CalculatorPreview() {
       contingency,
       margin,
     } = values;
-    return Math.max(
-      0,
+    return (
       salePrice -
         auctionFees -
         taxes -
@@ -49,7 +48,7 @@ export default function CalculatorPreview() {
         repair -
         documentation -
         contingency -
-        margin,
+        margin
     );
   }, [values]);
 
@@ -102,6 +101,7 @@ export default function CalculatorPreview() {
             <div aria-live="polite">
               <strong>${maxBid.toLocaleString("en-US")}</strong>
               <span>USD / escenario ilustrativo</span>
+              {maxBid <= 0 && <p className="calculator-warning">Este escenario no deja presupuesto para pujar. Revisa los costos y tu objetivo antes de continuar.</p>}
             </div>
             <p>
               El resultado es una estimación educativa. Los costos definitivos y

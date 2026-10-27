@@ -1,3 +1,4 @@
+import WorkspaceFrame from "./WorkspaceFrame";
 import ArrowIcon from "@/components/ArrowIcon";
 import Link from "next/link";
 export default function AccountShell({
@@ -12,7 +13,7 @@ export default function AccountShell({
   children: React.ReactNode;
 }) {
   return (
-    <section
+    <WorkspaceFrame><section
       className={`account-shell${compact ? " account-shell-compact" : ""}`}
     >
       <div className="account-top">
@@ -23,6 +24,6 @@ export default function AccountShell({
       </div>
       <h1>{title}</h1>
       {children}
-    </section>
+    </section></WorkspaceFrame>
   );
 }

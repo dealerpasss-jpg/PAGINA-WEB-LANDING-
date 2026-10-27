@@ -15,3 +15,8 @@
 .footer p { max-width: 570px; margin: 0; }
 .footer a { flex-shrink: 0; }
 @media (max-width: 640px) { .section { padding-top: 32px; padding-bottom: 40px; } .topics { grid-template-columns: 1fr; gap: 20px; } .footer { align-items: stretch; flex-direction: column; } .placeholder { gap: 10px; border-radius: 12px; padding: 18px; } }
+
+.introduction { display:grid; grid-template-columns: .85fr 1.15fr; align-items:center; gap:48px; padding:32px; border:1px solid #dedbd4; border-radius:24px; background:#f7f5f0; }
+.introduction .heading { margin-bottom:0; }
+.introduction .heading h2 { font-size:clamp(28px,3vw,40px); }
+@media(max-width:800px) { .introduction { grid-template-columns:1fr; gap:24px; padding:22px; } }

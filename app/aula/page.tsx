@@ -6,7 +6,7 @@ import { canOpenLesson } from "@/lib/academy/policy";
 import Link from "next/link";
 export const dynamic = "force-dynamic";
 export default async function Page() {
-  const who = await requireIdentity();
+  const who = await requireIdentity("/aula");
   let plans: string[] = [];
   try {
     plans = (await accessFor(who.user.id)).plans;
@@ -65,7 +65,7 @@ export default async function Page() {
           la formación.
         </p>
       )}
-      <div className="account-card">
+      {!!lessons?.length && <div className="account-card">
         {(lessons || []).map((l) => {
           const allowed = canOpenLesson(plans, l.allowed_plans);
           return (
@@ -91,7 +91,7 @@ export default async function Page() {
             </article>
           );
         })}
-      </div>
+      </div>}
     </AccountShell>
   );
 }

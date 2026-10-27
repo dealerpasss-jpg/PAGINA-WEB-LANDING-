@@ -1,3 +1,4 @@
+export const metadata = { title: "Método MARGEN | DealerPass", description: "Organiza costos, reparación y oferta máxima antes de una compra." };
 import { PageIntro } from "@/components/BrandSections";
 import MarginMethod from "@/components/MarginMethod";
 import CalculatorPreview from "@/components/CalculatorPreview";

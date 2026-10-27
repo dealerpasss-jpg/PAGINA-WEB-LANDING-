@@ -100,17 +100,17 @@ export default async function Page({
             <a
               href={
                 "/ingresar?mode=" +
-                (signup ? "login" : "registro") +
+                (signup || reset ? "login" : "registro") +
                 "&next=" +
                 encodeURIComponent(next)
               }
             >
-              {signup ? "Ya tengo una cuenta" : "Crear cuenta"}
+              {reset ? "Volver a iniciar sesión" : signup ? "Ya tengo una cuenta" : "Crear cuenta"}
             </a>
             <a
-              href={"/ingresar?mode=recuperar&next=" + encodeURIComponent(next)}
+              href={reset ? "/contacto" : "/ingresar?mode=recuperar&next=" + encodeURIComponent(next)}
             >
-              Olvidé mi contraseña
+              {reset ? "Ayuda y contacto" : "Olvidé mi contraseña"}
             </a>
           </div>
         </>

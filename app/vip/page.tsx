@@ -1,3 +1,4 @@
+export const metadata = { title: "Programa Elite | DealerPass", description: "Conoce el proceso de solicitud y entrevista individual de DealerPass Elite." };
 import ArrowIcon from "@/components/ArrowIcon";
 import AccountShell from "@/components/AccountShell";
 import { configured, identity, database, checked } from "@/lib/academy/server";

@@ -21,6 +21,7 @@ export default function Header() {
     window.addEventListener("scroll", update, { passive: true });
     return () => window.removeEventListener("scroll", update);
   }, []);
+  const workspace = ["/mi-cuenta", "/aula", "/equipo"].some(p => path === p || path.startsWith(p + "/"));
   const blended = path === "/" && !scrolled && !open;
   const trigger = useRef<HTMLButtonElement>(null);
   useEffect(() => {
@@ -49,7 +50,7 @@ export default function Header() {
           <Logo />
         </Link>
         <nav className="desktop-nav" aria-label="Navegación principal">
-          {links.map((l) => (
+          {(workspace ? [{href:"/mi-cuenta",label:"Mi espacio"},{href:"/contacto",label:"Ayuda"},{href:"/",label:"Volver al sitio"}] : links).map((l) => (
             <Link
               key={l.href}
               href={l.href}
@@ -60,10 +61,10 @@ export default function Header() {
           ))}
         </nav>
         <div className="header-actions">
-          <Link className="header-auth-link" href="/ingresar">Ingresar</Link>
-          <Link className="header-signup" href="/ingresar?mode=registro">Crear cuenta</Link>
+          {!workspace && <><Link className="header-auth-link" href="/ingresar">Ingresar</Link>
+          <Link className="header-signup" href="/ingresar?mode=registro">Crear cuenta</Link></>}
           <Link className="header-login" href="/mi-cuenta">
-            Dashboard{" "}
+            Mi espacio{" "}
             <span aria-hidden>
               <ArrowIcon />
             </span>
@@ -87,7 +88,7 @@ export default function Header() {
           className="mobile-nav"
           aria-label="Navegación móvil"
         >
-          {links.map((l) => (
+          {(workspace ? [{href:"/mi-cuenta",label:"Mi espacio"},{href:"/contacto",label:"Ayuda"},{href:"/",label:"Volver al sitio"}] : links).map((l) => (
             <Link key={l.href} href={l.href} onClick={() => setOpen(false)}>
               {l.label}
               <span aria-hidden>
@@ -95,9 +96,9 @@ export default function Header() {
               </span>
             </Link>
           ))}
-          <Link href="/mi-cuenta" onClick={() => setOpen(false)}>Mi dashboard <ArrowIcon /></Link>
-          <Link href="/ingresar" onClick={() => setOpen(false)}>Iniciar sesión <ArrowIcon /></Link>
-          <Link href="/ingresar?mode=registro" onClick={() => setOpen(false)}>Crear cuenta <ArrowIcon /></Link>
+          {!workspace && <Link href="/mi-cuenta" onClick={() => setOpen(false)}>Mi espacio <ArrowIcon /></Link>}
+          {!workspace && <><Link href="/ingresar" onClick={() => setOpen(false)}>Iniciar sesión <ArrowIcon /></Link>
+          <Link href="/ingresar?mode=registro" onClick={() => setOpen(false)}>Crear cuenta <ArrowIcon /></Link></>}
           <Link href="/contacto" onClick={() => setOpen(false)}>
             Hablemos{" "}
             <span aria-hidden>
