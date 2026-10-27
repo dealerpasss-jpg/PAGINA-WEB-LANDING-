@@ -1,0 +1,95 @@
+/* Shared action hierarchy. Loaded after page-wide styles. */
+:is(.button,.btn-primary,.btn-outline,.btn-outline-dark,.account-action,.dashboard-cta,.plan-compare-button) {
+  border-radius:12px;
+  font-weight:600;
+  text-decoration:none;
+  cursor:pointer;
+  transition:background .18s ease,border-color .18s ease,box-shadow .18s ease,transform .18s ease;
+}
+:is(.button,.btn-primary,.btn-outline,.btn-outline-dark) {
+  min-height:52px;
+  padding:15px 22px;
+  gap:18px;
+  line-height:1.45;
+}
+.button,.btn-primary,.account-action-primary,.dashboard-cta {
+  background:#ff4d00;
+  color:#111314;
+  border:1px solid #ff4d00;
+  box-shadow:0 4px 12px #11131412;
+}
+.account-action-primary svg { color:currentColor; }
+.button-light,.private-editorial .button-light {
+  background:#fff;
+  color:#111314;
+  border-color:#fff;
+}
+.btn-outline,.btn-outline-dark {
+  background:#fff;
+  color:#111314;
+  border-color:#85837d;
+  box-shadow:none;
+}
+.film-actions .button,.film-actions .text-link,.film-arrival .button { font-size:14px; }
+.plans-actions,.film-actions { gap:14px; }
+.wrap.plans-actions { margin-left:auto; margin-right:auto; }
+.plans-actions .text-link,.film-actions .text-link {
+  min-height:52px;
+  padding:14px 20px;
+  border:1px solid #85837d;
+  border-radius:12px;
+  background:#fff;
+  color:#111314;
+  font-weight:600;
+  text-align:center;
+  justify-content:center;
+  text-decoration:none;
+}
+.account-action:not(.account-action-primary):not(.account-action-quiet),
+.dashboard-nav a,.dashboard-profile a,.dashboard-resources a,.dashboard-section-title a {
+  border-color:#85837d;
+}
+.account-shell article a:is(.button,.btn-outline,.btn-outline-dark,.dashboard-cta,.account-action) { text-decoration:none; }
+.plan-compare-button { box-shadow:0 3px 8px #11131412; }
+@media(hover:hover) {
+  .button:hover,.btn-primary:hover,.account-action-primary:hover,.dashboard-cta:hover {
+    background:#ff6b2b;
+    color:#111314;
+    border-color:#ff6b2b;
+    box-shadow:0 7px 18px #1113141c;
+    transform:translateY(-2px);
+  }
+  .button-light:hover,.private-editorial .button-light:hover,
+  .btn-outline:hover,.btn-outline-dark:hover,
+  .plans-actions .text-link:hover,.film-actions .text-link:hover {
+    background:#f2eee7;
+    color:#111314;
+    border-color:#111314;
+  }
+}
+:is(.button,.btn-primary,.btn-outline,.btn-outline-dark,.account-action,.dashboard-cta,.plan-compare-button):active {
+  transform:translateY(0);
+  box-shadow:none;
+}
+:is(.button,.btn-primary,.btn-outline,.btn-outline-dark,.account-action,.dashboard-cta,.plan-compare-button,.plans-actions .text-link,.film-actions .text-link):focus-visible {
+  outline:3px solid #111314;
+  outline-offset:4px;
+  box-shadow:0 0 0 4px #fff;
+}
+:is(.button,.btn-primary,.btn-outline,.btn-outline-dark,.account-action,.dashboard-cta,.plan-compare-button):is(:disabled,[aria-disabled="true"]) {
+  opacity:.5;
+  cursor:not-allowed;
+  transform:none;
+  box-shadow:none;
+}
+@media(max-width:600px) {
+  .plans-actions { align-items:stretch; }
+  .plans-actions :is(.button,.text-link) { width:100%; min-height:52px; }
+  .film-actions :is(.button,.text-link) { min-height:48px; padding:13px 16px; }
+}
+@media(prefers-reduced-motion:reduce) {
+  :is(.button,.btn-primary,.btn-outline,.btn-outline-dark,.account-action,.dashboard-cta,.plan-compare-button),
+  .button span,.text-link span { transition:none; }
+  :is(.button,.btn-primary,.account-action,.dashboard-cta):hover,
+  .button:hover span,.text-link:hover span { transform:none; }
+}
