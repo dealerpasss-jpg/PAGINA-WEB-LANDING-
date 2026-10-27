@@ -83,6 +83,7 @@ export default async function Page({
       )}
       {!selected && <>
       <div className="account-actions" aria-label="Acciones de tu cuenta">
+        <Link className="account-action" href="/mi-cuenta/inversiones">Vehículos e inversiones <ArrowIcon /></Link>
         <Link className="account-action account-action-primary" href="/aula">Ir a mi formación <ArrowIcon direction="right" /></Link>
         {who.profile.role !== "student" && <Link className="account-action" href="/equipo">Panel del equipo <ArrowIcon /></Link>}
         <Link className="account-action" href="/mi-cuenta/perfil">Editar mi perfil <ArrowIcon /></Link>
