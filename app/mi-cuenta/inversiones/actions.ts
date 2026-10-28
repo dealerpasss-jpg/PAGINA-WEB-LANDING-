@@ -14,8 +14,8 @@ export async function saveInvestment(f:FormData) {
  if(action==='create'||action==='vehicle') {
  const status=text(f,'status',20)||'purchased';if(!(status in statuses))throw new Error('Estado inválido.');
  const sale=cents(f.get('sale_cents'),true);if(status==='sold'&&sale===null)throw new Error('Registra el precio real de venta.');if(status!=='sold'&&sale!==null)throw new Error('Marca el vehículo como vendido para registrar el precio final.');
- const date=text(f,'purchased_on',10,true);if(!/^\d{4}-\d{2}-\d{2}$/.test(date))throw new Error('Fecha inválida.');
- const data={title:text(f,'title',120,true),vin:text(f,'vin',17).toUpperCase(),auction:text(f,'auction',100),purchased_on:date,purchase_cents:cents(f.get('purchase_cents')),asking_cents:cents(f.get('asking_cents'),true),sale_cents:sale,status,notes:text(f,'notes',2000)};
+ const date=text(f,'purchased_on',10);if(date&&!/^\d{4}-\d{2}-\d{2}$/.test(date))throw new Error('Fecha inválida.');
+ const data={title:text(f,'title',120,true),vin:text(f,'vin',17).toUpperCase(),auction:text(f,'auction',100),purchased_on:date||null,purchase_cents:cents(f.get('purchase_cents'),true),asking_cents:cents(f.get('asking_cents'),true),sale_cents:sale,status,notes:text(f,'notes',2000)};
  if(data.vin&&!/^[A-HJ-NPR-Z0-9]{17}$/.test(data.vin))throw new Error('El VIN debe tener 17 caracteres válidos.');
  if(action==='create'){const row=checked(await db.from('investment_vehicles').insert(data).select('id').single()).data;if(!row)throw new Error('No se pudo crear el vehículo.');next+='/'+row.id;}
  else {const version=Number(f.get('version'));if(!Number.isSafeInteger(version))throw new Error('Recarga la ficha.');const result=checked(await db.from('investment_vehicles').update({...data,version:version+1}).eq('id',id).eq('version',version).select('id'));if(!result.data?.length)throw new Error('La ficha cambió en otra ventana. Recárgala antes de guardar.');}

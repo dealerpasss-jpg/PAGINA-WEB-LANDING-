@@ -1,0 +1,4 @@
+-- Idempotent import of the six existing public listings. Acquisition amounts remain unknown.
+with source as (select * from jsonb_to_recordset($catalog$[{"slug": "ford-escape-se-2016", "title": "Ford Escape SE 2016", "price": 600000}, {"slug": "ford-edge-2021", "title": "Ford Edge 2021", "price": 1080000}, {"slug": "ford-edge-titanium-2018", "title": "Ford Edge Titanium 2018", "price": 820000}, {"slug": "ford-explorer-xlt-2013", "title": "Ford Explorer XLT 2013", "price": 365000}, {"slug": "subaru-forester-2015", "title": "Subaru Forester 2015", "price": 600000}, {"slug": "subaru-impreza-2016", "title": "Subaru Impreza 2016", "price": 500000}]$catalog$::jsonb) as x(slug text,title text,price bigint))
+insert into public.investment_vehicles(title,catalogue_slug,purchase_cents,purchased_on,asking_cents,status)
+select title,slug,null,null,price,'listed' from source on conflict(catalogue_slug) do nothing;

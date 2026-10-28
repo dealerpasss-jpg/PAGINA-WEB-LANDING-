@@ -5,11 +5,12 @@ export function cents(value: unknown, optional = false): number | null {
   const [whole, fraction = ''] = text.split('.');
   return Number(whole) * 100 + Number(fraction.padEnd(2, '0'));
 }
-export function totals(purchase: number, expenses: number[], asking: number | null, sold: number | null) {
-  const cost = purchase + expenses.reduce((a,b)=>a+b,0);
-  const estimated = asking === null ? null : asking-cost;
-  const realized = sold === null ? null : sold-cost;
-  return { cost, estimated, realized, margin: sold && realized !== null ? realized/sold*100 : null, estimatedMargin: asking && estimated !== null ? estimated/asking*100 : null };
+export function totals(purchase: number | null, expenses: number[], asking: number | null, sold: number | null) {
+  const expensesTotal = expenses.reduce((a,b)=>a+b,0);
+  const cost = purchase === null ? null : purchase + expensesTotal;
+  const estimated = asking === null || cost === null ? null : asking-cost;
+  const realized = sold === null || cost === null ? null : sold-cost;
+  return { expensesTotal, cost, estimated, realized, margin: sold && realized !== null ? realized/sold*100 : null, estimatedMargin: asking && estimated !== null ? estimated/asking*100 : null };
 }
 export function usd(value: number | null) { return value === null ? 'Sin definir' : new Intl.NumberFormat('en-US',{style:'currency',currency:'USD'}).format(value/100); }
 export const statuses = { purchased:'Comprado', repairing:'En reparación', listed:'En venta', sold:'Vendido' } as const;
