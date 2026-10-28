@@ -1,0 +1,66 @@
+name: Import Subaru Impreza listing
+on:
+  push:
+    paths:
+      - 'uploads/subaru-impreza-2016-publicacion.zip'
+  workflow_dispatch:
+permissions:
+  contents: write
+jobs:
+  import:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          ref: feat/academy-payments-vip
+          persist-credentials: true
+      - name: Extract files and update inventory
+        shell: bash
+        run: |
+          python3 - <<'PY'
+          import zipfile
+          from pathlib import Path
+          zpath = Path("uploads/subaru-impreza-2016-publicacion.zip")
+          if not zpath.exists():
+              raise SystemExit("Missing uploads/subaru-impreza-2016-publicacion.zip")
+          with zipfile.ZipFile(zpath) as z:
+              for item in z.namelist():
+                  if item.startswith(("app/vehiculos/subaru-impreza-2016/", "public/vehicles/subaru-impreza-2016/")):
+                      dest = Path(item)
+                      if ".." in dest.parts:
+                          raise SystemExit("Unsafe ZIP path")
+                      dest.parent.mkdir(parents=True, exist_ok=True)
+                      dest.write_bytes(z.read(item))
+              card = z.read("INSERTAR_EN_app_vehiculos_page.tsx.txt").decode("utf-8").split("Cambiar 05")[0]
+          images = list(Path("public/vehicles/subaru-impreza-2016").glob("*.webp"))
+          if len(images) != 11:
+              raise SystemExit(f"Expected 11 photos, found {len(images)}")
+          listing = Path("app/vehiculos/page.tsx")
+          src = listing.read_text()
+          if '/vehiculos/subaru-impreza-2016' not in src:
+              if "05 vehículos publicados" not in src:
+                  raise SystemExit("Unexpected inventory count; manual review required")
+              src = src.replace("05 vehículos publicados","06 vehículos publicados")
+              pos = src.rfind(" </section>;")
+              if pos == -1:
+                  raise SystemExit("Inventory insertion point not found")
+              src = src[:pos] + card + src[pos:]
+              listing.write_text(src)
+          sitemap = Path("app/sitemap.ts")
+          sm = sitemap.read_text()
+          if '"/vehiculos/subaru-impreza-2016"' not in sm:
+              anchor = '"/contacto"'
+              if anchor not in sm:
+                  raise SystemExit("Sitemap insertion point not found")
+              sitemap.write_text(sm.replace(anchor,'"/vehiculos/subaru-impreza-2016",'+anchor,1))
+          PY
+      - name: Commit complete listing
+        run: |
+          git config user.name "dealerpass-import-bot"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          git add app/vehiculos/page.tsx app/sitemap.ts app/vehiculos/subaru-impreza-2016/page.tsx public/vehicles/subaru-impreza-2016
+          git diff --cached --check
+          if ! git diff --cached --quiet; then
+            git commit -m "Publish Subaru Impreza 2016 with full photo gallery"
+            git push origin HEAD:feat/academy-payments-vip
+          fi
