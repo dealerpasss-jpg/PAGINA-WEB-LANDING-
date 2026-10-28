@@ -177,3 +177,62 @@ body:has(.workspace-shell) .mobile-nav a { border-color:#ffffff20; }
 @media(max-width:800px) { .workspace-sidebar nav { display:grid; grid-template-columns:repeat(3,minmax(0,1fr)); overflow:visible; } .workspace-sidebar nav a { flex-direction:column; justify-content:center; text-align:center; font-size:11px; padding:10px 4px; gap:6px; white-space:normal; } .workspace-sidebar nav a>span.workspace-icon { display:flex; } }
 
 .workspace-shell :is(#nuevo-vehiculo,#editar-compra) { scroll-margin-top:112px; }
+
+/* Compact workspace rhythm and inventory cards. */
+.workspace-shell { width:100%; max-width:1920px; }
+.workspace-content .account-shell { width:100%; max-width:none; padding:28px clamp(20px,2.2vw,36px) 40px; }
+.workspace-sidebar nav a,.workspace-team { border-radius:10px; }
+.workspace-content .account-top { margin-bottom:20px; }
+.workspace-shell .investment-admin-actions { align-items:center; margin:16px 0; }
+.workspace-shell .dashboard-cta,
+.workspace-shell .investment-admin-actions .dashboard-text-link,
+.workspace-shell .investment-form .btn-primary { display:inline-flex; align-items:center; justify-content:center; gap:10px; min-height:44px; padding:11px 18px; border-radius:10px; font-size:13px; font-weight:600; line-height:1.4; text-decoration:none; }
+.workspace-shell .dashboard-cta { box-shadow:none; color:#17191b; }
+.workspace-shell .investment-admin-actions .dashboard-text-link { background:#ffffff06; border:1px solid #ffffff26; color:#eceeef; }
+.workspace-shell .investment-admin-actions .dashboard-text-link:hover { background:#ffffff10; border-color:#ffffff40; }
+.workspace-shell .investment-form .btn-primary { background:#ff650b; border:1px solid #ff7a20; color:#17191b; }
+.workspace-shell .investment-form .btn-primary:hover { background:#ff7a20; transform:none; }
+.workspace-shell .investment-stats { gap:12px; margin:16px 0; }
+.workspace-shell .investment-stats article { padding:18px 20px; gap:6px; border-radius:14px; }
+.workspace-shell .investment-stats strong { margin-top:0; font-variant-numeric:tabular-nums; }
+.workspace-shell .investment-pending { padding:10px 14px; margin-bottom:10px; font-size:12px; }
+.workspace-shell .investment-note { margin-bottom:16px; }
+.workspace-content .workspace-pipeline { padding:16px 20px; border-radius:14px; margin-bottom:18px; }
+.workspace-content .workspace-pipeline h2 { margin:0; font-size:17px; }
+.workspace-shell .workspace-pipeline-grid { gap:16px; margin-top:14px; }
+.workspace-shell .investment-grid { display:grid; grid-template-columns:repeat(2,minmax(0,1fr)); gap:16px; margin:18px 0 28px; align-items:stretch; }
+.workspace-shell .investment-grid .account-card { display:flex; flex-direction:column; padding:14px; margin:0; border-radius:16px; background:#25282b; border:1px solid #ffffff18; }
+.workspace-shell .investment-grid .account-card:hover { border-color:#ffffff38; }
+.workspace-shell .investment-grid .investment-cover { flex-shrink:0; aspect-ratio:16/10; margin:0 0 12px; border-radius:10px; text-decoration:none; }
+.workspace-shell .investment-cover img { display:block; }
+.workspace-shell .investment-cover-empty { width:100%; height:100%; min-height:0; }
+.workspace-shell .investment-grid .investment-status { align-self:flex-start; display:inline-flex; align-items:center; gap:6px; padding:4px 8px; border:1px solid #ff852f30; font-size:10px; line-height:1.4; border-radius:6px; }
+.workspace-shell .investment-grid .investment-status::before { content:""; width:5px; height:5px; border-radius:50%; background:#ff852f; flex-shrink:0; }
+.workspace-shell .investment-grid .account-card h2 { font-size:18px; line-height:1.35; letter-spacing:-.025em; margin:10px 0 14px; overflow-wrap:anywhere; }
+.workspace-shell .investment-grid .investment-finance { display:grid; grid-template-columns:repeat(2,minmax(0,1fr)); gap:0; margin:0 0 14px; border:1px solid #ffffff10; border-radius:10px; background:#1c1e2166; overflow:hidden; }
+.workspace-shell .investment-grid .investment-finance>div { display:flex; flex-direction:column; align-items:flex-start; justify-content:flex-start; gap:5px; padding:11px 10px; min-width:0; border:0; }
+.workspace-shell .investment-grid .investment-finance>div:nth-child(odd) { border-right:1px solid #ffffff10; }
+.workspace-shell .investment-grid .investment-finance>div:nth-child(n+3) { border-top:1px solid #ffffff10; }
+.workspace-shell .investment-grid .investment-finance dt { font-size:10px; line-height:1.5; }
+.workspace-shell .investment-grid .investment-finance dd { text-align:left; font-size:14px; line-height:1.4; font-weight:600; font-variant-numeric:tabular-nums; overflow-wrap:anywhere; }
+.workspace-shell .investment-grid .investment-actions { display:flex; margin:auto 0 0; padding:0; }
+.workspace-shell .investment-grid .investment-actions a { display:flex; width:100%; align-items:center; justify-content:space-between; gap:10px; padding:11px 12px; min-height:44px; border:1px solid #ff852f45; border-radius:9px; background:#ff650b0d; color:#ffad75; font-size:12px; font-weight:600; line-height:1.4; text-decoration:none; }
+.workspace-shell .investment-grid .investment-actions a:hover { background:#ff650b; border-color:#ff650b; color:#17191b; }
+.workspace-shell .investment-actions a svg { flex-shrink:0; width:17px; height:17px; }
+.workspace-shell #nuevo-vehiculo { padding:22px; border-radius:16px; }
+.workspace-shell #nuevo-vehiculo>h2 { margin:0 0 10px; }
+.workspace-shell .investment-form input,.workspace-shell .investment-form select,.workspace-shell .investment-form textarea { border-radius:9px; min-height:44px; }
+@media(min-width:1200px) { .workspace-shell .investment-grid { grid-template-columns:repeat(3,minmax(0,1fr)); } }
+@media(min-width:1800px) { .workspace-shell .investment-grid { grid-template-columns:repeat(4,minmax(0,1fr)); } }
+@media(max-width:800px) { .workspace-content .account-shell { padding:22px 20px 32px; } }
+@media(max-width:600px) {
+ .workspace-shell .investment-grid { grid-template-columns:1fr; gap:14px; }
+ .workspace-shell .investment-admin-actions { display:grid; grid-template-columns:1fr; gap:8px; }
+ .workspace-shell .investment-stats { grid-template-columns:1fr; gap:8px; }
+ .workspace-shell .investment-stats article { display:grid; grid-template-columns:minmax(0,1fr) auto; gap:16px; align-items:center; padding:14px 16px; }
+ .workspace-shell .investment-stats strong { font-size:23px; text-align:right; }
+ .workspace-shell .investment-grid .account-card h2 { font-size:20px; }
+ .workspace-shell .investment-grid .investment-finance dd { font-size:16px; }
+ .workspace-shell .investment-grid .investment-finance dt { font-size:11px; }
+ .workspace-shell .investment-grid .investment-actions a { font-size:13px; }
+}
