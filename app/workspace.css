@@ -236,3 +236,67 @@ body:has(.workspace-shell) .mobile-nav a { border-color:#ffffff20; }
  .workspace-shell .investment-grid .investment-finance dt { font-size:11px; }
  .workspace-shell .investment-grid .investment-actions a { font-size:13px; }
 }
+
+/* Phone workspace: persistent thumb navigation and compact content. */
+@media(max-width:800px) {
+ body:has(.workspace-shell) .header-inner { height:60px; width:calc(100% - 32px); gap:12px; }
+ body:has(.workspace-shell) .brand-logo,
+ body:has(.workspace-shell) .brand-logo img { width:154px; }
+ body:has(.workspace-shell) .header-actions { gap:8px; }
+ body:has(.workspace-shell) .header-login { min-height:44px; font-size:11px; }
+ .workspace-shell { padding-bottom:calc(82px + env(safe-area-inset-bottom,0px)); }
+ .workspace-sidebar { display:flex; flex-wrap:wrap; align-items:center; justify-content:space-between; gap:4px 12px; padding:6px 16px; background:#17191b; }
+ .workspace-sidebar .workspace-label { display:none; }
+ .workspace-sidebar nav { position:fixed; inset:auto 0 0; z-index:60; display:grid; grid-template-columns:repeat(5,minmax(0,1fr)); gap:2px; padding:8px 8px calc(8px + env(safe-area-inset-bottom,0px)); background:#1b1d20f5; border-top:1px solid #ffffff20; box-shadow:0 -8px 28px #00000026; backdrop-filter:blur(18px); overflow:visible; }
+ .workspace-sidebar nav a { display:flex; flex-direction:column; align-items:center; justify-content:center; gap:5px; min-width:0; min-height:56px; padding:7px 2px; border:0; border-radius:10px; font-size:10px; line-height:1.25; font-weight:500; color:#adb2ba; white-space:normal; text-align:center; }
+ .workspace-sidebar nav a>span.workspace-icon { display:flex; color:inherit; }
+ .workspace-sidebar nav a .workspace-icon svg { width:21px; height:21px; }
+ .workspace-sidebar nav a[aria-current="page"] { background:#ff650b18; color:#ff914a; box-shadow:inset 0 2px #ff650b; }
+ .workspace-sidebar nav a:hover { background:#ffffff0b; color:#fff; }
+ .workspace-sidebar nav a[aria-current="page"]:hover { color:#ffad75; background:#ff650b20; }
+ .workspace-sidebar .workspace-team { display:inline-flex; align-items:center; gap:8px; min-height:44px; margin:0; padding:8px 0; border:0; background:none; font-size:12px; }
+ .workspace-sidebar .workspace-team[aria-current="page"] { color:#ff914a; }
+ .workspace-sidebar .workspace-team>svg:first-child { width:17px; height:17px; }
+ .workspace-sidebar .workspace-logout { margin:0 0 0 auto; }
+ .workspace-sidebar .workspace-logout button { min-height:44px; gap:7px; padding:8px 0; font-size:11px; color:#aeb3bb; }
+ .workspace-sidebar .workspace-logout svg { width:14px; height:14px; }
+ .workspace-content .account-shell { padding:20px 16px 28px; }
+ .workspace-content .account-top { display:flex; flex-wrap:nowrap; align-items:center; gap:10px; margin-bottom:14px; letter-spacing:.06em; font-size:9px; line-height:1.5; }
+ .workspace-content .account-top>span { min-width:0; }
+ .workspace-content .account-top>a { display:none; }
+ .workspace-content .account-shell h1 { font-size:28px; line-height:1.15; letter-spacing:-.04em; margin-bottom:10px; text-wrap:balance; }
+ .workspace-content .account-shell>p { font-size:13px; line-height:1.6; margin-bottom:14px; }
+ .workspace-shell .investment-admin-actions { display:flex; flex-wrap:wrap; gap:8px; margin:16px 0; }
+ .workspace-shell .investment-admin-actions .dashboard-cta { flex:1 1 190px; min-height:46px; padding:11px 12px; font-size:12px; }
+ .workspace-shell .investment-admin-actions .dashboard-text-link { flex:1 1 130px; min-height:46px; padding:11px 10px; font-size:12px; }
+ .workspace-shell .investment-admin-actions svg { width:16px; height:16px; }
+ .workspace-shell .investment-stats { grid-template-columns:repeat(2,minmax(0,1fr)); gap:8px; margin:14px 0; }
+ .workspace-shell .investment-stats article { display:flex; flex-direction:column; align-items:flex-start; justify-content:space-between; gap:10px; padding:14px; border-radius:12px; background:#272a2e; }
+ .workspace-shell .investment-stats article:first-child { grid-column:1/-1; flex-direction:row; align-items:center; padding:12px 14px; }
+ .workspace-shell .investment-stats span { font-size:9px; line-height:1.5; letter-spacing:.06em; }
+ .workspace-shell .investment-stats strong { font-size:23px; text-align:left; line-height:1.2; }
+ .workspace-shell .investment-pending { padding:10px 12px; font-size:12px; border-left:3px solid #ff650b; border-radius:8px; }
+ .workspace-content .workspace-pipeline { padding:14px; border-radius:12px; }
+ .workspace-content .workspace-pipeline h2 { font-size:15px; }
+ .workspace-shell .workspace-pipeline-grid { gap:12px; }
+ .workspace-shell .workspace-pipeline-grid>div>div { font-size:11px; }
+ .workspace-shell .investment-grid { margin-top:14px; }
+ .workspace-shell .investment-grid .account-card { padding:12px; border-radius:14px; }
+ .workspace-shell .investment-grid .investment-cover { aspect-ratio:16/9; }
+ .workspace-shell .investment-grid .account-card h2 { margin:8px 0 12px; font-size:19px; }
+ .workspace-shell #nuevo-vehiculo { padding:16px; }
+ .workspace-shell .investment-form input,.workspace-shell .investment-form select,.workspace-shell .investment-form textarea { font-size:16px; }
+ .workspace-content .dashboard-panel { padding:18px; border-radius:16px; }
+ .workspace-operations { padding:20px; margin:18px 0; gap:20px; border-radius:16px; }
+ .workspace-operations h2 { font-size:28px; }
+ .workspace-footer { padding:16px; gap:12px; font-size:10px; }
+ .workspace-footer>span { flex-basis:100%; }
+ .workspace-shell :is(#nuevo-vehiculo,#editar-compra) { scroll-margin-top:76px; }
+}
+@media(max-width:360px) {
+ body:has(.workspace-shell) .brand-logo,body:has(.workspace-shell) .brand-logo img { width:136px; }
+ .workspace-sidebar nav { padding-inline:4px; }
+ .workspace-sidebar nav a { font-size:9px; }
+ .workspace-shell .investment-admin-actions { flex-direction:column; align-items:stretch; }
+ .workspace-shell .investment-admin-actions a { flex:auto; }
+}
