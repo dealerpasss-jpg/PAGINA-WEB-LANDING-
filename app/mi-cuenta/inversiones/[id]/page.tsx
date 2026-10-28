@@ -1,3 +1,4 @@
+import ArrowIcon from "@/components/ArrowIcon";
 import Link from 'next/link';
 import Image from 'next/image';
 import { notFound } from 'next/navigation';
@@ -22,7 +23,7 @@ export default async function Page({params,searchParams}:{params:Promise<{id:str
  const summary=totals(vehicle.purchase_cents,expenses.filter(e=>!e.voided_at).map(e=>e.amount_cents),vehicle.asking_cents,vehicle.sale_cents);const {message}=await searchParams;
  const margin=vehicle.status==='sold'?summary.margin:summary.estimatedMargin;
  return <AccountShell kicker="DEALERPASS / VEHÍCULOS E INVERSIONES" title={vehicle.title}>
- <div className="investment-actions"><Link href="/mi-cuenta/inversiones">← Todos mis vehículos</Link></div><p className="investment-status">{statuses[vehicle.status]} · {vehicle.purchased_on}</p><p>{vehicle.vin&&'VIN: '+vehicle.vin} {vehicle.auction&&' · '+vehicle.auction}</p>
+ <div className="investment-actions"><Link href="/mi-cuenta/inversiones"><ArrowIcon direction="left" /> Todos mis vehículos</Link></div><p className="investment-status">{statuses[vehicle.status]} · {vehicle.purchased_on}</p><p>{vehicle.vin&&'VIN: '+vehicle.vin} {vehicle.auction&&' · '+vehicle.auction}</p>
  {message&&<p className="account-notice" role="status">{message}</p>}
  <div className="investment-stats"><article><span>INVERSIÓN TOTAL</span><strong>{usd(summary.cost)}</strong></article><article><span>{vehicle.status==='sold'?'RESULTADO REGISTRADO':'GANANCIA ESTIMADA'}</span><strong>{usd(vehicle.status==='sold'?summary.realized:summary.estimated)}</strong></article><article><span>{vehicle.status==='sold'?'MARGEN SOBRE VENTA':'MARGEN ESTIMADO SOBRE VENTA'}</span><strong>{margin===null?'Sin definir':margin.toFixed(1)+'%'}</strong></article></div>
  <p className="investment-note">Compra {usd(vehicle.purchase_cents)} + gastos vigentes {usd(summary.cost-vehicle.purchase_cents)}. Precio publicado: {usd(vehicle.asking_cents)}. Cierre real: {usd(vehicle.sale_cents)}. Resultado antes de gastos no registrados; no equivale a dinero repartido.</p>

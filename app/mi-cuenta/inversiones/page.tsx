@@ -1,3 +1,4 @@
+import ArrowIcon from "@/components/ArrowIcon";
 import Link from 'next/link';
 import AccountShell from '@/components/AccountShell';
 import VehicleForm, {type Vehicle} from '@/components/investments/VehicleForm';
@@ -19,6 +20,6 @@ export default async function Page({searchParams}:{searchParams:Promise<{message
  {!admin&&<p className="investment-note">Estos totales corresponden a los vehículos completos que puedes ver, no a tu parte de las ganancias.</p>}
  {admin&&<details className="account-card"><summary>+ Registrar un vehículo</summary><VehicleForm/></details>}
  {!rows.length&&<div className="investment-empty"><h2>{admin?'Registra tu primer carro.':'Todavía no tienes vehículos asignados.'}</h2><p>{admin?'Empieza por el costo de compra; después añade fotos, gastos y participantes.':'Pide al administrador que te asigne con el mismo correo confirmado de tu cuenta.'}</p></div>}
- <div className="investment-grid">{rows.map(v=><article className="account-card" key={v.id}><span className="investment-status">{statuses[v.status]}</span><h2>{v.title}</h2><p>{v.auction||'Sin subasta registrada'} · {v.purchased_on}</p><dl className="investment-finance"><div><dt>Inversión total</dt><dd>{usd(v.summary.cost)}</dd></div><div><dt>{v.status==='sold'?'Precio de cierre':'Precio publicado'}</dt><dd>{usd(v.status==='sold'?v.sale_cents:v.asking_cents)}</dd></div><div><dt>{v.status==='sold'?'Resultado registrado':'Ganancia estimada'}</dt><dd>{usd(v.status==='sold'?v.summary.realized:v.summary.estimated)}</dd></div></dl><div className="investment-actions"><Link href={'/mi-cuenta/inversiones/'+v.id}>Ver fotos y cuentas →</Link></div></article>)}</div>
+ <div className="investment-grid">{rows.map(v=><article className="account-card" key={v.id}><span className="investment-status">{statuses[v.status]}</span><h2>{v.title}</h2><p>{v.auction||'Sin subasta registrada'} · {v.purchased_on}</p><dl className="investment-finance"><div><dt>Inversión total</dt><dd>{usd(v.summary.cost)}</dd></div><div><dt>{v.status==='sold'?'Precio de cierre':'Precio publicado'}</dt><dd>{usd(v.status==='sold'?v.sale_cents:v.asking_cents)}</dd></div><div><dt>{v.status==='sold'?'Resultado registrado':'Ganancia estimada'}</dt><dd>{usd(v.status==='sold'?v.summary.realized:v.summary.estimated)}</dd></div></dl><div className="investment-actions"><Link href={'/mi-cuenta/inversiones/'+v.id}>Ver fotos y cuentas <ArrowIcon direction="right" /></Link></div></article>)}</div>
  </AccountShell>;
 }

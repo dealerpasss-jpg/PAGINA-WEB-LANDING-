@@ -32,7 +32,7 @@ export default function AcademyPage() {
       <p className="sales-price">{academy.price} <span>· {academy.priceSuffix}</span></p>
       <p>Academy prioriza la formación. No incluye acceso a plataformas de subastas. La duración del acceso, la comunidad y el calendario de sesiones se confirmarán antes de habilitar la compra.</p>
       <p className="pricing-note">Precio de referencia en revisión. Los pagos permanecen en preparación. Crear tu cuenta no activa una membresía.</p>
-      <div className="plans-actions"><Link className="button" href="/mi-cuenta?plan=academy">Elegir Academy →</Link><Link className="text-link" href="/planes#comparar">Comparar con Starter y Pro</Link></div>
+      <div className="plans-actions"><Link className="button" href="/mi-cuenta?plan=academy">Elegir Academy <ArrowIcon direction="right" /></Link><Link className="text-link" href="/planes#comparar">Comparar con Starter y Pro</Link></div>
     </section>
     <PurchaseGuide />
     <FAQ compact />

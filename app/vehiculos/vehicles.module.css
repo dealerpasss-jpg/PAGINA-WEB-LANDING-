@@ -9,3 +9,5 @@
 @media(max-width:760px){.page{padding-top:32px;padding-bottom:64px}.heading{margin-bottom:32px}.heading h1{font-size:42px}.heading p{font-size:16px}.card{grid-template-columns:1fr}.cover{aspect-ratio:4/3}.cardBody h2{font-size:32px}.cardBody .price{font-size:38px}.detailHeading h1 span{display:block;margin-top:5px}.photoBadge{bottom:14px;left:14px}.inventoryLabel{font-size:11px}.detailGrid{gap:24px}}
 
 .card + .card { margin-top: 32px; }
+
+.summary .primary{margin-top:24px}.previous,.next{display:grid;place-items:center}

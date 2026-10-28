@@ -1,3 +1,4 @@
+import ArrowIcon from "@/components/ArrowIcon";
 import type { Metadata } from "next";
 import Link from "next/link";
 import AcademyPresentation from "@/components/AcademyPresentation";
@@ -13,7 +14,7 @@ export default function PlanesPage() {
       <h1>Un plan para cada etapa de tu camino.</h1>
       <p>Aprende a analizar una subasta con Academy, explora el acceso inicial con Starter o combina formación y acompañamiento con Pro.</p>
       <p className="launch-note"><strong>Apertura en preparación.</strong> Puedes comparar las opciones y crear tu cuenta. Los precios son de referencia y todavía no se reciben pagos.</p>
-      <div className="plans-actions"><a className="button" href="#comparar">Comparar planes ↓</a><Link className="text-link" href="/academy">Conocer la academia ↗</Link></div>
+      <div className="plans-actions"><a className="button" href="#comparar">Comparar planes <ArrowIcon direction="down" /></a><Link className="text-link" href="/academy">Conocer la academia <ArrowIcon direction="up-right" /></Link></div>
     </section>
     <section className="wrap sales-comparison" id="planes"><div id="comparar" /><PlanComparison /></section>
     <AcademyPresentation plansPage />
