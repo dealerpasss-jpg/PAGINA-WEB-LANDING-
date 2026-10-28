@@ -62,8 +62,8 @@ export default async function Page({
   const name = greetingName(who.user.user_metadata);
   const profileComplete = ["first_name","last_name","country","region","experience","goal","language"].every(k=>!!who.user.user_metadata?.[k]);
   return (
-    <AccountShell title={name ? `Hola, ${name}.` : "Bienvenido a tu espacio."}>
-      <p className="account-welcome"><span className="account-role">{who.profile.role === "student" ? "Estudiante" : "Equipo DealerPass"}</span> Tu formación y herramientas, en un solo lugar.</p>
+    <AccountShell team={who.profile.role !== "student"} title={name ? `Hola, ${name}.` : "Bienvenido a tu espacio."}>
+      <p className="account-welcome"><span className="account-role">{who.profile.role === "student" ? "Estudiante" : who.profile.role === "admin" ? "Administración" : "Equipo DealerPass"}</span> Tu formación y herramientas, en un solo lugar.</p>
       {searchParams.message && (
         <p className="account-notice" role="status">
           {searchParams.message}
@@ -82,21 +82,12 @@ export default async function Page({
         </p>
       )}
       {!selected && <>
-      <div className="account-actions" aria-label="Acciones de tu cuenta">
-        <Link className="account-action" href="/mi-cuenta/inversiones">Vehículos e inversiones <ArrowIcon /></Link>
-        <Link className="account-action account-action-primary" href="/aula">Ir a mi formación <ArrowIcon direction="right" /></Link>
-        {who.profile.role !== "student" && <Link className="account-action" href="/equipo">Panel del equipo <ArrowIcon /></Link>}
-        <Link className="account-action" href="/mi-cuenta/perfil">Editar mi perfil <ArrowIcon /></Link>
-        <form action="/api/account" method="post">
-          <input type="hidden" name="action" value="logout" />
-          <button className="account-action account-action-quiet">Cerrar sesión</button>
-        </form>
-      </div>
-      <StudentDashboard now={now} active={active} lessons={lessonsResult.data || []} completedIds={(progressResult.data || []).map(p=>p.lesson_id)} unavailable={failed || learningFailed} profileComplete={profileComplete} paymentStates={paymentStates} />
+      {who.profile.role !== "student" && <section className="dashboard-panel workspace-team-welcome"><div><span className="dashboard-eyebrow">CENTRO DE OPERACIONES</span><h2>Todo listo para avanzar.</h2><p>Gestiona la formación{who.profile.role === "admin" ? ", las admisiones y las cuentas de tus vehículos" : " del equipo"} desde tu panel.</p></div><Link className="dashboard-cta" href="/equipo">Abrir mi panel <ArrowIcon direction="right" /></Link></section>}
+      <details className="workspace-learning" open={who.profile.role === "student"}><summary>Mi formación y membresía</summary><StudentDashboard now={now} active={active} lessons={lessonsResult.data || []} completedIds={(progressResult.data || []).map(p=>p.lesson_id)} unavailable={failed || learningFailed} profileComplete={profileComplete} paymentStates={paymentStates} /></details>
       </>}
       {selected && <p className="account-notice">Seleccionaste {selected.name}. Revisa sus detalles abajo antes de continuar.</p>}
       <section id="planes" className={`dashboard-plan-section ${selected ? "selected-purchase" : ""}`}><span className="dashboard-eyebrow">TU SIGUIENTE PASO</span><h2>{selected ? "Revisa tu elección." : active.length ? "Explora otras formas de avanzar." : "Elige cómo quieres avanzar."}</h2>
-      <div className="account-grid">
+      <details className="workspace-plan-options" open={!!selected || !active.length && who.profile.role === "student"}><summary>Ver planes y opciones de acceso</summary><div className="account-grid">
         {(selected ? [selected] : plans).map((plan) => (
           <article key={plan.id} className={`account-card ${selected?.id === plan.id ? "account-plan-selected" : ""}`}>
             <span className="account-tag">
@@ -148,6 +139,7 @@ export default async function Page({
           habilitados.
         </p>
       )}
+      </details>
       {selected && <p><Link className="text-link" href="/planes#comparar">Cambiar de plan</Link> · <Link className="text-link" href="/mi-cuenta">Volver a mi espacio</Link></p>}
       </section>
     </AccountShell>

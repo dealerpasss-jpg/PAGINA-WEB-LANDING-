@@ -32,12 +32,13 @@ export default async function Page({
       ).data
     : [];
   return (
-    <AccountShell kicker="DEALERPASS / EQUIPO" title="Formación y admisiones.">
+    <AccountShell team kicker="DEALERPASS / CENTRO DE OPERACIONES" title={admin ? "Tu negocio, en perspectiva." : "El espacio de tu equipo."}>
       <p>
         {admin
           ? "Administra las clases, las solicitudes VIP y los permisos del equipo."
           : "Consulta la formación en preparación. Las decisiones de admisión y los permisos requieren un administrador."}
       </p>
+      <section className="workspace-operations"><div><span className="dashboard-eyebrow">{admin ? "ADMINISTRACIÓN" : "FORMACIÓN INTERNA"}</span><h2>Menos vueltas.<br />Más claridad.</h2><p>Elige una tarea y continúa donde hace falta.</p><Link className="dashboard-cta" href={admin ? "/mi-cuenta/inversiones" : "/equipo/clases"}>{admin ? "Ver vehículos y cuentas" : "Ver biblioteca"} →</Link></div><div className="workspace-operations-summary"><span>{admin ? "SOLICITUDES POR ATENDER" : "CLASES PUBLICADAS"}</span><strong>{admin ? applications?.filter(a=>a.status === "requested" || a.status === "meeting").length || 0 : lessons?.filter(l=>l.published).length || 0}</strong><p>{admin ? "Solicitudes recibidas o en coordinación de reunión." : "Contenido disponible en la biblioteca."}</p>{admin && <a href="#admisiones">Revisar admisiones →</a>}</div></section>
       <TeamNav admin={admin} />
       <div className="dashboard-stats">{admin && <article><span>ESTUDIANTES</span><strong>Personas y progreso</strong><Link href="/equipo/estudiantes">Abrir directorio</Link></article>}<article><span>FORMACIÓN</span><strong>{lessons?.filter(l=>l.published).length||0} publicadas</strong><Link href="/equipo/clases">Gestionar biblioteca</Link></article><article><span>EN PREPARACIÓN</span><strong>{lessons?.filter(l=>!l.published).length||0} borradores</strong><Link href="/equipo/clases?estado=borrador">Revisar borradores</Link></article></div>
       {searchParams.message && (
@@ -50,8 +51,8 @@ export default async function Page({
           <h2 id="admisiones">Solicitudes Elite</h2>
           {!applications?.length && <p>No hay solicitudes pendientes.</p>}
           {applications?.map((a) => (
-            <article key={a.user_id} className="account-card">
-              <h2>{a.profiles?.email}</h2>
+            <details key={a.user_id} className="account-card workspace-application">
+              <summary>{a.profiles?.email}<span>{({requested:"Recibida",meeting:"Reunión",approved:"Aprobada",rejected:"No aprobada"} as Record<string,string>)[a.status] || a.status}</span></summary>
               <p>
                 {a.phone} · {a.status}
               </p>
@@ -95,7 +96,7 @@ export default async function Page({
                 </label>
                 <button className="btn-primary">Guardar evaluación</button>
               </form>
-            </article>
+            </details>
           ))}
           <h2 id="permisos" className="mt-12">Permisos de colaboradores</h2>
           <form

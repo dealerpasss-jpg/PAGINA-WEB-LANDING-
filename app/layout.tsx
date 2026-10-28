@@ -14,6 +14,7 @@ import "./plan-comparison.css";
 import "./sales-journey.css";
 import "./buttons.css";
 import "./platform.css";
+import "./workspace.css";
 
 const body = Inter({
   subsets: ["latin"],

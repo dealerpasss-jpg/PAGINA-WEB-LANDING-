@@ -5,15 +5,17 @@ export default function AccountShell({
   title,
   kicker = "DEALERPASS / MI ESPACIO",
   compact = false,
+  team = false,
   children,
 }: {
   title: string;
   kicker?: string;
   compact?: boolean;
+  team?: boolean;
   children: React.ReactNode;
 }) {
   return (
-    <WorkspaceFrame><section
+    <WorkspaceFrame team={team}><section
       className={`account-shell${compact ? " account-shell-compact" : ""}`}
     >
       <div className="account-top">
