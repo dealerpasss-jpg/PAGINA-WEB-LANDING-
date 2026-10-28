@@ -11,3 +11,59 @@
 .card + .card { margin-top: 32px; }
 
 .summary .primary{margin-top:24px}.previous,.next{display:grid;place-items:center}
+
+
+/* Public inventory: a consistent, compact editorial grid. */
+.page { padding-top:56px; padding-bottom:80px; }
+.heading { max-width:850px; margin-bottom:36px; }
+.heading h1 { font-size:clamp(38px,4.7vw,64px); margin:18px 0; line-height:1.08; }
+.heading h1 span { color:#777770; }
+.heading p { font-size:16px; max-width:590px; }
+.inventoryLabel { align-items:center; padding:20px 0; gap:16px; }
+.inventoryLabel h2 { margin:0; font-size:20px; line-height:1.3; letter-spacing:-.025em; color:#141616; }
+.inventoryCount { padding:8px 12px; background:#f2eee7; border:1px solid #e4e1db; border-radius:999px; font-size:12px; letter-spacing:0; white-space:nowrap; }
+.inventoryGrid { display:grid; grid-template-columns:repeat(3,minmax(0,1fr)); gap:24px; }
+.card { display:flex; flex-direction:column; min-width:0; border-radius:18px; background:#fff; border:1px solid #e3e1dc; box-shadow:0 3px 12px #11131504; transition:border-color .2s ease,box-shadow .2s ease; }
+.card + .card { margin-top:0; }
+.cover { aspect-ratio:4/3; overflow:hidden; flex-shrink:0; }
+.cover img { display:block; transition:transform .35s ease; }
+.photoBadge { display:inline-flex; align-items:center; gap:10px; bottom:14px; left:14px; padding:8px 11px; border:1px solid #ffffff9c; border-radius:8px; background:#fffffff2; font-size:12px; line-height:1.4; }
+.photoBadge svg { width:15px; height:15px; }
+.cardBody { display:flex; flex:1; flex-direction:column; align-self:stretch; padding:22px; }
+.cardBody .eyebrow { font-size:11px; letter-spacing:.1em; color:#62645e; }
+.cardBody h2 { margin:10px 0 16px; font-size:24px; line-height:1.25; letter-spacing:-.035em; }
+.cardBody h2 a:focus-visible { outline:3px solid #ff4d00; outline-offset:4px; border-radius:2px; }
+.chips { gap:6px; }
+.chips span { font-size:12px; line-height:1.4; padding:6px 8px; border-color:#e5e2dd; background:#f7f6f2; color:#555851; }
+.cardPrice { margin-top:auto; padding-top:22px; padding-bottom:20px; }
+.cardBody .price { font-size:32px; line-height:1.15; font-weight:600; font-variant-numeric:tabular-nums; }
+.cardBody .priceLabel { display:block; margin:5px 0 0; font-size:12px; }
+.cardBody .primary { justify-content:space-between; min-height:48px; padding:12px 16px; font-size:14px; border:1px solid #ff4d00; border-radius:10px; }
+.catalogueNote { margin-top:24px; max-width:700px; font-size:13px; color:#626560; line-height:1.7; }
+.back { display:inline-flex; align-items:center; gap:10px; min-height:44px; margin-bottom:22px; }
+.back svg { width:18px; height:18px; }
+.specs dd { text-align:right; overflow-wrap:anywhere; }
+@media(hover:hover) {
+ .card:hover { border-color:#c5c2bb; box-shadow:0 8px 24px #1113150a; }
+ .cover:hover img { transform:scale(1.025); }
+ .cardBody h2 a:hover { color:#a53200; }
+}
+@media(max-width:1100px) { .inventoryGrid { grid-template-columns:repeat(2,minmax(0,1fr)); gap:20px; } }
+@media(max-width:640px) {
+ .page { padding-top:28px; padding-bottom:48px; }
+ .heading { margin-bottom:24px; }
+ .heading h1 { font-size:clamp(34px,8.7vw,44px); }
+ .heading p { font-size:15px; }
+ .inventoryLabel { flex-wrap:wrap; gap:10px; padding:18px 0; }
+ .inventoryLabel h2 { font-size:18px; }
+ .inventoryCount { font-size:11px; padding:6px 10px; }
+ .inventoryGrid { grid-template-columns:1fr; gap:20px; }
+ .cardBody { padding:20px; }
+ .cardBody h2 { font-size:25px; }
+ .cardBody .price { font-size:32px; }
+ .cardPrice { padding-top:20px; padding-bottom:18px; }
+ .detailHeading { margin-bottom:24px; }
+ .detailHeading p { font-size:16px; }
+ .summary { padding:22px; }
+}
+@media(prefers-reduced-motion:reduce) { .card,.cover img { transition:none; } .cover:hover img { transform:none; } }

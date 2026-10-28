@@ -1,10 +1,21 @@
 "use client";
 import ArrowIcon from "@/components/ArrowIcon";
 
-import { useEffect, useRef, useState } from "react";
+import { Suspense, useEffect, useRef, useState } from "react";
 import Link from "next/link";
-import { usePathname } from "next/navigation";
+import { usePathname, useSearchParams } from "next/navigation";
 import Logo from "./Logo";
+import { safeNext } from "@/lib/academy/policy";
+
+function AuthLinks({ mobile = false, close }: { mobile?: boolean; close?: () => void }) {
+  const params = useSearchParams();
+  const path = usePathname();
+  const next = path === "/ingresar" ? "&next=" + encodeURIComponent(safeNext(params.get("next"))) : "";
+  return <>
+    <Link className={mobile ? undefined : "header-auth-link"} href={"/ingresar?mode=login" + next} onClick={close}>{mobile ? "Iniciar sesión" : "Ingresar"}{mobile && <ArrowIcon />}</Link>
+    <Link className={mobile ? undefined : "header-signup"} href={"/ingresar?mode=registro" + next} onClick={close}>Crear cuenta{mobile && <ArrowIcon />}</Link>
+  </>;
+}
 const links = [
   { href: "/academy", label: "Academia" },
   { href: "/vehiculos", label: "Vehículos" },
@@ -61,8 +72,7 @@ export default function Header() {
           ))}
         </nav>
         <div className="header-actions">
-          {!workspace && <><Link className="header-auth-link" href="/ingresar">Ingresar</Link>
-          <Link className="header-signup" href="/ingresar?mode=registro">Crear cuenta</Link></>}
+          {!workspace && <Suspense fallback={<><Link className="header-auth-link" href="/ingresar">Ingresar</Link><Link className="header-signup" href="/ingresar?mode=registro">Crear cuenta</Link></>}><AuthLinks /></Suspense>}
           <Link className="header-login" href="/mi-cuenta">
             Mi espacio{" "}
             <span aria-hidden>
@@ -89,7 +99,7 @@ export default function Header() {
           aria-label="Navegación móvil"
         >
           {(workspace ? [{href:"/mi-cuenta",label:"Mi espacio"},{href:"/contacto",label:"Ayuda"},{href:"/",label:"Volver al sitio"}] : links).map((l) => (
-            <Link key={l.href} href={l.href} onClick={() => setOpen(false)}>
+            <Link key={l.href} href={l.href} aria-current={path === l.href ? "page" : undefined} onClick={() => setOpen(false)}>
               {l.label}
               <span aria-hidden>
                 <ArrowIcon />
@@ -97,8 +107,7 @@ export default function Header() {
             </Link>
           ))}
           {!workspace && <Link href="/mi-cuenta" onClick={() => setOpen(false)}>Mi espacio <ArrowIcon /></Link>}
-          {!workspace && <><Link href="/ingresar" onClick={() => setOpen(false)}>Iniciar sesión <ArrowIcon /></Link>
-          <Link href="/ingresar?mode=registro" onClick={() => setOpen(false)}>Crear cuenta <ArrowIcon /></Link></>}
+          {!workspace && <Suspense fallback={null}><AuthLinks mobile close={() => setOpen(false)} /></Suspense>}
           <Link href="/contacto" onClick={() => setOpen(false)}>
             Hablemos{" "}
             <span aria-hidden>
