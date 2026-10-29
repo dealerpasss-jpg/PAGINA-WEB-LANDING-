@@ -11,8 +11,8 @@ export default function MetodoMargenPage() {
         title="Compra con números. Decide con criterio."
         description="MARGEN organiza seis variables para que puedas mirar una oportunidad con perspectiva, antes de comprometer tu capital."
       />
-      <MarginMethod />
       <CalculatorPreview />
+      <MarginMethod />
       <FinalCTA />
     </>
   );

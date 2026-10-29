@@ -19,7 +19,7 @@ function AuthLinks({ mobile = false, close }: { mobile?: boolean; close?: () => 
 const links = [
   { href: "/academy", label: "Academia" },
   { href: "/vehiculos", label: "Vehículos" },
-  { href: "/metodo-margen", label: "El método" },
+  { href: "/metodo-margen", label: "Calculadora" },
   { href: "/planes", label: "Planes" },
 ];
 export default function Header() {
