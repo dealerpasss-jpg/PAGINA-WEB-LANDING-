@@ -44,7 +44,7 @@ body:has(.workspace-shell) .page-transition { animation:none; transform:none; }
 .system-state h1,.system-state h2 { margin:24px 0; max-width:800px; }
 .system-state p { max-width:620px; color:#555650; }
 .account-links a.btn-primary { color:#111314; text-decoration:none; }
-[id]:is(#formacion,#recursos,#sesiones,#compras,#admisiones,#permisos) { scroll-margin-top:115px; }
+[id]:is(#formacion,#recursos,#sesiones,#compras,#admisiones,#permisos) { scroll-margin-top:0; }
 @media(max-width:1100px) { .workspace-shell { grid-template-columns:190px minmax(0,1fr); } .workspace-sidebar { padding:24px 10px; } .workspace-sidebar nav a { font-size:12px; gap:8px; } .workspace-content .dashboard-columns { grid-template-columns:1fr; } }
 @media(max-width:800px) {
  .workspace-shell { display:block; }

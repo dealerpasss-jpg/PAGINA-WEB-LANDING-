@@ -1752,3 +1752,11 @@ a {
   .instructor-copy { padding-top: 20px; }
   .instructors-note { margin-top: 32px; }
 }
+
+/* Header clearance belongs to the scroll container, not each anchor target. */
+#main-content:focus { outline:none; }
+@media(max-width:800px) { html { scroll-padding-top:90px; } html:has(.workspace-shell) { scroll-padding-top:76px; } }
+
+/* A disclosure menu stays reachable on short screens and never overlays desktop navigation. */
+@media(max-width:800px) { .mobile-nav { max-height:calc(100dvh - 74px); overflow-y:auto; overscroll-behavior:contain; } body:has(.workspace-shell) .mobile-nav { max-height:calc(100dvh - 60px); } }
+@media(min-width:801px) { .mobile-nav { display:none; } }

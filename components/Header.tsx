@@ -23,8 +23,10 @@ const links = [
   { href: "/planes", label: "Planes" },
 ];
 export default function Header() {
-  const [open, setOpen] = useState(false);
   const path = usePathname();
+  const [openPath, setOpenPath] = useState<string | null>(null);
+  const open = openPath === path;
+  function setOpen(next: boolean) { setOpenPath(next ? path : null); }
   const [scrolled, setScrolled] = useState(false);
   useEffect(() => {
     const update = () => setScrolled(window.scrollY > 24);
@@ -36,14 +38,23 @@ export default function Header() {
   const blended = path === "/" && !scrolled && !open;
   const trigger = useRef<HTMLButtonElement>(null);
   useEffect(() => {
+    if (!open) return;
     function esc(e: KeyboardEvent) {
       if (e.key === "Escape") {
-        setOpen(false);
+        setOpenPath(null);
         trigger.current?.focus();
       }
     }
     document.addEventListener("keydown", esc);
     return () => document.removeEventListener("keydown", esc);
+  }, [open]);
+  useEffect(() => {
+    const desktop = window.matchMedia('(min-width: 801px)');
+    const close = () => setOpenPath(null);
+    const resize = () => { if (desktop.matches) close(); };
+    window.addEventListener('popstate', close);
+    desktop.addEventListener('change', resize);
+    return () => { window.removeEventListener('popstate', close); desktop.removeEventListener('change', resize); };
   }, []);
   return (
     <header
@@ -65,7 +76,7 @@ export default function Header() {
             <Link
               key={l.href}
               href={l.href}
-              aria-current={path === l.href ? "page" : undefined}
+              aria-current={path === l.href || path.startsWith(l.href + "/") ? "page" : undefined}
             >
               {l.label}
             </Link>
@@ -99,7 +110,7 @@ export default function Header() {
           aria-label="Navegación móvil"
         >
           {(workspace ? [{href:"/mi-cuenta",label:"Mi espacio"},{href:"/contacto",label:"Ayuda"},{href:"/",label:"Volver al sitio"}] : links).map((l) => (
-            <Link key={l.href} href={l.href} aria-current={path === l.href ? "page" : undefined} onClick={() => setOpen(false)}>
+            <Link key={l.href} href={l.href} aria-current={path === l.href || path.startsWith(l.href + "/") ? "page" : undefined} onClick={() => setOpen(false)}>
               {l.label}
               <span aria-hidden>
                 <ArrowIcon />

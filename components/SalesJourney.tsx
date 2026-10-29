@@ -2,7 +2,7 @@ import ArrowIcon from "@/components/ArrowIcon";
 import Link from "next/link";
 export function LearningPreview() {
   return <section className="section wrap sales-preview">
-    <span className="kicker"><i /> ASÍ EMPIEZA EL ANÁLISIS</span><h2>El precio de puja es solo el comienzo.</h2>
+    <span className="kicker" id="enfoque"><i /> ASÍ EMPIEZA EL ANÁLISIS</span><h2>El precio de puja es solo el comienzo.</h2>
     <p>Antes de elegir un carro, necesitas conectar tres preguntas. Este es un ejemplo del enfoque educativo de DealerPass.</p>
     <div className="sales-three"><article><span>01</span><h3>¿Qué estoy comprando?</h3><p>Revisar fotos, historial, título y condición. Identificar qué falta por comprobar.</p></article><article><span>02</span><h3>¿Cuánto costará en total?</h3><p>Sumar puja, cargos de subasta, transporte, documentación y una estimación de reparación.</p></article><article><span>03</span><h3>¿Hasta dónde puedo pujar?</h3><p>Contrastar el costo total con el mercado y el objetivo de la compra, considerando imprevistos.</p></article></div>
     <Link className="text-link" href="/metodo-margen">Explorar el Método MARGEN <ArrowIcon direction="up-right" /></Link>

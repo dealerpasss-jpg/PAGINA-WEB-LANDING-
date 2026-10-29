@@ -48,7 +48,7 @@ export default function RootLayout({
       <body className={body.variable}>
         <MotionEffects />
         <Header />
-        <main id="main-content">{children}</main>
+        <main id="main-content" tabIndex={-1}>{children}</main>
         <Footer />
       </body>
     </html>

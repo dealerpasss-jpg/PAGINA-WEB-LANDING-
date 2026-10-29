@@ -445,7 +445,7 @@
   justify-content: center;
   align-items: start;
   padding: 60px 0;
-  scroll-margin-top: 110px;
+  scroll-margin-top:0;
 }
 .journey-step h2 {
   font-size: clamp(38px, 4.3vw, 64px);
@@ -1960,7 +1960,7 @@
 @keyframes page-arrive { from { opacity: .92; } to { opacity: 1; } }
 .mobile-nav { animation: menu-arrive 240ms cubic-bezier(.22,1,.36,1); }
 @keyframes menu-arrive { from { opacity: 0; transform: translateY(-8px); } to { opacity: 1; transform: translateY(0); } }
-main [id] { scroll-margin-top: 10px; }
+main [id] { scroll-margin-top:0; }
 #main-content { scroll-margin-top: 0; }
 .site-header a, .site-footer a { transition: color 180ms ease, opacity 180ms ease; }
 a:focus-visible, button:focus-visible { outline: 2px solid #b73500; outline-offset: 5px; }

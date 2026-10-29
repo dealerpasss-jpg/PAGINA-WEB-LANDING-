@@ -90,7 +90,7 @@
 .consultationNote { display:flex; align-items:flex-start; gap:12px; padding-top:18px; margin-top:18px; border-top:1px solid #ddded6; }
 .consultationNote>span { display:grid; place-items:center; flex-shrink:0; width:18px; height:18px; border:1px solid #999d91; border-radius:50%; color:#74786d; font-size:11px; }
 .consultationNote p { color:#696d63; font-size:12px; line-height:1.7; margin:0; }
-.vehicleFacts { grid-column:1; padding:28px; border:1px solid #e2e1da; border-radius:14px; scroll-margin-top:110px!important; }
+.vehicleFacts { grid-column:1; padding:28px; border:1px solid #e2e1da; border-radius:14px; scroll-margin-top:0; }
 .sectionHeading h2 { margin:12px 0 24px; font-size:28px; font-weight:500; letter-spacing:-.04em; }
 .specs { margin:0; display:grid; grid-template-columns:1fr 1fr; column-gap:26px; }
 .specs>div { display:flex; flex-direction:column; gap:7px; padding:16px 0; border-bottom:1px solid #e2e3da; font-size:14px; }
@@ -155,7 +155,7 @@
  .mainPhoto { border-radius:12px; }.previous,.next { width:44px; height:44px; }.previous { left:9px; }.next { right:9px; }
  .expandHint { left:12px; bottom:12px; }
  .summary { padding:22px; }.summaryHighlights { gap:8px; }.summaryHighlights>div { font-size:12px; }
- .vehicleFacts { padding:22px; scroll-margin-top:88px!important; }.sectionHeading h2 { font-size:26px; }
+ .vehicleFacts { padding:22px; scroll-margin-top:0; }.sectionHeading h2 { font-size:26px; }
  .specs { column-gap:18px; }.specs dd { font-size:13px; }
  .related { margin-top:48px; padding-top:28px; }.relatedHeading { flex-direction:column; align-items:flex-start; gap:12px; }
  .related .inventoryGrid>.card:last-child { display:flex; }

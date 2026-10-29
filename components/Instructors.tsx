@@ -25,7 +25,7 @@ export default function Instructors() {
   return (
     <section className="instructors" aria-labelledby="instructors-heading">
       <div className="wrap">
-        <div className="instructors-heading">
+        <div className="instructors-heading" id="instructores">
           <span className="kicker"><i />EL EQUIPO</span>
           <h2 id="instructors-heading">Conoce a tus instructores.</h2>
           <p>Dos especialidades que conectan la evaluación técnica con la decisión de compra y la venta.</p>

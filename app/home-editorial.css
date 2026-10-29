@@ -13,7 +13,7 @@
 .home-editorial .he-inline-link svg { width:18px; height:18px; transition:transform .2s; }
 .home-editorial .he-primary { display:inline-flex; align-items:center; justify-content:space-between; gap:28px; min-height:52px; padding:16px 22px; background:var(--he-accent); border:1px solid var(--he-accent); color:var(--he-ink); border-radius:8px; font-size:14px; font-weight:600; line-height:1.4; transition:background .2s,transform .2s; }
 .home-editorial .he-primary svg { width:20px; height:20px; flex-shrink:0; }
-.home-editorial .he-route { scroll-margin-top:92px; padding-bottom:48px; }
+.home-editorial .he-route { scroll-margin-top:0; padding-bottom:48px; }
 .home-editorial .he-route-grid { display:grid; grid-template-columns:repeat(3,minmax(0,1fr)); gap:36px; margin-top:52px; }
 .home-editorial .he-route-link { display:grid; grid-template-columns:30px 1fr; gap:16px; border-top:1px solid var(--he-line); padding-top:24px; }
 .home-editorial .he-route-number { font-size:12px; color:#92948d; padding-top:6px; }
