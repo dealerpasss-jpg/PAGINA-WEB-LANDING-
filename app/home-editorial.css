@@ -61,13 +61,22 @@
 .home-editorial .he-vehicle-meta h3 { font-size:22px; margin:10px 0 20px; letter-spacing:-.035em; }
 .home-editorial .he-vehicle-meta>div { display:flex; justify-content:space-between; align-items:center; gap:16px; }
 .home-editorial .he-vehicle-meta strong { font-size:24px; font-weight:500; letter-spacing:-.04em; font-variant-numeric:tabular-nums; }
-.home-editorial .he-vehicle-arrow { display:grid; place-items:center; width:40px; height:40px; border:1px solid var(--he-line); border-radius:50%; transition:background .2s,border-color .2s; }
+.home-editorial .he-vehicle-arrow { display:inline-flex; align-items:center; justify-content:center; gap:10px; min-height:44px; padding:12px 14px; background:var(--he-accent); color:var(--he-ink); border:1px solid var(--he-accent); border-radius:8px; font-size:12px; font-weight:600; white-space:nowrap; transition:background .2s,border-color .2s; }
 .home-editorial .he-vehicle-arrow svg { width:18px; }
-.home-editorial .testimonials-section { background:var(--he-ivory); padding-block:76px; border-block:1px solid #e4e0d8; }
+/* Explicit light-surface colors override the legacy dark testimonial theme. */
+.home-editorial .testimonials-section { background:var(--he-ivory); color:var(--he-ink); padding-block:76px; border-block:1px solid #e4e0d8; }
 .home-editorial .testimonials-head { margin-bottom:36px; }
-.home-editorial .testimonial { background:#fff; border:1px solid #e1ddd5; box-shadow:none; border-radius:4px; }
-.home-editorial .testimonial p { color:var(--he-ink); font-size:16px; }
-.home-editorial .testimonials-intro { color:var(--he-muted); }
+.home-editorial .testimonials-section .testimonials-head h2,.home-editorial .testimonials-section .kicker { color:var(--he-ink); }
+.home-editorial .testimonials-section .testimonial { background:#fff; color:var(--he-ink); border:1px solid #d8d5cf; box-shadow:none; border-radius:8px; transform:none; }
+.home-editorial .testimonials-section .testimonial:hover { background:#fff; color:var(--he-ink); border-color:#a49f95; transform:none; }
+.home-editorial .testimonials-section .testimonial blockquote { color:var(--he-ink); font-size:17px; line-height:1.75; font-weight:400; }
+.home-editorial .testimonials-section .testimonial-person strong { color:var(--he-ink); font-size:14px; }
+.home-editorial .testimonials-section .testimonial-person div > span { color:#5c5d58; font-size:12px; }
+.home-editorial .testimonials-section .testimonials-intro,.home-editorial .testimonials-section .carousel-hint { color:#5c5d58; }
+.home-editorial .testimonials-section .carousel-controls button { color:var(--he-ink); background:#fff; border-color:#aaa79f; min-height:44px; min-width:44px; }
+.home-editorial .testimonials-section .carousel-controls button:hover:enabled { background:var(--he-accent); color:var(--he-ink); border-color:var(--he-accent); }
+.home-editorial .testimonials-section .carousel-controls button:disabled { opacity:1; color:#77776f; border-color:#c5c1b8; background:#e8e4dc; }
+.home-editorial .testimonials-section button:focus-visible,.home-editorial .testimonial-track:focus-visible { outline:3px solid var(--he-ink); outline-offset:4px; }
 .home-editorial .faq-grid { padding-block:88px; }
 .home-editorial .faq-grid h2 { font-size:clamp(32px,3.4vw,48px); }
 .home-editorial .faq-list summary { font-size:15px; padding-block:22px; }
@@ -84,7 +93,7 @@
  .home-editorial .he-route-link:hover { border-color:var(--he-accent); }
  .home-editorial .he-route-link:hover .he-inline-link svg,.home-editorial a.he-inline-link:hover svg { transform:translateX(5px); }
  .home-editorial .he-academy-art:hover img,.home-editorial .he-vehicle:hover img { transform:scale(1.035); }
- .home-editorial .he-vehicle:hover .he-vehicle-arrow { background:var(--he-accent); border-color:var(--he-accent); }
+ .home-editorial .he-vehicle:hover .he-vehicle-arrow,.home-editorial .he-vehicle:focus-visible .he-vehicle-arrow { background:#ff6928; border-color:#ff6928; color:var(--he-ink); }
  .home-editorial .he-method-row:hover { background:#ffffff06; padding-inline:8px; }
 }
 @media(max-width:1100px) {

@@ -57,7 +57,7 @@ export default function HomePage() {
         <Reveal className="he-intro"><div><span className="he-eyebrow">04 / VEHÍCULOS DEALERPASS</span><h2 id="inventory-home-title">Cada carro,<br /><span>con su propia historia.</span></h2></div><div><p>Explora fotografías, características y precios. Revisa cada detalle antes de dar el siguiente paso.</p><Link href="/vehiculos" className="he-inline-link">Ver los {vehicleCatalogue.length} vehículos <ArrowIcon /></Link></div></Reveal>
         <div className="he-inventory-grid">{vehicleCatalogue.slice(0,3).map(vehicle => <Link className="he-vehicle" href={`/vehiculos/${vehicle.slug}`} key={vehicle.slug}>
           <div className="he-vehicle-image"><Image src={vehicle.photos[0].src} alt={vehicle.title} fill sizes="(max-width: 640px) 100vw, (max-width: 1000px) 50vw, 33vw"/><span>{vehicle.photos.length} fotos <ArrowIcon direction="up-right" /></span></div>
-          <div className="he-vehicle-meta"><span>{vehicle.specs.find(([label])=>label==='Millaje')?.[1]} · {vehicle.specs.find(([label])=>label==='Transmisión')?.[1]}</span><h3>{vehicle.title}</h3><div><strong>{money.format(vehicle.price/100)}</strong><span className="he-vehicle-arrow"><ArrowIcon /></span></div></div>
+          <div className="he-vehicle-meta"><span>{vehicle.specs.find(([label])=>label==='Millaje')?.[1]} · {vehicle.specs.find(([label])=>label==='Transmisión')?.[1]}</span><h3>{vehicle.title}</h3><div><strong>{money.format(vehicle.price/100)}</strong><span className="he-vehicle-arrow">Ver carro <ArrowIcon /></span></div></div>
         </Link>)}</div><p className="he-disclosure">Datos proporcionados por el vendedor. Consulta condiciones y fotografías en cada ficha.</p>
       </section>
       <Testimonials />

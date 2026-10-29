@@ -8,7 +8,7 @@ import { testimonials } from "@/data/testimonials";
 export default function Testimonials() {
   const ref = useRef<HTMLDivElement>(null);
   const [position, setPosition] = useState(0);
-  const [paused, setPaused] = useState(false);
+  const [paused, setPaused] = useState(true);
   const [hovered, setHovered] = useState(false);
   const [focused, setFocused] = useState(false);
   const [reduced, setReduced] = useState(false);
@@ -187,8 +187,7 @@ export default function Testimonials() {
           ))}
         </div>
         <p className="carousel-hint">
-          Desliza para leer más. El movimiento se detiene al tocar o pasar el
-          cursor.{" "}
+          Lee a tu ritmo. Desliza o usa las flechas para ver más experiencias.{" "}
           <span aria-hidden>
             <ArrowIcon direction="right" />
           </span>
