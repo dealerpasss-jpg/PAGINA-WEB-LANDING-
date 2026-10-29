@@ -12,9 +12,9 @@ import "./lower.css";
 import "./readability.css";
 import "./plan-comparison.css";
 import "./sales-journey.css";
-import "./buttons.css";
 import "./platform.css";
 import "./workspace.css";
+import "./buttons.css";
 
 const body = Inter({
   subsets: ["latin"],

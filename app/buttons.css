@@ -1,95 +1,244 @@
-/* Shared action hierarchy. Loaded after page-wide styles. */
-:is(.button,.btn-primary,.btn-outline,.btn-outline-dark,.account-action,.dashboard-cta,.plan-compare-button) {
-  border-radius:12px;
+/* DealerPass action family, derived from the approved glass menu.
+ * Geometry stays with each component; only explicit actions opt in (not all links).
+ * Module controls use data-dp-button; existing global primitives remain supported.
+ * Keep this import after workspace.css. The shared selector intentionally matches
+ * the most specific existing card action so route CSS cannot change the skin.
+ */
+:root {
+  --dp-action-ink:#171d18;
+  --dp-action-dark:linear-gradient(130deg,#2d352d,#151b17);
+  --dp-action-dark-hover:linear-gradient(130deg,#374232,#202920);
+  --dp-action-light:linear-gradient(130deg,#fff,#f2f1eb);
+  --dp-action-light-hover:linear-gradient(130deg,#fff,#eaece3);
+  --dp-action-edge:#b7bfa8;
+  --dp-action-shadow:0 4px 12px #111b1814,inset 0 1px 0 #ffffff26;
+  --dp-action-light-shadow:0 2px 6px #26321e06,inset 0 1px 0 #fff;
+}
+body :is([data-dp-button], .button, .btn-primary, .btn-outline, .btn-outline-dark,
+  .account-action, .dashboard-cta, .plan-compare-button, .home-editorial .he-primary,
+  .plans-actions .text-link, .film-actions .text-link, .header-signup, .header-login,
+  .workspace-shell .investment-admin-actions .dashboard-text-link,
+  .workspace-shell .investment-grid .investment-actions a,
+  .workspace-status-filters button, .workspace-filter-empty button, .workspace-reset-filters,
+  .workspace-logout button, .testimonials-section .carousel-controls button,
+  .method-tabs button, .art-pause) {
+  min-height:var(--action-height,44px);
+  border:1px solid var(--action-border,#354232);
+  border-radius:var(--action-radius,12px);
+  background:var(--action-bg,var(--dp-action-dark));
+  color:var(--action-ink,#fff);
+  box-shadow:var(--action-shadow,var(--dp-action-shadow));
+  font-family:inherit;
   font-weight:600;
+  line-height:1.45;
+  letter-spacing:-.01em;
   text-decoration:none;
   cursor:pointer;
-  transition:background .18s ease,border-color .18s ease,box-shadow .18s ease,transform .18s ease;
+  -webkit-tap-highlight-color:transparent;
+  transition:background .16s ease,border-color .16s ease,box-shadow .16s ease,transform .16s ease;
 }
-:is(.button,.btn-primary,.btn-outline,.btn-outline-dark) {
-  min-height:52px;
-  padding:15px 22px;
-  gap:18px;
-  line-height:1.45;
+body :where([data-dp-button="secondary"], [data-dp-button="chip"], [data-dp-button="icon"],
+  .button-light, .btn-outline, .btn-outline-dark, .account-action:not(.account-action-primary),
+  .plans-actions .text-link, .film-actions .text-link, .header-signup,
+  .workspace-shell .investment-admin-actions .dashboard-text-link,
+  .workspace-shell .investment-grid .investment-actions a, .workspace-status-filters button,
+  .workspace-filter-empty button, .workspace-reset-filters, .testimonials-section .carousel-controls button,
+  .method-tabs button) {
+  --action-bg:var(--dp-action-light);
+  --action-hover-bg:var(--dp-action-light-hover);
+  --action-ink:var(--dp-action-ink);
+  --action-border:var(--dp-action-edge);
+  --action-hover-border:#929f82;
+  --action-shadow:var(--dp-action-light-shadow);
 }
-.button,.btn-primary,.account-action-primary,.dashboard-cta {
-  background:#ff4d00;
-  color:#111314;
-  border:1px solid #ff4d00;
-  box-shadow:0 4px 12px #11131412;
+body :is([data-dp-button="quiet"],.account-action-quiet) {
+  --action-bg:transparent; --action-ink:#424d3b; --action-border:transparent;
+  --action-shadow:none; --action-hover-bg:#edf0e7; --action-hover-border:#b7bfa8;
 }
-.account-action-primary svg { color:currentColor; }
-.button-light,.private-editorial .button-light {
-  background:#fff;
-  color:#111314;
-  border-color:#fff;
+body :is([data-dp-button="inverse"],.workspace-logout button,.art-pause) {
+  --action-bg:linear-gradient(130deg,#313931,#202820); --action-ink:#f5f4ef;
+  --action-border:#6c7667; --action-hover-border:#9aa591;
+  --action-hover-bg:linear-gradient(130deg,#414d3b,#2c362b);
 }
-.btn-outline,.btn-outline-dark {
-  background:#fff;
-  color:#111314;
-  border-color:#85837d;
-  box-shadow:none;
+body [data-dp-button="destructive"] {
+  --action-bg:linear-gradient(130deg,#fff7f4,#fae9e4); --action-ink:#972d1b;
+  --action-border:#cf9a8c; --action-hover-border:#972d1b;
+  --action-hover-bg:linear-gradient(130deg,#fff1eb,#f4d6cc);
+  --action-shadow:0 2px 6px #5a1a0c05,inset 0 1px 0 #fff;
 }
-.film-actions .button,.film-actions .text-link,.film-arrival .button { font-size:14px; }
-.plans-actions,.film-actions { gap:14px; }
-.wrap.plans-actions { margin-left:auto; margin-right:auto; }
-.plans-actions .text-link,.film-actions .text-link {
-  min-height:52px;
-  padding:14px 20px;
-  border:1px solid #85837d;
-  border-radius:12px;
-  background:#fff;
-  color:#111314;
-  font-weight:600;
-  text-align:center;
-  justify-content:center;
-  text-decoration:none;
+body :is([data-dp-button="chip"],.workspace-status-filters button,.method-tabs button)[aria-pressed="true"] {
+  --action-bg:var(--dp-action-dark); --action-ink:#fff; --action-border:#354232;
+  --action-hover-bg:var(--dp-action-dark-hover); --action-hover-border:#56654c;
+  --action-shadow:var(--dp-action-shadow);
 }
-.account-action:not(.account-action-primary):not(.account-action-quiet),
-.dashboard-nav a,.dashboard-profile a,.dashboard-resources a,.dashboard-section-title a {
-  border-color:#85837d;
+body :is(.button,.btn-primary,.btn-outline,.btn-outline-dark,.home-editorial .he-primary,[data-dp-button="primary"],[data-dp-button="secondary"]):not([data-dp-size="compact"]) {
+  --action-height:52px; padding:11px 18px; gap:16px;
 }
-.account-shell article a:is(.button,.btn-outline,.btn-outline-dark,.dashboard-cta,.account-action) { text-decoration:none; }
-.plan-compare-button { box-shadow:0 3px 8px #11131412; }
+body :is(.account-action,.dashboard-cta) { padding:11px 18px; gap:16px; }
+body :is([data-dp-button="chip"],.workspace-status-filters button) { padding:8px 13px; --action-radius:999px; }
+body [data-dp-size="compact"] { padding:9px 12px; font-size:12px; }
+body :is([data-dp-button="icon"],.carousel-controls button:not(.carousel-pause)) { --action-radius:50%; min-width:44px; }
+body :is(.header-signup,.header-login) { display:inline-flex; align-items:center; justify-content:center; gap:10px; padding:8px 13px; min-height:44px; font-size:12px; }
+body .header-actions { gap:12px; }
+body .workspace-logout button { padding:9px 12px; }
+body .method-tabs button { padding:16px 14px; margin-bottom:6px; }
+body .method-tabs button[aria-pressed="true"]>span:first-child { color:#fff; }
+body .method-tabs button.active>span:first-child:after { background:#ff7b43; }
+body .method-tabs button .dp-arrow { color:currentColor; }
+body .plans-actions,body .film-actions { gap:14px; }
+body .wrap.plans-actions { margin-inline:auto; }
+body :is(.plans-actions,.film-actions) .text-link { padding:12px 18px; --action-height:52px; justify-content:center; text-align:center; }
+body .film-actions .button,body .film-arrival .button,body .film-actions .text-link { font-size:14px; }
+body :is([data-dp-button="primary"], .button:not(.button-light), .btn-primary,
+  .account-action-primary, .dashboard-cta, .home-editorial .he-primary, .header-login):not([data-dp-button="destructive"]) .dp-arrow {
+  box-sizing:border-box; width:28px; height:28px; flex:0 0 28px;
+  padding:6px; border-radius:50%; background:#ff4d00; color:#171d18;
+}
+body :where([data-dp-button="secondary"], [data-dp-button="chip"], [data-dp-button="icon"],
+  .button-light, .btn-outline, .btn-outline-dark, .account-action:not(.account-action-primary),
+  .plans-actions .text-link, .film-actions .text-link, .header-signup,
+  .workspace-shell .investment-admin-actions .dashboard-text-link,
+  .workspace-shell .investment-grid .investment-actions a, .workspace-status-filters button,
+  .workspace-filter-empty button, .workspace-reset-filters, .testimonials-section .carousel-controls button,
+  .method-tabs button) .dp-arrow { color:#9b3305; }
+body :is(.button,.header-login)>span { transform:none; }
+body :is(.header-login) .dp-arrow { width:24px; height:24px; padding:5px; flex-basis:24px; }
+@supports ((backdrop-filter:blur(1px)) or (-webkit-backdrop-filter:blur(1px))) {
+  :root { --dp-action-light:linear-gradient(130deg,#ffffffed,#f2f1ebe6); }
+body :is([data-dp-button="secondary"], [data-dp-button="chip"], [data-dp-button="icon"],
+  .button-light, .btn-outline, .btn-outline-dark, .account-action:not(.account-action-primary),
+  .plans-actions .text-link, .film-actions .text-link, .header-signup,
+  .workspace-shell .investment-admin-actions .dashboard-text-link,
+  .workspace-shell .investment-grid .investment-actions a, .workspace-status-filters button,
+  .workspace-filter-empty button, .workspace-reset-filters, .testimonials-section .carousel-controls button,
+  .method-tabs button) { -webkit-backdrop-filter:blur(8px); backdrop-filter:blur(8px); }
+}
 @media(hover:hover) {
-  .button:hover,.btn-primary:hover,.account-action-primary:hover,.dashboard-cta:hover {
-    background:#ff6b2b;
-    color:#111314;
-    border-color:#ff6b2b;
-    box-shadow:0 7px 18px #1113141c;
-    transform:translateY(-2px);
+body :is([data-dp-button], .button, .btn-primary, .btn-outline, .btn-outline-dark,
+  .account-action, .dashboard-cta, .plan-compare-button, .home-editorial .he-primary,
+  .plans-actions .text-link, .film-actions .text-link, .header-signup, .header-login,
+  .workspace-shell .investment-admin-actions .dashboard-text-link,
+  .workspace-shell .investment-grid .investment-actions a,
+  .workspace-status-filters button, .workspace-filter-empty button, .workspace-reset-filters,
+  .workspace-logout button, .testimonials-section .carousel-controls button,
+  .method-tabs button, .art-pause):hover:not(:disabled):not([aria-disabled="true"]) {
+    background:var(--action-hover-bg,var(--dp-action-dark-hover));
+    border-color:var(--action-hover-border,#53614c);
+    color:var(--action-ink,#fff);
+    box-shadow:0 5px 14px #111b181a,inset 0 1px 0 #ffffff38;
+    transform:translateY(-1px);
   }
-  .button-light:hover,.private-editorial .button-light:hover,
-  .btn-outline:hover,.btn-outline-dark:hover,
-  .plans-actions .text-link:hover,.film-actions .text-link:hover {
-    background:#f2eee7;
-    color:#111314;
-    border-color:#111314;
-  }
 }
-:is(.button,.btn-primary,.btn-outline,.btn-outline-dark,.account-action,.dashboard-cta,.plan-compare-button):active {
-  transform:translateY(0);
-  box-shadow:none;
+body :is([data-dp-button], .button, .btn-primary, .btn-outline, .btn-outline-dark,
+  .account-action, .dashboard-cta, .plan-compare-button, .home-editorial .he-primary,
+  .plans-actions .text-link, .film-actions .text-link, .header-signup, .header-login,
+  .workspace-shell .investment-admin-actions .dashboard-text-link,
+  .workspace-shell .investment-grid .investment-actions a,
+  .workspace-status-filters button, .workspace-filter-empty button, .workspace-reset-filters,
+  .workspace-logout button, .testimonials-section .carousel-controls button,
+  .method-tabs button, .art-pause):active:not(:disabled):not([aria-disabled="true"]) { transform:translateY(1px); box-shadow:inset 0 1px 3px #111b1814; }
+body :is([data-dp-button], .button, .btn-primary, .btn-outline, .btn-outline-dark,
+  .account-action, .dashboard-cta, .plan-compare-button, .home-editorial .he-primary,
+  .plans-actions .text-link, .film-actions .text-link, .header-signup, .header-login,
+  .workspace-shell .investment-admin-actions .dashboard-text-link,
+  .workspace-shell .investment-grid .investment-actions a,
+  .workspace-status-filters button, .workspace-filter-empty button, .workspace-reset-filters,
+  .workspace-logout button, .testimonials-section .carousel-controls button,
+  .method-tabs button, .art-pause):focus-visible { outline:2px solid #ad3500; outline-offset:4px; box-shadow:0 0 0 4px #fff; }
+body :is([data-dp-button], .button, .btn-primary, .btn-outline, .btn-outline-dark,
+  .account-action, .dashboard-cta, .plan-compare-button, .home-editorial .he-primary,
+  .plans-actions .text-link, .film-actions .text-link, .header-signup, .header-login,
+  .workspace-shell .investment-admin-actions .dashboard-text-link,
+  .workspace-shell .investment-grid .investment-actions a,
+  .workspace-status-filters button, .workspace-filter-empty button, .workspace-reset-filters,
+  .workspace-logout button, .testimonials-section .carousel-controls button,
+  .method-tabs button, .art-pause):is(:disabled,[aria-disabled="true"]) {
+  background:#e6e7e1; color:#62695b; border-color:#c5c9bc; opacity:1;
+  box-shadow:none; transform:none; cursor:not-allowed;
+  -webkit-backdrop-filter:none; backdrop-filter:none;
 }
-:is(.button,.btn-primary,.btn-outline,.btn-outline-dark,.account-action,.dashboard-cta,.plan-compare-button,.plans-actions .text-link,.film-actions .text-link):focus-visible {
-  outline:3px solid #111314;
-  outline-offset:4px;
-  box-shadow:0 0 0 4px #fff;
-}
-:is(.button,.btn-primary,.btn-outline,.btn-outline-dark,.account-action,.dashboard-cta,.plan-compare-button):is(:disabled,[aria-disabled="true"]) {
-  opacity:.5;
-  cursor:not-allowed;
-  transform:none;
-  box-shadow:none;
-}
+body :is([data-dp-button], .button, .btn-primary, .btn-outline, .btn-outline-dark,
+  .account-action, .dashboard-cta, .plan-compare-button, .home-editorial .he-primary,
+  .plans-actions .text-link, .film-actions .text-link, .header-signup, .header-login,
+  .workspace-shell .investment-admin-actions .dashboard-text-link,
+  .workspace-shell .investment-grid .investment-actions a,
+  .workspace-status-filters button, .workspace-filter-empty button, .workspace-reset-filters,
+  .workspace-logout button, .testimonials-section .carousel-controls button,
+  .method-tabs button, .art-pause):is(:disabled,[aria-disabled="true"]) .dp-arrow { background:transparent; color:inherit; }
+body :is([data-dp-button], .button, .btn-primary, .btn-outline, .btn-outline-dark,
+  .account-action, .dashboard-cta, .plan-compare-button, .home-editorial .he-primary,
+  .plans-actions .text-link, .film-actions .text-link, .header-signup, .header-login,
+  .workspace-shell .investment-admin-actions .dashboard-text-link,
+  .workspace-shell .investment-grid .investment-actions a,
+  .workspace-status-filters button, .workspace-filter-empty button, .workspace-reset-filters,
+  .workspace-logout button, .testimonials-section .carousel-controls button,
+  .method-tabs button, .art-pause)[aria-busy="true"] { cursor:progress; }
+@media(max-width:1100px) { body .header-signup { display:none; } }
 @media(max-width:600px) {
-  .plans-actions { align-items:stretch; }
-  .plans-actions :is(.button,.text-link) { width:100%; min-height:52px; }
-  .film-actions :is(.button,.text-link) { min-height:48px; padding:13px 16px; }
+  body .plans-actions { align-items:stretch; }
+  body .plans-actions :is(.button,.text-link) { width:100%; }
+  body .film-actions :is(.button,.text-link) { --action-height:48px; padding:11px 14px; }
 }
 @media(prefers-reduced-motion:reduce) {
-  :is(.button,.btn-primary,.btn-outline,.btn-outline-dark,.account-action,.dashboard-cta,.plan-compare-button),
-  .button span,.text-link span { transition:none; }
-  :is(.button,.btn-primary,.account-action,.dashboard-cta):hover,
-  .button:hover span,.text-link:hover span { transform:none; }
+body :is([data-dp-button], .button, .btn-primary, .btn-outline, .btn-outline-dark,
+  .account-action, .dashboard-cta, .plan-compare-button, .home-editorial .he-primary,
+  .plans-actions .text-link, .film-actions .text-link, .header-signup, .header-login,
+  .workspace-shell .investment-admin-actions .dashboard-text-link,
+  .workspace-shell .investment-grid .investment-actions a,
+  .workspace-status-filters button, .workspace-filter-empty button, .workspace-reset-filters,
+  .workspace-logout button, .testimonials-section .carousel-controls button,
+  .method-tabs button, .art-pause) { transition:none; }
+body :is([data-dp-button], .button, .btn-primary, .btn-outline, .btn-outline-dark,
+  .account-action, .dashboard-cta, .plan-compare-button, .home-editorial .he-primary,
+  .plans-actions .text-link, .film-actions .text-link, .header-signup, .header-login,
+  .workspace-shell .investment-admin-actions .dashboard-text-link,
+  .workspace-shell .investment-grid .investment-actions a,
+  .workspace-status-filters button, .workspace-filter-empty button, .workspace-reset-filters,
+  .workspace-logout button, .testimonials-section .carousel-controls button,
+  .method-tabs button, .art-pause):is(:hover,:active):not(:disabled):not([aria-disabled="true"]) { transform:none; }
+}
+@media(prefers-reduced-transparency:reduce) {
+  :root { --dp-action-light:linear-gradient(130deg,#fff,#f2f1eb); }
+body :is([data-dp-button], .button, .btn-primary, .btn-outline, .btn-outline-dark,
+  .account-action, .dashboard-cta, .plan-compare-button, .home-editorial .he-primary,
+  .plans-actions .text-link, .film-actions .text-link, .header-signup, .header-login,
+  .workspace-shell .investment-admin-actions .dashboard-text-link,
+  .workspace-shell .investment-grid .investment-actions a,
+  .workspace-status-filters button, .workspace-filter-empty button, .workspace-reset-filters,
+  .workspace-logout button, .testimonials-section .carousel-controls button,
+  .method-tabs button, .art-pause) { -webkit-backdrop-filter:none; backdrop-filter:none; }
+}
+@media(forced-colors:active) {
+body :is([data-dp-button], .button, .btn-primary, .btn-outline, .btn-outline-dark,
+  .account-action, .dashboard-cta, .plan-compare-button, .home-editorial .he-primary,
+  .plans-actions .text-link, .film-actions .text-link, .header-signup, .header-login,
+  .workspace-shell .investment-admin-actions .dashboard-text-link,
+  .workspace-shell .investment-grid .investment-actions a,
+  .workspace-status-filters button, .workspace-filter-empty button, .workspace-reset-filters,
+  .workspace-logout button, .testimonials-section .carousel-controls button,
+  .method-tabs button, .art-pause) { background:ButtonFace!important; color:ButtonText!important; border-color:ButtonText!important; box-shadow:none!important; -webkit-backdrop-filter:none; backdrop-filter:none; }
+body :is([data-dp-button], .button, .btn-primary, .btn-outline, .btn-outline-dark,
+  .account-action, .dashboard-cta, .plan-compare-button, .home-editorial .he-primary,
+  .plans-actions .text-link, .film-actions .text-link, .header-signup, .header-login,
+  .workspace-shell .investment-admin-actions .dashboard-text-link,
+  .workspace-shell .investment-grid .investment-actions a,
+  .workspace-status-filters button, .workspace-filter-empty button, .workspace-reset-filters,
+  .workspace-logout button, .testimonials-section .carousel-controls button,
+  .method-tabs button, .art-pause):focus-visible { outline-color:Highlight; }
+body :is([data-dp-button], .button, .btn-primary, .btn-outline, .btn-outline-dark,
+  .account-action, .dashboard-cta, .plan-compare-button, .home-editorial .he-primary,
+  .plans-actions .text-link, .film-actions .text-link, .header-signup, .header-login,
+  .workspace-shell .investment-admin-actions .dashboard-text-link,
+  .workspace-shell .investment-grid .investment-actions a,
+  .workspace-status-filters button, .workspace-filter-empty button, .workspace-reset-filters,
+  .workspace-logout button, .testimonials-section .carousel-controls button,
+  .method-tabs button, .art-pause)[aria-pressed="true"] { border:2px solid Highlight!important; }
+body :is([data-dp-button], .button, .btn-primary, .btn-outline, .btn-outline-dark,
+  .account-action, .dashboard-cta, .plan-compare-button, .home-editorial .he-primary,
+  .plans-actions .text-link, .film-actions .text-link, .header-signup, .header-login,
+  .workspace-shell .investment-admin-actions .dashboard-text-link,
+  .workspace-shell .investment-grid .investment-actions a,
+  .workspace-status-filters button, .workspace-filter-empty button, .workspace-reset-filters,
+  .workspace-logout button, .testimonials-section .carousel-controls button,
+  .method-tabs button, .art-pause) .dp-arrow { background:ButtonFace; color:ButtonText; }
 }

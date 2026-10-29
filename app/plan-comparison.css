@@ -18,9 +18,9 @@
 .plan-compare-purpose { display:block; color:#5d605c; font-size:12px; line-height:1.4; margin:10px 0 22px; min-height:34px; }
 .plan-compare-price { display:block; font-size:clamp(24px,3vw,40px); letter-spacing:-.04em; line-height:1.1; }
 .plan-compare-period { display:block; font-size:12px; font-weight:400; margin:8px 0 20px; }
-.plan-compare-button { display:block; border:1px solid #111314; border-radius:9px; background:#111314; color:#fff!important; padding:13px 6px; min-height:46px; font-size:13px; font-weight:600; text-decoration:none!important; transition:background .18s ease; }
+.plan-compare-button { display:block; border:1px solid #111314; border-radius:9px; background:#111314; color:#fff; padding:13px 6px; min-height:46px; font-size:13px; font-weight:600; text-decoration:none!important; transition:background .18s ease; }
 .plan-compare-button:hover { background:#323735; }
-.plan-compare-academy .plan-compare-button { background:#ff4d00; color:#111314!important; border-color:#ff4d00; }
+.plan-compare-academy .plan-compare-button { background:#ff4d00; color:#111314; border-color:#ff4d00; }
 .plan-compare-academy .plan-compare-button:hover { background:#e94700; }
 .plan-compare-check,.plan-compare-no { display:block; font-size:22px; line-height:1.2; font-weight:700; }
 .plan-compare-check { color:#236849; }

@@ -21,7 +21,7 @@ export default function VehicleCards({ vehicles, priority = false, search = '' }
           <h3><Link href={href}>{vehicle.title}</Link></h3>
           <div className={styles.chips}><span>{vehicleSpec(vehicle, 'Millaje')}</span><span>{vehicleSpec(vehicle, 'Transmisión')}</span><span>{vehicleSpec(vehicle, 'Exterior')}</span></div>
           <div className={styles.cardPrice}><p className={styles.price}>{money.format(vehicle.price / 100)}</p><span className={styles.priceLabel}>Precio de venta · USD</span></div>
-          <Link href={href} className={styles.primary} aria-label={`Ver ${vehicle.title}`}>Ver vehículo <ArrowIcon direction="right" /></Link>
+          <Link href={href} className={styles.primary} data-dp-button="primary" aria-label={`Ver ${vehicle.title}`}>Ver vehículo <ArrowIcon direction="right" /></Link>
         </div>
       </article>;
     })}
