@@ -236,3 +236,32 @@ body:has(.workspace-shell) .mobile-nav a { border-color:#ffffff20; }
 }
 @media(max-width:360px) { body:has(.workspace-shell) .brand-logo,body:has(.workspace-shell) .brand-logo img { width:136px; } .workspace-sidebar nav { padding-inline:4px; } .workspace-sidebar nav a { font-size:9px; } .workspace-shell .investment-admin-actions { flex-direction:column; align-items:stretch; } .workspace-shell .investment-admin-actions a { flex:auto; } .workspace-content .dashboard-stats strong { max-width:130px; font-size:20px; } }
 @media(prefers-reduced-motion:reduce) { .workspace-shell :is(a,button) { transition:none!important; transform:none!important; } }
+
+/* Local view controls never change the inventory, its permissions or its totals. */
+.workspace-collection { margin:30px 0; }
+.workspace-collection-heading { display:flex; align-items:flex-end; justify-content:space-between; gap:20px; margin:0 0 20px; }
+.workspace-collection-heading h2 { font-size:25px; font-weight:500; letter-spacing:-.035em; margin:10px 0 0; }
+.workspace-collection-heading>p { margin:0; color:#6a6a6a; font-size:12px; white-space:nowrap; }
+.workspace-collection-tools { background:#fff; border:1px solid #deded9; border-radius:12px; padding:18px; }
+.workspace-collection-tools>label { display:grid; gap:8px; max-width:560px; }
+.workspace-collection-tools>label>span { font-size:11px; color:#626262; font-weight:500; }
+.workspace-collection-tools>label>div { position:relative; }
+.workspace-collection-tools>label svg { position:absolute; top:14px; left:14px; width:20px; height:20px; stroke:#74746c; stroke-width:1.6; pointer-events:none; }
+.workspace-collection-tools input { width:100%; min-height:48px; padding:12px 14px 12px 44px; color:#171919; border:1px solid #bfc2b7; background:#fcfcfa; border-radius:8px; font-family:inherit; font-size:15px; }
+.workspace-collection-tools input::placeholder { color:#73776b; }
+.workspace-status-filters { display:flex; flex-wrap:wrap; gap:7px; margin-top:16px; }
+.workspace-status-filters button { display:flex; align-items:center; gap:8px; min-height:40px; border:1px solid #dedfd8; border-radius:7px; background:#fff; padding:8px 12px; font:inherit; font-size:11px; color:#62665b; cursor:pointer; }
+.workspace-status-filters button span { color:inherit; opacity:.8; font-size:10px; font-variant-numeric:tabular-nums; }
+.workspace-status-filters button[aria-pressed=true] { background:#171919; color:#fff; border-color:#171919; }
+.workspace-status-filters button:hover:not([aria-pressed=true]) { background:#f1f2ec; }
+.workspace-filter-empty { text-align:center; padding:36px 24px; margin:20px 0; border:1px dashed #bfc3b8; border-radius:12px; background:#fff; }
+.workspace-filter-empty h3 { font-size:20px; font-weight:500; margin:0 0 12px; }
+.workspace-filter-empty p { font-size:13px; color:#62665b; }
+.workspace-filter-empty button,.workspace-reset-filters { min-height:44px; padding:10px 14px; background:#fff; border:1px solid #bfc3b8; border-radius:7px; color:#373d31; font:inherit; font-size:12px; cursor:pointer; }
+.workspace-filter-empty button { margin-top:12px; }.workspace-reset-filters { margin-top:-8px; }
+.dashboard-learning-empty { display:flex; flex-direction:column; align-items:flex-start; padding:24px; margin:24px 0; border:1px dashed #cfd1c7; border-radius:10px; background:#f8f8f4; }
+.dashboard-learning-empty>svg { width:28px; height:28px; color:#9a3b12; margin-bottom:16px; }
+.dashboard-learning-empty strong { color:#343a2e; font-size:16px; font-weight:500; line-height:1.5; }
+.dashboard-learning-empty>span { font-size:13px; line-height:1.7; color:#6c7164; margin-top:9px; }
+.dashboard-learning-empty>a { display:flex; align-items:center; gap:14px; min-height:44px; margin-top:14px; font-size:12px; color:#a33300; }
+@media(max-width:600px) { .workspace-collection { margin:24px 0; }.workspace-collection-heading { align-items:flex-start; flex-direction:column; gap:10px; }.workspace-collection-heading h2 { font-size:23px; }.workspace-collection-tools { padding:16px; }.workspace-collection-tools input { font-size:16px; }.workspace-status-filters { gap:6px; }.workspace-status-filters button { min-height:44px; padding:8px 10px; }.dashboard-learning-empty { padding:20px; } }

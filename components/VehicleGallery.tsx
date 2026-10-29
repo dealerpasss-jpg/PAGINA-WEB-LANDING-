@@ -10,7 +10,6 @@ export default function VehicleGallery({ photos, vehicle }: { photos: CatalogueV
   const [selected, setSelected] = useState(0);
   const [expanded, setExpanded] = useState(false);
   const dialog = useRef<HTMLDialogElement>(null);
-  const thumbnails = useRef<HTMLDivElement>(null);
   const touch = useRef<{ x: number; y: number } | null>(null);
   const swiped = useRef(false);
   const photo = photos[selected];
@@ -63,7 +62,7 @@ export default function VehicleGallery({ photos, vehicle }: { photos: CatalogueV
       <button type="button" className={styles.previous} aria-label="Foto anterior" onClick={() => move(-1)}><ArrowIcon direction="left" /></button><button type="button" className={styles.next} aria-label="Foto siguiente" onClick={() => move(1)}><ArrowIcon direction="right" /></button>
     </div>
     <p className={styles.caption} aria-live="polite" aria-atomic="true"><span>{photo.caption}</span><span>{selected + 1} / {photos.length}</span></p>
-    <div ref={thumbnails} className={styles.thumbnails} role="group" aria-label="Seleccionar foto del vehículo">{photos.map((item, index) => <button type="button" key={item.src} aria-label={`Foto ${index + 1}: ${item.caption}`} aria-pressed={index === selected} onClick={event => { setSelected(index); event.currentTarget.scrollIntoView({ block: 'nearest', inline: 'nearest', behavior: 'auto' }); }}><Image src={item.src} alt="" width={144} height={108} sizes="94px" /></button>)}</div>
+    <div className={styles.thumbnails} role="group" aria-label="Seleccionar foto del vehículo">{photos.map((item, index) => <button type="button" key={item.src} aria-label={`Foto ${index + 1}: ${item.caption}`} aria-pressed={index === selected} onClick={event => { setSelected(index); event.currentTarget.scrollIntoView({ block: 'nearest', inline: 'nearest', behavior: 'auto' }); }}><Image src={item.src} alt="" width={144} height={108} sizes="94px" /></button>)}</div>
     <p className={styles.note}>La portada tiene el fondo editado para unificar el catálogo. Las demás fotografías muestran el vehículo en su entorno original.</p>
     <dialog ref={dialog} className={styles.photoDialog} aria-label={`Galería ampliada de ${vehicle}`} onClose={() => setExpanded(false)} onKeyDown={onKeyDown} onClick={event => { if (event.target === event.currentTarget) dialog.current?.close(); }}>
       <div className={styles.dialogInner}>

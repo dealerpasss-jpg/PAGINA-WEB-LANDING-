@@ -1,3 +1,4 @@
+import WorkspaceIcon from "@/components/WorkspaceIcon";
 import ArrowIcon from "@/components/ArrowIcon";
 import AccountShell from "@/components/AccountShell";
 import { requireIdentity, database, checked } from "@/lib/academy/server";
@@ -40,7 +41,7 @@ export default async function Page() {
   return (
     <AccountShell title="Aprende. Aplica. Avanza.">
       <p>Tu formación está organizada según los planes que tienes activos.</p>
-      <div className="account-card">
+      {available.length > 0 && <div className="account-card">
         <span className="account-tag">Tu progreso</span>
         <h2>
           {completed} de {available.length} clases completadas
@@ -50,19 +51,14 @@ export default async function Page() {
           max={Math.max(available.length, 1)}
           value={completed}
         />
-      </div>
+      </div>}
+      {available.length === 0 && <section className="dashboard-panel dashboard-learning-empty"><WorkspaceIcon name="learn" /><h2>{plans.length ? "Estamos preparando tu formación." : "Tu recorrido empieza por aquí."}</h2><p>{plans.length ? "Todavía no hay clases publicadas para tu plan. Cuando estén disponibles, verás aquí tus módulos y tu avance." : "Consulta el temario y las opciones de formación antes de elegir un plan. Crear tu cuenta no activa una membresía."}</p><Link href="/academy#temario">Explorar el temario de referencia <ArrowIcon /></Link></section>}
       {!plans.length && (
         <p className="account-notice">
           No tienes un plan activo.{" "}
           <Link href="/mi-cuenta">
             Explorar planes <ArrowIcon direction="right" />
           </Link>
-        </p>
-      )}
-      {available.length === 0 && plans.length > 0 && (
-        <p className="account-notice">
-          Aún no hay clases publicadas para tu plan. El equipo está preparando
-          la formación.
         </p>
       )}
       {!!lessons?.length && <div className="account-card">

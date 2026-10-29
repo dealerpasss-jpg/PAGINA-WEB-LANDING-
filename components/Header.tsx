@@ -24,9 +24,11 @@ const links = [
 ];
 export default function Header() {
   const path = usePathname();
-  const [openPath, setOpenPath] = useState<string | null>(null);
-  const open = openPath === path;
-  function setOpen(next: boolean) { setOpenPath(next ? path : null); }
+  const [menu, setMenu] = useState({ path, open: false });
+  // Reset route-owned disclosure state during render so returning to a route cannot reopen it.
+  if (menu.path !== path) setMenu({ path, open: false });
+  const open = menu.path === path && menu.open;
+  function setOpen(next: boolean) { setMenu({ path, open: next }); }
   const [scrolled, setScrolled] = useState(false);
   useEffect(() => {
     const update = () => setScrolled(window.scrollY > 24);
@@ -41,7 +43,7 @@ export default function Header() {
     if (!open) return;
     function esc(e: KeyboardEvent) {
       if (e.key === "Escape") {
-        setOpenPath(null);
+        setMenu(current => ({ ...current, open: false }));
         trigger.current?.focus();
       }
     }
@@ -50,7 +52,7 @@ export default function Header() {
   }, [open]);
   useEffect(() => {
     const desktop = window.matchMedia('(min-width: 801px)');
-    const close = () => setOpenPath(null);
+    const close = () => setMenu(current => ({ ...current, open: false }));
     const resize = () => { if (desktop.matches) close(); };
     window.addEventListener('popstate', close);
     desktop.addEventListener('change', resize);
@@ -84,7 +86,7 @@ export default function Header() {
         </nav>
         <div className="header-actions">
           {!workspace && <Suspense fallback={<><Link className="header-auth-link" href="/ingresar">Ingresar</Link><Link className="header-signup" href="/ingresar?mode=registro">Crear cuenta</Link></>}><AuthLinks /></Suspense>}
-          <Link className="header-login" href="/mi-cuenta">
+          <Link className="header-login" href="/mi-cuenta" onClick={() => setOpen(false)}>
             Mi espacio{" "}
             <span aria-hidden>
               <ArrowIcon />

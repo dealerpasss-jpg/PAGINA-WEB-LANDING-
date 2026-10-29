@@ -8,7 +8,9 @@
     "start": "next start",
     "lint": "eslint app components lib proxy.ts",
     "test": "node --experimental-strip-types --test tests/*.test.ts",
-    "typecheck": "tsc --noEmit"
+    "typecheck": "tsc --noEmit",
+    "check:build": "node scripts/check-build.mjs",
+    "verify": "npm run lint && npm run test && npm run typecheck && npm run build && npm run check:build"
   },
   "dependencies": {
     "@supabase/ssr": "^0.12.7",
