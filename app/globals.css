@@ -1761,11 +1761,11 @@ a {
 @media(max-width:800px) { .mobile-nav { max-height:calc(100dvh - 74px); overflow-y:auto; overscroll-behavior:contain; } body:has(.workspace-shell) .mobile-nav { max-height:calc(100dvh - 60px); } }
 @media(min-width:801px) { .mobile-nav { display:none; } }
 
-/* Blend only the lower ground into white. The rightmost 16% is physically
+/* Blend the lower portion into white. The rightmost 16% is physically
    outside the overlay, preserving each original Meta AI mark in full.
    The photograph itself stays full-frame: no mask, opacity or filter. */
-.brand-photo-frame { position:relative; isolation:isolate; --brand-photo-fade-height:4%; --brand-photo-radius:16px; }
-.brand-photo-frame--inspection { --brand-photo-fade-height:14%; --brand-photo-radius:14px; }
+.brand-photo-frame { position:relative; isolation:isolate; --brand-photo-fade-height:24%; --brand-photo-radius:16px; }
+.brand-photo-frame--inspection { --brand-photo-fade-height:30%; --brand-photo-radius:14px; }
 @supports (mask-image:linear-gradient(to right,#000,transparent)) {
   .brand-photo-frame::after {
     content:'';

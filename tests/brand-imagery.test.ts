@@ -36,8 +36,8 @@ test('ground fade leaves the original provenance corner physically outside the o
   assert.equal(values.height, 'var(--brand-photo-fade-height)');
   assert.equal(values['pointer-events'], 'none');
   assert.equal(values['mask-image'], 'linear-gradient(to right,#000 66%,transparent 100%)');
-  assert.match(rules[0].toString(), /--brand-photo-fade-height:4%/);
-  assert.match(rules[1].toString(), /--brand-photo-fade-height:14%/);
+  assert.match(rules[0].toString(), /--brand-photo-fade-height:24%/);
+  assert.match(rules[1].toString(), /--brand-photo-fade-height:30%/);
   assert.match(rules[3].parent!.toString(), /prefers-reduced-transparency:reduce/);
   assert.match(rules[3].parent!.toString(), /forced-colors:active/);
   assert.equal(rules[3].nodes[0].type === 'decl' && rules[3].nodes[0].value, 'none');

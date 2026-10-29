@@ -21,7 +21,7 @@
 ## Presentation treatment (2026-10-29)
 
 - The first full-frame layout is retained (homepage portrait up to 420px; Academy inspection up to 320px).
-- The lower ground blends into the white page through a decorative `brand-photo-frame::after` gradient, not by changing either image. The shallow group fade occupies only the bottom 4% to avoid materially affecting shoes; the inspection fade occupies the bottom 14%, below the person.
+- The lower ground blends into the white page through a decorative `brand-photo-frame::after` gradient, not by changing either image. At the user’s request for a larger, gradual transition, the group fade occupies the bottom 24% and the inspection fade the bottom 30%. The lower legs/ground may blend into white; faces remain outside the effect.
 - The overlay is physically limited to the left 84% of the frame and fades horizontally before that edge. The rightmost 16%, containing each original Meta AI mark, is never overlaid, faded or blurred. Do not expand the overlay across that reserved region.
 - The photograph itself remains unmasked, unfiltered, full-opacity and full-frame. Original image bytes, neutral educational captions and accurate alt text remain unchanged. No replacement by unmarked copies.
 - Browsers without CSS mask support retain the unmodified photo. Reduced-transparency and forced-colors preferences disable the decorative gradient.
