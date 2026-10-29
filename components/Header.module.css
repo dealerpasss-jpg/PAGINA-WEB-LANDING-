@@ -1,0 +1,39 @@
+.menuToggle,.sheetClose{align-items:center;justify-content:center;gap:9px;min-height:44px;border:0;background:transparent;color:inherit;font:inherit;font-size:12px;font-weight:500;cursor:pointer;padding:8px 0}
+.menuToggle{display:none}.sheetClose{display:inline-flex;flex:none}
+.menuToggle svg,.sheetClose svg{width:22px;height:22px;stroke:currentColor;stroke-width:1.6;stroke-linecap:round}
+.menuToggle:focus-visible,.mobileMenu :is(a,button):focus-visible{outline:2px solid #ad3500;outline-offset:4px;border-radius:5px}
+.mobileMenu{position:fixed;inset:0 0 auto;width:100%;max-width:none;max-height:100dvh;margin:0;padding:0;border:0;border-bottom:1px solid #dedbd3;border-radius:0 0 20px 20px;background:#f7f5ef;color:#171919;box-shadow:0 24px 60px #11131524;overflow:hidden}
+.mobileMenu[open]{display:flex;flex-direction:column}
+.mobileMenu::backdrop{background:#11131566;backdrop-filter:blur(3px)}
+.sheetHeader{display:flex;align-items:center;justify-content:space-between;gap:20px;min-height:74px;flex:none;padding:0 24px;border-bottom:1px solid #e0ddd5;background:#f2eee7}
+.sheetBody{padding:22px 24px calc(16px + env(safe-area-inset-bottom,0px));overflow-y:auto;overscroll-behavior:contain;min-height:0}
+.groupLabel{display:block;font-size:10px;font-weight:600;line-height:1.5;letter-spacing:.11em;color:#74766e}
+.navigation>.groupLabel{margin:0 12px 10px}
+.navigation>a{position:relative;display:flex;align-items:center;justify-content:space-between;gap:16px;min-height:48px;padding:11px 12px;border-radius:8px;color:#171919;font-size:16px;font-weight:500;line-height:1.5;text-decoration:none}
+.navigation>a:hover{background:#eeece5}
+.navigation>a[aria-current=page]{background:#eae6dc}
+.navigation>a[aria-current=page]::before{content:'';position:absolute;left:0;top:17px;bottom:17px;width:3px;border-radius:2px;background:#ff4d00}
+.navigation svg{width:16px;height:16px;stroke:currentColor;stroke-width:1.6;stroke-linecap:round;stroke-linejoin:round;color:#7b7e75;flex:none}
+.account{margin-top:22px;padding:12px 18px 8px;border:1px solid #dfdbd2;border-radius:12px;background:#fff}
+.accountHeading{display:flex;align-items:center;justify-content:space-between;gap:16px;min-height:40px}
+.accountHeading>a{display:flex;align-items:center;gap:9px;min-height:44px;color:#555b52;font-size:12px;text-decoration:none}
+.accountHeading svg{width:15px;height:15px}
+.account>p{margin:0 0 16px;color:#62675e;font-size:13px;line-height:1.6}
+.accountActions{display:grid;gap:2px}
+.signIn,.signUp{display:flex;align-items:center;justify-content:space-between;gap:16px;min-height:46px;font-size:13px;font-weight:500;text-decoration:none}
+.signIn{padding:12px 15px;border:1px solid #171919;border-radius:8px;background:#171919;color:#fff}
+.signIn:hover{background:#333830}.signIn svg{color:inherit;width:17px;height:17px}
+.signUp{padding:10px 2px;color:#a33300}.signUp svg{width:16px;height:16px}.signUp:hover{text-decoration:underline;text-underline-offset:4px}
+.contact{display:flex;align-items:center;justify-content:space-between;gap:18px;padding:8px 12px 0;color:#74766e;font-size:12px}
+.contact>a{display:flex;align-items:center;gap:10px;min-height:44px;color:#343930;text-decoration:none}.contact svg{width:16px;height:16px}
+.mobileMenu[data-workspace=true]{background:#111315;border-color:#ffffff1c;color:#f5f4ef}
+.mobileMenu[data-workspace=true] .sheetHeader{background:#111315;border-color:#ffffff1c;min-height:60px}
+.mobileMenu[data-workspace=true] .groupLabel{color:#a4a79d}
+.mobileMenu[data-workspace=true] .navigation>a{color:#f5f4ef}
+.mobileMenu[data-workspace=true] .navigation>a:hover,.mobileMenu[data-workspace=true] .navigation>a[aria-current=page]{background:#ffffff0d}
+.mobileMenu[data-workspace=true] .navigation svg{color:#a4a79d}
+.mobileMenu[data-workspace=true] :is(a,button):focus-visible{outline-color:#ff7b43}
+@media(max-width:800px){.menuToggle{display:inline-flex}.desktopAccount{display:none!important}}
+@media(max-width:600px){.sheetHeader{padding:0 20px;gap:16px}.sheetBody{padding:18px 20px calc(12px + env(safe-area-inset-bottom,0px))}.account{margin-top:18px}.navigation>.groupLabel{margin-bottom:8px}}
+@media(max-height:520px){.sheetHeader{min-height:60px}.sheetBody{padding-top:16px}}
+@media(min-width:801px){.mobileMenu[open]{display:none}}

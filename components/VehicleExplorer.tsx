@@ -1,27 +1,33 @@
 'use client';
 
 import { useSearchParams } from 'next/navigation';
+import { useSyncExternalStore } from 'react';
 import type { CatalogueVehicle } from '@/data/vehicle-catalogue';
 import { filterCatalogue, readCatalogueFilters, vehicleMake, updateCatalogueParams, catalogueQuery, type CatalogueParam } from '@/lib/vehicles/catalogue';
+import { catalogueHistorySnapshot, replaceCatalogueHistory, subscribeCatalogueHistory } from '@/lib/vehicles/catalogue-history';
 import VehicleCards from './VehicleCards';
 import ArrowIcon from './ArrowIcon';
 import styles from '@/app/vehiculos/vehicles.module.css';
 
 export default function VehicleExplorer({ vehicles }: { vehicles: CatalogueVehicle[] }) {
-  const params = useSearchParams();
+  // Keep Next's navigation subscription/SSR snapshot, but never control an input
+  // with its delayed history reflection: rapid typing otherwise drops characters.
+  const routerParams = useSearchParams();
+  const query = useSyncExternalStore(subscribeCatalogueHistory, catalogueHistorySnapshot, () => routerParams.toString());
+  const params = new URLSearchParams(query);
   const filters = readCatalogueFilters(params);
   const matches = filterCatalogue(vehicles, filters);
   const makes = [...new Set(vehicles.map(vehicleMake))];
   const filtered = !!filters.query || !!filters.make;
 
   function update(key: CatalogueParam, value: string) {
-    const next = updateCatalogueParams(params, key, value);
-    window.history.replaceState(null, '', `${window.location.pathname}${next.size ? `?${next}` : ''}`);
+    const next = updateCatalogueParams(new URLSearchParams(catalogueHistorySnapshot()), key, value);
+    replaceCatalogueHistory(next);
   }
   function reset() {
-    const next = new URLSearchParams(params.toString());
+    const next = new URLSearchParams(catalogueHistorySnapshot());
     ['buscar', 'marca', 'orden'].forEach(key => next.delete(key));
-    window.history.replaceState(null, '', `${window.location.pathname}${next.size ? `?${next}` : ''}`);
+    replaceCatalogueHistory(next);
   }
   return <section aria-labelledby="inventory-title">
     <div className={styles.inventoryLabel}><h2 id="inventory-title">Encuentra el que va contigo.</h2><span className={styles.inventoryCount}>{vehicles.length} vehículos publicados</span></div>

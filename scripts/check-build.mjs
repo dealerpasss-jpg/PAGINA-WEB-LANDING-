@@ -55,6 +55,14 @@ assert.deepEqual(filmImages.sort(), ['/brand/film-open.webp', '/brand/film-road.
 for (const asset of ['road', 'open', 'eighth', 'quarter', 'half', 'three-quarter', 'closed', 'car']) {
   assert.ok(existsSync(path.join(root, 'public/brand', `film-${asset}.webp`)), `Missing original film asset: ${asset}`);
 }
+const menu = documents.get('/')?.html.match(/<dialog\b[^>]*id="mobile-navigation"[^>]*>[\s\S]*?<\/dialog>/)?.[0];
+assert.ok(menu, 'Mobile navigation must be a native modal, not a layout-pushing dropdown.');
+assert.match(menu, /aria-label="Cerrar menú"/, 'Mobile navigation needs a clearly labeled close action.');
+assert.match(menu, /EXPLORAR DEALERPASS/, 'Primary exploration links must remain grouped.');
+assert.match(menu, /aria-label="Acceso a tu cuenta"/, 'Account actions must have their own distinct group.');
+for (const href of ['/academy', '/vehiculos', '/metodo-margen', '/planes', '/mi-cuenta', '/contacto']) {
+  assert.ok(menu.includes(`href="${href}"`), `Mobile navigation lost destination: ${href}`);
+}
 if (errors.length) { console.error(errors.join('\n')); process.exit(1); }
 console.log(`Build structure passed: ${documents.size} static pages, ${checkedLinks} internal links, ${checkedImages} image references. No missing static anchors or duplicate IDs.`);
 console.log('Hero fallback passed: only road/open hand in initial HTML; stable eligible geometry and native no-JS fallback; original motion assets available.');
