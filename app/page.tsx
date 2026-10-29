@@ -31,23 +31,23 @@ export default function HomePage() {
       </section>
 
       <section className="he-section he-academy" aria-labelledby="academy-home-title">
+        <Reveal className="he-academy-heading"><span className="he-eyebrow">02 / CONSTRUYE TU CRITERIO</span><h2 id="academy-home-title">La mejor herramienta<br /><span>está en lo que sabes.</span></h2></Reveal>
         <Reveal className="he-academy-art">
           <div className="he-art-label"><span>DEALERPASS ACADEMY</span><span>FORMACIÓN EN ESPAÑOL</span></div>
           <figure className="he-academy-portrait">
-            <Image src="/brand/academy-brand-scene.webp" alt="Imagen editada de tres personas junto a un vehículo en un taller." width={1152} height={2048} sizes="(max-width: 460px) calc(100vw - 36px), 420px" />
+            <Image src="/brand/academy-brand-scene.webp" alt="Imagen editada de tres personas junto a un vehículo en un taller." width={1152} height={2048} sizes="(max-width: 360px) 260px, (max-width: 800px) 280px, 300px" />
             <figcaption><span aria-hidden="true" />Formación y criterio para tu próxima compra.</figcaption>
           </figure>
         </Reveal>
         <Reveal className="he-academy-copy" delay={0.1}>
-          <span className="he-eyebrow">02 / CONSTRUYE TU CRITERIO</span><h2 id="academy-home-title">La mejor herramienta<br />no está en el taller.<br /><span>Está en lo que sabes.</span></h2>
           <p>Una ruta de formación en español para entender el proceso completo: desde leer un lote hasta preparar su comercialización.</p>
-          <ol className="he-syllabus"><li><span>01</span><div><strong>Entiende la subasta</strong><small>Plataformas, títulos y responsabilidades.</small></div></li><li><span>02</span><div><strong>Evalúa la oportunidad</strong><small>Historial, condición y costos reales.</small></div></li><li><span>03</span><div><strong>Prepara el siguiente paso</strong><small>Compra, preparación y comercialización.</small></div></li></ol>
+          <div className="he-academy-learning">
+            <ol className="he-syllabus"><li><span>01</span><div><strong>Entiende la subasta</strong><small>Plataformas, títulos y responsabilidades.</small></div></li><li><span>02</span><div><strong>Evalúa la oportunidad</strong><small>Historial, condición y costos reales.</small></div></li><li><span>03</span><div><strong>Prepara el siguiente paso</strong><small>Compra, preparación y comercialización.</small></div></li></ol>
+            <figure className="he-academy-illustration"><Image src="/brand/editorial-academy.webp" alt="Ilustración de un mentor y estudiantes evaluando un vehículo naranja." width={1254} height={1254} sizes="140px" /><figcaption>Ilustración de marca.</figcaption></figure>
+          </div>
           <Link href="/academy" className="he-primary">Explorar la formación <ArrowIcon /></Link>
           <p className="he-disclosure">Consulta el temario y las condiciones. Los pagos permanecen en preparación; crear tu cuenta no activa una membresía.</p>
-          <figure className="he-academy-illustration">
-            <Image src="/brand/editorial-academy.webp" alt="Ilustración de un mentor y estudiantes evaluando un vehículo naranja." width={1254} height={1254} sizes="(max-width: 420px) 208px, (max-width: 800px) 180px, 160px" />
-            <figcaption><span>DEL DETALLE AL CRITERIO</span><strong>Aprende a ver lo que otros pasan por alto.</strong><small>Ilustración de marca.</small></figcaption>
-          </figure>
+
         </Reveal>
       </section>
 
