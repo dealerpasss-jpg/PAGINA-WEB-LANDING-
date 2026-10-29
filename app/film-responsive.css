@@ -1,0 +1,50 @@
+/* Final hero geometry: one viewport, stable small-viewport units, no scroll interception. */
+.hero-film .film-stage{height:100svh;min-height:0;padding:0;contain:layout paint}
+.hero-film .film-track{height:290svh}
+.hero-film .film-copy{position:absolute;top:clamp(108px,17svh,180px);left:max(36px,calc((100vw - 1400px)/2));width:42%;max-width:550px}
+.hero-film .film-arrival{top:clamp(108px,17svh,180px)}
+.hero-film .film-hand,.hero-film .film-car,.hero-film .film-road{backface-visibility:hidden}
+.hero-film .film-track[data-animating="false"] .film-hand,.hero-film .film-track[data-animating="false"] .film-car{will-change:auto}
+.hero-film .film-controls>a{min-height:44px;align-items:center}
+.hero-film .film-controls{padding:8px 20px;bottom:max(18px,env(safe-area-inset-bottom))}
+.hero-film .film-scroll-hint{bottom:100px}
+@media(min-width:801px) and (max-height:740px){
+ .hero-film .film-copy{top:100px}.hero-film .film-copy h1{font-size:clamp(36px,4vw,58px)}
+ .hero-film .film-copy .kicker{margin-bottom:12px}.hero-film .film-copy>p{margin:16px 0;font-size:14px;line-height:1.55}
+ .hero-film .film-copy .film-trust{margin-top:16px;padding:10px}.hero-film .film-scroll-hint{display:none}
+}
+@media(max-width:800px){
+ .hero-film .film-track{height:265svh}.hero-film .film-stage{height:100svh;min-height:0}
+ .hero-film .film-copy{left:24px;right:24px;top:94px;width:auto;max-width:540px}
+ .hero-film .film-copy .kicker{font-size:10px;margin-bottom:12px}
+ .hero-film .film-copy h1{font-size:clamp(32px,6vw,44px);line-height:1.05}
+ .hero-film .film-copy>p{font-size:14px;line-height:1.55;margin:14px 0 16px;max-width:420px}
+ .hero-film .film-copy .film-trust{display:none}
+ .hero-film .film-actions{gap:18px}.hero-film .film-actions .button{min-height:46px;font-size:12px;padding:13px 16px}
+ .hero-film .film-actions .text-link{font-size:12px;min-height:44px;display:inline-flex;align-items:center}
+ .hero-film .film-canvas{top:43%;height:49%;left:-35%;right:-8%}
+ .hero-film .film-readability{background:linear-gradient(180deg,#f2eee7 0%,#f2eee7 34%,#f2eee7b0 47%,transparent 60%)}
+ .hero-film .film-controls{left:18px;right:18px;bottom:max(12px,env(safe-area-inset-bottom));flex-wrap:nowrap;padding:5px 12px;gap:12px}
+ .hero-film .film-chapters{flex:1 1 auto;font-size:11px;justify-content:flex-start}.hero-film .film-chapters span:not([aria-current]){display:none}
+ .hero-film .film-controls>a{font-size:11px;margin-left:auto;min-height:44px}.hero-film .film-scroll-hint{display:none}
+ .hero-film .film-arrival{top:100px;left:24px;right:24px}.hero-film .film-arrival h2{font-size:clamp(32px,7vw,42px)}
+}
+@media(max-width:500px){
+ .hero-film .film-copy{top:88px;left:20px;right:20px}.hero-film .film-copy h1{font-size:clamp(31px,8.5vw,40px)}
+ .hero-film .film-copy>p{font-size:13px;line-height:1.5;margin:12px 0 14px}
+ .hero-film .film-canvas{top:47%;height:44%;left:-65%;right:-12%}
+ .hero-film .film-actions{gap:14px}.hero-film .film-actions .text-link{font-size:11px;gap:7px}
+ .hero-film .film-controls{left:12px;right:12px}.hero-film .film-arrival{left:20px;right:20px;top:94px}
+}
+/* Short landscape windows use a normal-flow, fully accessible opening instead of a clipped sticky scene. */
+@media(max-height:520px){
+ .hero-film .film-track{height:auto}.hero-film .film-stage{position:relative;height:600px;min-height:0}
+ .hero-film .film-copy{top:100px}.hero-film .film-copy .film-trust{display:none}
+ .hero-film .film-chapters,.hero-film .film-progress,.hero-film .film-scroll-hint{display:none}
+}
+@media(prefers-reduced-motion:reduce){
+ .hero-film .film-track{height:auto}.hero-film .film-stage{position:relative;height:max(100svh,620px);min-height:0}
+ .hero-film .film-copy{opacity:1!important;visibility:visible!important;transform:none!important}
+ .hero-film .film-arrival,.hero-film .film-car{display:none}.hero-film .film-controls{justify-content:flex-end}
+ .hero-film .film-hand,.hero-film .film-road{will-change:auto;transform:none!important}
+}

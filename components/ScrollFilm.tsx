@@ -5,106 +5,72 @@ import { useEffect, useRef, useState } from "react";
 import Image from "next/image";
 import Link from "next/link";
 import { testimonials } from "@/data/testimonials";
-const clamp = (v: number) => Math.max(0, Math.min(1, v));
-const smooth = (v: number) => {
-  const t = clamp(v);
-  return t * t * t * (t * (t * 6 - 15) + 10);
-};
-const handPoses = [
-  { name: "open", at: 0 },
-  { name: "eighth", at: 0.125 },
-  { name: "quarter", at: 0.25 },
-  { name: "half", at: 0.5 },
-  { name: "three-quarter", at: 0.75 },
-  { name: "closed", at: 1 },
-];
+import { dampProgress, filmState, handPoses, scrollProgress } from '@/lib/animation/scroll-film';
+import '@/app/film-responsive.css';
 export default function ScrollFilm() {
   const root = useRef<HTMLElement>(null);
   const [chapter, setChapter] = useState(0);
   useEffect(() => {
     const el = root.current;
-    if (!el) return;
-    const media = matchMedia("(prefers-reduced-motion: reduce)");
-    let frame = 0;
-    let progress = 0;
-    let previousTime = 0;
-    let initialized = false;
-    const draw = (time: number) => {
-      frame = 0;
-      const rect = el.getBoundingClientRect();
-      const target = media.matches
-        ? 0
-        : clamp(-rect.top / Math.max(1, rect.height - innerHeight));
-      const dt = Math.min(48, previousTime ? time - previousTime : 16.67);
-      previousTime = time;
-      if (!initialized || media.matches) {
-        progress = target;
-        initialized = true;
-      } else {
-        progress += (target - progress) * (1 - Math.exp(-dt / 190));
-      }
-      if (Math.abs(target - progress) < 0.0001) progress = target;
-      const p = progress;
-      const close = smooth((p - 0.04) / 0.38),
-        leave = smooth((p - 0.37) / 0.3),
-        drive = smooth((p - 0.48) / 0.52);
-      // Blend only adjacent poses; the weights always sum to one.
-      const end = handPoses.findIndex((pose) => pose.at >= close);
-      const right = end < 0 ? handPoses.length - 1 : end;
-      const left = Math.max(0, right - 1);
-      const interval = handPoses[right].at - handPoses[left].at;
-      const phase = interval ? (close - handPoses[left].at) / interval : 1;
-      // Keep each drawing crisp; crossfade only in the middle of each interval.
-      const blend = smooth((phase - 0.25) / 0.5);
-      handPoses.forEach((pose, i) => {
-        const opacity = left === right ? (i === right ? 1 : 0) : i === left ? 1 - blend : i === right ? blend : 0;
-        el.style.setProperty(`--film-${pose.name}-opacity`, String(opacity));
-      });
-      el.style.setProperty("--film-close", String(close));
-      el.style.setProperty("--film-leave", String(leave));
-      el.style.setProperty("--film-drive", String(drive));
-      el.style.setProperty("--film-progress", String(p));
-      el.style.setProperty("--film-copy-fade", String(smooth((p - 0.43) / 0.13)));
-      el.style.setProperty("--film-arrival-fade", String(smooth((p - 0.59) / 0.15)));
-      el.style.setProperty(
-        "--film-hand-x",
-        `${Math.pow(leave, 1.35) * 82 - close * 1.5}%`,
-      );
-      el.style.setProperty(
-        "--film-hand-y",
-        `${leave * leave * 55 + Math.sin(close * Math.PI) * -1.5}%`,
-      );
-      el.style.setProperty("--film-hand-angle", `${leave * 19 - close * 3}deg`);
-      el.style.setProperty(
-        "--film-car-x",
-        `${2 + (1 - drive) * 28 - Math.sin(drive * Math.PI) * 4}%`,
-      );
-      el.style.setProperty("--film-car-y", `${-4 + (1 - drive) * -15}%`);
-      el.style.setProperty("--film-car-angle", `${-3 * (1 - drive)}deg`);
-      el.style.setProperty("--film-car-scale", String(0.26 + drive * 0.52));
-      el.style.setProperty(
-        "--film-car-opacity",
-        String(smooth((p - 0.49) / 0.14)),
-      );
-      setChapter((prev) => {
-        const next = p < 0.27 ? 0 : p < 0.56 ? 1 : 2;
-        return prev === next ? prev : next;
-      });
-      if (progress !== target) frame = requestAnimationFrame(draw);
-      else previousTime = 0;
+    const stage = el?.querySelector<HTMLElement>('.film-stage');
+    if (!el || !stage) return;
+    const reduced = matchMedia('(prefers-reduced-motion: reduce)');
+    const compact = matchMedia('(max-height: 520px)');
+    const hand=el.querySelector<HTMLElement>('.film-hand')!, car=el.querySelector<HTMLElement>('.film-car')!;
+    const road=el.querySelector<HTMLElement>('.film-road')!, copy=el.querySelector<HTMLElement>('.film-copy')!;
+    const arrival=el.querySelector<HTMLElement>('.film-arrival')!, readability=el.querySelector<HTMLElement>('.film-readability')!;
+    const bar=el.querySelector<HTMLElement>('.film-progress > span')!, hint=el.querySelector<HTMLElement>('.film-scroll-hint')!;
+    const poses=handPoses.map(pose=>el.querySelector<HTMLImageElement>(`.film-hand-${pose.name}`)!);
+    let frame=0, progress=0, previousTime=0, activeChapter=-1, visible=true, ready=false, disposed=false;
+    let geometry={top:0,height:1,stageHeight:1};
+    const paint=(p:number)=>{
+      const state=filmState(p);
+      poses.forEach((pose,index)=>{ const opacity=String(state.poses[index]);if(pose.style.opacity!==opacity)pose.style.opacity=opacity; });
+      hand.style.transform=`translate3d(${state.handX}%,${state.handY}%,0) rotate(${state.handAngle}deg)`;
+      hand.style.opacity=String(1-Math.max(0,Math.min(1,(state.leave-.55)/.45)));
+      car.style.transform=`translate3d(${state.carX}%,${state.carY}%,0) scale(${state.carScale}) rotate(${state.carAngle}deg)`;
+      car.style.opacity=String(state.carOpacity);
+      road.style.transform=`translate3d(0,${state.drive*12}%,0) scale(${1+state.drive*.08})`;
+      copy.style.opacity=String(1-state.copyFade);copy.style.transform=`translate3d(0,${state.copyFade*-18}px,0)`;
+      copy.style.visibility=state.copyFade===1?'hidden':'visible';copy.inert=state.copyFade>.95;
+      arrival.style.opacity=String(state.arrivalFade);arrival.style.transform=`translate3d(0,${(1-state.arrivalFade)*20}px,0)`;
+      arrival.style.visibility=state.arrivalFade===0?'hidden':'visible';arrival.inert=state.arrivalFade<.05;
+      readability.style.opacity=String(1-state.drive*.65);bar.style.transform=`scaleX(${state.p})`;hint.style.opacity=String(1-state.close);
+      if(activeChapter!==state.chapter){activeChapter=state.chapter;setChapter(state.chapter);}
     };
-    const schedule = () => {
-      if (!frame) frame = requestAnimationFrame(draw);
+    const draw=(time:number)=>{
+      frame=0;
+      if(disposed||document.hidden||!visible)return;
+      const still=reduced.matches||compact.matches||!ready;
+      const target=still?0:scrollProgress(window.scrollY,geometry.top,geometry.height,geometry.stageHeight);
+      progress=still?0:dampProgress(progress,target,previousTime?time-previousTime:16.67);
+      previousTime=time;paint(progress);
+      if(progress!==target)frame=requestAnimationFrame(draw);else previousTime=0;
     };
-    window.addEventListener("scroll", schedule, { passive: true });
-    window.addEventListener("resize", schedule);
-    media.addEventListener("change", schedule);
-    draw(performance.now());
-    return () => {
-      cancelAnimationFrame(frame);
-      window.removeEventListener("scroll", schedule);
-      window.removeEventListener("resize", schedule);
-      media.removeEventListener("change", schedule);
+    const schedule=()=>{if(!frame&&visible&&!document.hidden)frame=requestAnimationFrame(draw);};
+    const measure=()=>{
+      const bounds=el.getBoundingClientRect();
+      geometry={top:bounds.top+window.scrollY,height:bounds.height,stageHeight:stage.getBoundingClientRect().height};
+      schedule();
+    };
+    const visibility=()=>{previousTime=0;if(document.hidden){cancelAnimationFrame(frame);frame=0;}else measure();};
+    const observer=new IntersectionObserver(entries=>{
+      visible=entries[0].isIntersecting;el.dataset.animating=String(visible);
+      if(visible){previousTime=0;measure();}else{cancelAnimationFrame(frame);frame=0;}
+    },{rootMargin:'120px 0px'});
+    observer.observe(el);
+    const resize=new ResizeObserver(measure);resize.observe(el);resize.observe(stage);
+    // Preserve original WebP pixels; decode the actual DOM assets before blending poses.
+    Promise.all([...poses,car.querySelector<HTMLImageElement>('img')!].map(image=>image.decode()))
+      .then(()=>{if(!disposed){ready=true;schedule();}}).catch(()=>{/* Static open hand remains usable if an asset fails. */});
+    document.fonts.ready.then(()=>{if(!disposed)measure();});
+    window.addEventListener('scroll',schedule,{passive:true});window.addEventListener('resize',measure);
+    document.addEventListener('visibilitychange',visibility);reduced.addEventListener('change',measure);compact.addEventListener('change',measure);
+    measure();paint(0);
+    return()=>{
+      disposed=true;cancelAnimationFrame(frame);observer.disconnect();resize.disconnect();
+      window.removeEventListener('scroll',schedule);window.removeEventListener('resize',measure);
+      document.removeEventListener('visibilitychange',visibility);reduced.removeEventListener('change',measure);compact.removeEventListener('change',measure);
     };
   }, []);
   return (
@@ -121,15 +87,16 @@ export default function ScrollFilm() {
             alt=""
             fill
             priority
+            unoptimized
             sizes="100vw"
           />
           <div className="film-car">
-            <Image src="/brand/film-car.webp" alt="" fill priority sizes="100vw" />
+            <Image src="/brand/film-car.webp" alt="" fill unoptimized loading="eager" fetchPriority="low" sizes="100vw" />
           </div>
           <div className="film-hand">
             {handPoses.map((pose) => (
               <Image key={pose.name} className={`film-hand-${pose.name}`}
-                src={`/brand/film-${pose.name}.webp`} alt="" fill priority sizes="100vw" />
+                src={`/brand/film-${pose.name}.webp`} alt="" fill unoptimized priority={pose.name === "open"} loading={pose.name === "open" ? undefined : "eager"} fetchPriority={pose.name === "open" ? "high" : "low"} sizes="100vw" />
             ))}
           </div>
         </div>

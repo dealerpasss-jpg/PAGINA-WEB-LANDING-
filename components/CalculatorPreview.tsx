@@ -1,4 +1,5 @@
 import PurchaseCalculator from './PurchaseCalculator';
+import styles from './PurchaseCalculator.module.css';
 export default function CalculatorPreview() {
-  return <section id="calculadora" className="calculator-section"><div className="wrap"><div className="section-heading"><span className="kicker"><i />DEALERPASS / CALCULADORA</span><div><h2>¿Cuánto puedes pagar<br />por ese carro?</h2><p>Completa 3 pasos para estimar tu puja máxima. Puedes empezar con un ejemplo y luego cambiar los números por los tuyos.</p></div></div><PurchaseCalculator /></div></section>;
+  return <section id="calculadora" className={styles.publicSection}><div className="wrap"><header className={styles.publicHeading}><span>DEALERPASS / CALCULADORA</span><h1>Calcula tu próxima compra.</h1><p>Define tus costos. Encuentra tu límite de puja.</p></header><PurchaseCalculator /></div></section>;
 }
