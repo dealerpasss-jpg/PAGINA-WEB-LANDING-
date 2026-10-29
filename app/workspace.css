@@ -196,7 +196,10 @@ body:has(.workspace-shell) .mobile-nav a { border-color:#ffffff20; }
  .workspace-shell .investment-admin-actions .dashboard-text-link { flex:1 1 120px; }
  .workspace-shell .investment-stats { grid-template-columns:repeat(2,minmax(0,1fr)); gap:10px; }
  .workspace-shell .investment-stats article { padding:16px; border-radius:10px; gap:10px; }
- .workspace-shell .investment-stats article:first-child { grid-column:1/-1; flex-direction:row; align-items:center; }
+ .workspace-shell .investment-stats article:first-child { grid-column:1/-1; flex-direction:row; align-items:center; justify-content:space-between; gap:24px; }
+ .workspace-shell .investment-stats article:first-child>span { flex:1; min-width:0; }
+ .workspace-shell .investment-stats article:first-child>strong { flex:0 0 auto; text-align:right; line-height:1; }
+ .workspace-shell .investment-stats article:not(:first-child)>strong { margin-top:auto; }
  .workspace-shell .investment-stats strong { font-size:24px; }
  .workspace-content .dashboard-panel { padding:22px; border-radius:12px; }
  .workspace-content .workspace-team-welcome { padding:22px; }

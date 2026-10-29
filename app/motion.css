@@ -1956,8 +1956,8 @@
 .testimonials-section .carousel-controls button:hover:enabled{background:#e5e7d9;color:#233a3b}
 
 /* Short entrances preserve normal routing, history and sticky sections. */
-.page-transition { animation: page-arrive 320ms ease-out; }
-@keyframes page-arrive { from { opacity: .35; } to { opacity: 1; } }
+.page-transition { animation: page-arrive 160ms ease-out; }
+@keyframes page-arrive { from { opacity: .92; } to { opacity: 1; } }
 .mobile-nav { animation: menu-arrive 240ms cubic-bezier(.22,1,.36,1); }
 @keyframes menu-arrive { from { opacity: 0; transform: translateY(-8px); } to { opacity: 1; transform: translateY(0); } }
 main [id] { scroll-margin-top: 10px; }
