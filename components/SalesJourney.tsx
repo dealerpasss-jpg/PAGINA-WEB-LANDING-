@@ -9,7 +9,7 @@ export function LearningPreview({ inspection = false }: { inspection?: boolean }
     <Link className="text-link" href="/metodo-margen">Explorar el Método MARGEN <ArrowIcon direction="up-right" /></Link>
   </>;
   return <section className={`section wrap sales-preview${inspection ? ' sales-preview-with-image' : ''}`}>
-    {inspection ? <div className="sales-preview-layout"><div className="sales-preview-copy">{content}</div><figure className="sales-inspection-image"><Image src="/brand/academy-inspection-scene.webp" alt="Escena generada con IA: una persona revisa la rueda de un vehículo en un lote." width={864} height={1536} sizes="240px" /><figcaption><span aria-hidden="true" />Aprende qué revisar antes de comprar.</figcaption></figure></div> : content}
+    {inspection ? <div className="sales-preview-layout"><div className="sales-preview-copy">{content}</div><figure className="sales-inspection-image"><Image className="brand-photo-soft-edge" src="/brand/academy-inspection-scene.webp" alt="Escena generada con IA: una persona revisa la rueda de un vehículo en un lote." width={864} height={1536} sizes="(max-width: 360px) calc(100vw - 40px), 320px" /><figcaption><span aria-hidden="true" />Aprende qué revisar antes de comprar.</figcaption></figure></div> : content}
   </section>;
 }
 export function PurchaseGuide() {

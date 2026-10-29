@@ -17,3 +17,9 @@
 - Derivative SHA-256: `d3b522ce32b2a34b47e472730262827fb87fbebafe5cb5dd419ee3350ba44660`.
 - The person is generated. This is an illustrative learning scene, **not a photograph of a real student or proof of a class, inspection service or outcome**. At the user’s request, the visible caption is pedagogical: “Aprende qué revisar antes de comprar.” Preserve the accurate generated-scene alt and original Meta AI mark.
 - Appears only in Academy’s educational analysis section alongside the existing three questions. Shared plans-page learning content remains unchanged. Preserve the group portrait and original hero.
+
+## Presentation treatment (2026-10-29)
+
+- The first full-frame layout is retained (homepage portrait up to 420px; Academy inspection up to 320px).
+- `brand-photo-soft-edge` applies only a soft external lower shadow, fading into the page. It must not mask, blur, crop, recolor or overlay either source image or its embedded Meta AI provenance mark.
+- Reduced-transparency and forced-colors preferences disable the decorative shadow. Image files, neutral educational captions and accurate alt text remain unchanged.

@@ -1760,3 +1760,12 @@ a {
 /* A disclosure menu stays reachable on short screens and never overlays desktop navigation. */
 @media(max-width:800px) { .mobile-nav { max-height:calc(100dvh - 74px); overflow-y:auto; overscroll-behavior:contain; } body:has(.workspace-shell) .mobile-nav { max-height:calc(100dvh - 60px); } }
 @media(min-width:801px) { .mobile-nav { display:none; } }
+
+/* A soft fade below the full photograph, never over its embedded provenance mark.
+   Only external shadows: no opacity, masking, cropping or image blur. */
+img.brand-photo-soft-edge {
+  box-shadow: 0 14px 18px -13px rgb(35 40 32 / .38), 0 28px 32px -25px rgb(35 40 32 / .22);
+}
+@media (prefers-reduced-transparency: reduce), (forced-colors: active) {
+  img.brand-photo-soft-edge { box-shadow: none; }
+}
