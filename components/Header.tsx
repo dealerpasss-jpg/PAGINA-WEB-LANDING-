@@ -69,7 +69,7 @@ export default function Header() {
       <a className="skip-link" href="#main-content">
         Saltar al contenido
       </a>
-      <div className="header-inner">
+      <div className={`header-inner ${styles.headerInner}`}>
         <Link
           href={path === "/" ? "#main-content" : "/"}
           aria-label="DealerPass, inicio"
