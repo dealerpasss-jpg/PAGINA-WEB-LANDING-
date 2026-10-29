@@ -20,7 +20,7 @@ export default function AcademyPage() {
     </section>
     <div className={`wrap ${styles.chapterNav}`}><span>EXPLORA ACADEMY</span><nav aria-label="Secciones de Academy"><a href="#enfoque">El enfoque <span>01</span></a><a href="#temario">Temario <span>02</span></a><a href="#instructores">Instructores <span>03</span></a><a href="#academy-oferta">Qué incluye <span>04</span></a></nav></div>
     <div className={`wrap ${styles.availability}`}><span className={styles.availabilityDot} aria-hidden="true"/><p><strong>Apertura en preparación.</strong> La presentación en video, las lecciones y los recursos se confirmarán antes de habilitar la compra. Crear tu cuenta no activa una membresía.</p></div>
-    <LearningPreview />
+    <LearningPreview inspection />
     <AcademySection />
     <Instructors />
     <section className={`wrap ${styles.offer}`} aria-labelledby="academy-offer-title">

@@ -67,6 +67,14 @@ assert.match(academyHome, /width="1152" height="2048"/, 'Portrait must reserve i
 assert.match(academyHome, /Imagen editada de marca/, 'Edited brand scene must be visibly identified.');
 assert.match(academyHome, /editorial-academy.webp/, 'The complementary brand illustration must remain.');
 assert.match(academyHome, /Ilustración de marca/, 'Illustration must remain explicitly identified.');
+const academyPage = documents.get('/academy')?.html;
+assert.match(academyPage, /academy-inspection-scene.webp/, 'Academy must include the approved inspection scene.');
+assert.match(academyPage, /width="864" height="1536"/, 'Inspection scene must reserve its full-frame aspect ratio.');
+assert.match(academyPage, /Escena ilustrativa generada con IA/, 'Generated scene needs its visible disclosure.');
+assert.ok(!documents.get('/planes')?.html.includes('academy-inspection-scene.webp'), 'Inspection image is scoped to Academy, not the shared plans preview.');
+const inspection = readFileSync(path.join(root, 'public/brand/academy-inspection-scene.webp'));
+assert.equal(createHash('sha256').update(inspection).digest('hex'), 'd3b522ce32b2a34b47e472730262827fb87fbebafe5cb5dd419ee3350ba44660', 'Use the exact reviewed inspection scene derivative.');
+assert.ok(inspection.length < 320 * 1024, 'Inspection scene must remain optimized for mobile delivery.');
 const menu = documents.get('/')?.html.match(/<dialog\b[^>]*id="mobile-navigation"[^>]*>[\s\S]*?<\/dialog>/)?.[0];
 assert.ok(menu, 'Mobile navigation must be a native modal, not a layout-pushing dropdown.');
 assert.match(menu, /aria-label="Cerrar menú"/, 'Mobile navigation needs a clearly labeled close action.');
