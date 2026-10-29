@@ -1,6 +1,7 @@
 import { readFileSync, existsSync, readdirSync } from 'node:fs';
 import path from 'node:path';
 import assert from 'node:assert/strict';
+import { createHash } from 'node:crypto';
 
 // A structural build check, not a substitute for interactive browser or phone QA.
 const root = process.cwd();
@@ -55,6 +56,17 @@ assert.deepEqual(filmImages.sort(), ['/brand/film-open.webp', '/brand/film-road.
 for (const asset of ['road', 'open', 'eighth', 'quarter', 'half', 'three-quarter', 'closed', 'car']) {
   assert.ok(existsSync(path.join(root, 'public/brand', `film-${asset}.webp`)), `Missing original film asset: ${asset}`);
 }
+// The approved edited brand portrait is not a student testimonial and keeps its full frame.
+const academyHome = documents.get('/')?.html.match(/<section\b[^>]*aria-labelledby="academy-home-title"[^>]*>[\s\S]*?<\/section>/)?.[0];
+assert.ok(academyHome, 'Homepage must retain its formation section.');
+assert.match(academyHome, /academy-brand-scene.webp/, 'Formation must use the specifically approved portrait.');
+const portrait = readFileSync(path.join(root, 'public/brand/academy-brand-scene.webp'));
+assert.equal(createHash('sha256').update(portrait).digest('hex'), 'e5e28c87be45990670557214b9684bfbdcacb3f5b874fbfd5acc754e5dd6caaf', 'Use the exact reviewed full-frame portrait derivative.');
+assert.ok(portrait.length < 250 * 1024, 'Portrait must remain optimized for mobile delivery.');
+assert.match(academyHome, /width="1152" height="2048"/, 'Portrait must reserve its original full-frame aspect ratio.');
+assert.match(academyHome, /Imagen editada de marca/, 'Edited brand scene must be visibly identified.');
+assert.match(academyHome, /editorial-academy.webp/, 'The complementary brand illustration must remain.');
+assert.match(academyHome, /Ilustración de marca/, 'Illustration must remain explicitly identified.');
 const menu = documents.get('/')?.html.match(/<dialog\b[^>]*id="mobile-navigation"[^>]*>[\s\S]*?<\/dialog>/)?.[0];
 assert.ok(menu, 'Mobile navigation must be a native modal, not a layout-pushing dropdown.');
 assert.match(menu, /aria-label="Cerrar menú"/, 'Mobile navigation needs a clearly labeled close action.');
