@@ -14,14 +14,16 @@ export function dampProgress(current: number, target: number, elapsed: number) {
 }
 export function filmState(progress: number) {
   const p=clamp(progress),close=smooth((p-.04)/.38),leave=smooth((p-.37)/.3),drive=smooth((p-.48)/.52);
-  const right=Math.max(0,handPoses.findIndex(pose=>pose.at>=close)),left=Math.max(0,right-1);
-  const interval=handPoses[right].at-handPoses[left].at;
-  const phase=interval?(close-handPoses[left].at)/interval:1;
-  // Continuous interpolation avoids the pause/jump at each of the six existing drawings.
-  const blend=smooth(phase);
-  const poses=handPoses.map((_,index)=>left===right?(index===right?1:0):index===left?1-blend:index===right?blend:0);
+  // These are six distinct drawings, not aligned video frames. Blending them
+  // creates duplicate fingers/cuffs, especially when the scroll position rests.
+  // Keep one fully opaque drawing while the surrounding travel remains eased.
+  const poseIndex=handPoses.reduce((nearest,pose,index)=>
+    Math.abs(pose.at-close)<Math.abs(handPoses[nearest].at-close)?index:nearest,0);
+  const poses=handPoses.map((_,index)=>index===poseIndex?1:0);
   return {p,close,leave,drive,poses,chapter:p<.27?0:p<.56?1:2,
     copyFade:smooth((p-.43)/.13),arrivalFade:smooth((p-.59)/.15),
-    handX:Math.pow(leave,1.35)*82-close*1.5,handY:leave*leave*55-Math.sin(close*Math.PI)*1.5,handAngle:leave*19-close*3,
+    // The sleeve is cropped at the source right/bottom edges. Never rotate or
+    // translate it inward: that exposes the rectangular raster boundary.
+    handX:Math.pow(leave,1.35)*82,handY:leave*leave*55,handAngle:0,
     carX:2+(1-drive)*28-Math.sin(drive*Math.PI)*4,carY:-4+(1-drive)*-15,carAngle:-3*(1-drive),carScale:.26+drive*.52,carOpacity:smooth((p-.49)/.14)};
 }

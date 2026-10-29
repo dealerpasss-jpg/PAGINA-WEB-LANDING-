@@ -4,6 +4,11 @@
 .hero-film .film-copy{position:absolute;top:clamp(108px,17svh,180px);left:max(36px,calc((100vw - 1400px)/2));width:42%;max-width:550px}
 .hero-film .film-arrival{top:clamp(108px,17svh,180px)}
 .hero-film .film-hand,.hero-film .film-car,.hero-film .film-road{backface-visibility:hidden}
+/* Two-pixel bleed keeps the sleeve attached to the viewport edge; no artwork crop edits. */
+.hero-film .film-hand{right:-2px;bottom:-2px}
+/* Server-rendered/reduced-motion opening must not stack undecoded pose layers. */
+.hero-film .film-hand img{opacity:0;transition:opacity 70ms linear}
+.hero-film .film-hand .film-hand-open{opacity:1}
 .hero-film .film-track[data-animating="false"] .film-hand,.hero-film .film-track[data-animating="false"] .film-car{will-change:auto}
 .hero-film .film-controls>a{min-height:44px;align-items:center}
 .hero-film .film-controls{padding:8px 20px;bottom:max(18px,env(safe-area-inset-bottom))}
@@ -47,4 +52,5 @@
  .hero-film .film-copy{opacity:1!important;visibility:visible!important;transform:none!important}
  .hero-film .film-arrival,.hero-film .film-car{display:none}.hero-film .film-controls{justify-content:flex-end}
  .hero-film .film-hand,.hero-film .film-road{will-change:auto;transform:none!important}
+ .hero-film .film-hand img{transition:none}
 }
