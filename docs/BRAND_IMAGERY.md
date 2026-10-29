@@ -6,7 +6,7 @@
 - Original SHA-256: `fe0237c846a4e591733f89e63f58e7ff06736d09f4e199802e4bdf8dd1dc28d1`.
 - Website derivative: `public/brand/academy-brand-scene.webp`, 1152 × 2048, 210068 bytes. WebP quality 86; no crop, resizing, face retouching or generative changes.
 - Derivative SHA-256: `e5e28c87be45990670557214b9684bfbdcacb3f5b874fbfd5acc754e5dd6caaf`.
-- This is an **AI-edited brand image**, including a fictional person. It is not documentary evidence of a class, customer, delivery, auction visit or testimonial. Preserve the visible “Imagen editada de marca” caption, accurate edited-scene alt text and the existing Meta AI mark in the original frame.
+- This is an **AI-edited brand image**, including a fictional person. It is not documentary evidence of a class, customer, delivery, auction visit or testimonial. At the user’s request, the visible caption is pedagogical: “Formación y criterio para tu próxima compra.” Preserve the accurate edited-scene alt text and existing Meta AI mark in the original frame.
 - Use the exact approved upload, not earlier experimental variants. The original scroll-film hero and complementary editorial illustration remain unchanged.
 
 ## Academy inspection scene (2026-10-29)
@@ -15,5 +15,5 @@
 - Original SHA-256: `65bdd6925be9cc8fd43ecd2e8f25c095ec3baa6951e933252521291cf5e190cb`.
 - Website derivative: `public/brand/academy-inspection-scene.webp`, 864 × 1536, 298894 bytes. WebP quality 86; no crop, resizing, retouching or new generation.
 - Derivative SHA-256: `d3b522ce32b2a34b47e472730262827fb87fbebafe5cb5dd419ee3350ba44660`.
-- The person is generated. This is an illustrative learning scene, **not a photograph of a real student or proof of a class, inspection service or outcome**. Preserve the visible “Escena ilustrativa generada con IA” caption, accurate generated-scene alt and original Meta AI mark.
+- The person is generated. This is an illustrative learning scene, **not a photograph of a real student or proof of a class, inspection service or outcome**. At the user’s request, the visible caption is pedagogical: “Aprende qué revisar antes de comprar.” Preserve the accurate generated-scene alt and original Meta AI mark.
 - Appears only in Academy’s educational analysis section alongside the existing three questions. Shared plans-page learning content remains unchanged. Preserve the group portrait and original hero.

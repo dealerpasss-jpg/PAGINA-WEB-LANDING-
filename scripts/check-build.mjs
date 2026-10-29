@@ -64,13 +64,15 @@ const portrait = readFileSync(path.join(root, 'public/brand/academy-brand-scene.
 assert.equal(createHash('sha256').update(portrait).digest('hex'), 'e5e28c87be45990670557214b9684bfbdcacb3f5b874fbfd5acc754e5dd6caaf', 'Use the exact reviewed full-frame portrait derivative.');
 assert.ok(portrait.length < 250 * 1024, 'Portrait must remain optimized for mobile delivery.');
 assert.match(academyHome, /width="1152" height="2048"/, 'Portrait must reserve its original full-frame aspect ratio.');
-assert.match(academyHome, /Imagen editada de marca/, 'Edited brand scene must be visibly identified.');
+assert.match(academyHome, /Formación y criterio para tu próxima compra\./, 'Brand portrait keeps its approved pedagogical caption.');
+assert.match(academyHome, /Imagen editada de tres personas/, 'Brand portrait alt must remain accurate.');
 assert.match(academyHome, /editorial-academy.webp/, 'The complementary brand illustration must remain.');
 assert.match(academyHome, /Ilustración de marca/, 'Illustration must remain explicitly identified.');
 const academyPage = documents.get('/academy')?.html;
 assert.match(academyPage, /academy-inspection-scene.webp/, 'Academy must include the approved inspection scene.');
 assert.match(academyPage, /width="864" height="1536"/, 'Inspection scene must reserve its full-frame aspect ratio.');
-assert.match(academyPage, /Escena ilustrativa generada con IA/, 'Generated scene needs its visible disclosure.');
+assert.match(academyPage, /Aprende qué revisar antes de comprar\./, 'Inspection scene keeps its approved pedagogical caption.');
+assert.match(academyPage, /Escena generada con IA:/, 'Inspection alt must remain accurate.');
 assert.ok(!documents.get('/planes')?.html.includes('academy-inspection-scene.webp'), 'Inspection image is scoped to Academy, not the shared plans preview.');
 const inspection = readFileSync(path.join(root, 'public/brand/academy-inspection-scene.webp'));
 assert.equal(createHash('sha256').update(inspection).digest('hex'), 'd3b522ce32b2a34b47e472730262827fb87fbebafe5cb5dd419ee3350ba44660', 'Use the exact reviewed inspection scene derivative.');
