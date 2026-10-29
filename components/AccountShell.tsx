@@ -18,6 +18,7 @@ export default function AccountShell({
     <WorkspaceFrame team={team}><section
       className={`account-shell${compact ? " account-shell-compact" : ""}`}
     >
+      <header className="account-heading">
       <div className="account-top">
         <span>{kicker}</span>
         <Link href={compact ? "/" : "/mi-cuenta"}>
@@ -25,6 +26,7 @@ export default function AccountShell({
         </Link>
       </div>
       <h1>{title}</h1>
+      </header>
       {children}
     </section></WorkspaceFrame>
   );

@@ -16,7 +16,7 @@ export default function WorkspaceFrame({ children, team = false }: { children: R
   if (!privatePage) return <>{children}</>;
   return <div className="workspace-shell">
     <aside className="workspace-sidebar">
-      <div className="workspace-label"><span className="workspace-dot" /> MI WORKSPACE</div>
+      <div className="workspace-label"><span className="workspace-dot" /> MI ESPACIO</div>
       <nav aria-label="Navegación de mi espacio">{links.map(l => <Link key={l.href} href={l.href} aria-current={(l.href === "/mi-cuenta" ? path === l.href : path === l.href || path.startsWith(l.href + "/")) ? "page" : undefined}><span className="workspace-icon"><WorkspaceIcon name={l.mark} /></span>{l.label}<ArrowIcon direction="right" /></Link>)}</nav>
       {(team || path.startsWith("/equipo")) && <Link className="workspace-team" href="/equipo" aria-current={path.startsWith("/equipo") ? "page" : undefined}><WorkspaceIcon name="team" /> Panel del equipo <ArrowIcon /></Link>}
       <div className="workspace-support"><strong>A tu ritmo. Con dirección.</strong><p>Consulta tus herramientas y continúa desde donde quedaste.</p><Link href="/contacto">Ayuda y contacto <ArrowIcon /></Link></div>
