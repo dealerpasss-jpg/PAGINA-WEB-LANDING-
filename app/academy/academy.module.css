@@ -45,7 +45,7 @@
 .page :global(.sales-preview-with-image .sales-three h3) { margin:0 0 8px; }
 .page :global(.sales-preview-with-image .sales-three p) { grid-column:2; margin:0; }
 .page :global(.sales-inspection-image) { width:100%; max-width:320px; margin:0; justify-self:center; }
-.page :global(.sales-inspection-image>img) { display:block; width:100%; height:auto; aspect-ratio:9/16; border-radius:14px; border:1px solid #dedfd6; background:#e7e6df; }
+.page :global(.sales-inspection-image .brand-photo-frame>img) { display:block; width:100%; height:auto; aspect-ratio:9/16; border-radius:14px; border:1px solid #dedfd6; background:#e7e6df; }
 .page :global(.sales-inspection-image figcaption) { display:flex; align-items:flex-start; gap:8px; margin-top:12px; font-size:11px; line-height:1.6; color:#62665b; }
 .page :global(.sales-inspection-image figcaption>span) { width:5px; height:5px; margin-top:6px; border-radius:50%; flex:none; background:#ff4d00; }
 

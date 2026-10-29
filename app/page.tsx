@@ -34,7 +34,7 @@ export default function HomePage() {
         <Reveal className="he-academy-art">
           <div className="he-art-label"><span>DEALERPASS ACADEMY</span><span>FORMACIÓN EN ESPAÑOL</span></div>
           <figure className="he-academy-portrait">
-            <Image className="brand-photo-soft-edge" src="/brand/academy-brand-scene.webp" alt="Imagen editada de tres personas junto a un vehículo en un taller." width={1152} height={2048} sizes="(max-width: 460px) calc(100vw - 36px), 420px" />
+            <div className="brand-photo-frame"><Image src="/brand/academy-brand-scene.webp" alt="Imagen editada de tres personas junto a un vehículo en un taller." width={1152} height={2048} sizes="(max-width: 460px) calc(100vw - 36px), 420px" /></div>
             <figcaption><span aria-hidden="true" />Formación y criterio para tu próxima compra.</figcaption>
           </figure>
         </Reveal>

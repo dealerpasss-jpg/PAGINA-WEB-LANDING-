@@ -21,5 +21,7 @@
 ## Presentation treatment (2026-10-29)
 
 - The first full-frame layout is retained (homepage portrait up to 420px; Academy inspection up to 320px).
-- `brand-photo-soft-edge` applies only a soft external lower shadow, fading into the page. It must not mask, blur, crop, recolor or overlay either source image or its embedded Meta AI provenance mark.
-- Reduced-transparency and forced-colors preferences disable the decorative shadow. Image files, neutral educational captions and accurate alt text remain unchanged.
+- The lower ground blends into the white page through a decorative `brand-photo-frame::after` gradient, not by changing either image. The shallow group fade occupies only the bottom 4% to avoid materially affecting shoes; the inspection fade occupies the bottom 14%, below the person.
+- The overlay is physically limited to the left 84% of the frame and fades horizontally before that edge. The rightmost 16%, containing each original Meta AI mark, is never overlaid, faded or blurred. Do not expand the overlay across that reserved region.
+- The photograph itself remains unmasked, unfiltered, full-opacity and full-frame. Original image bytes, neutral educational captions and accurate alt text remain unchanged. No replacement by unmarked copies.
+- Browsers without CSS mask support retain the unmodified photo. Reduced-transparency and forced-colors preferences disable the decorative gradient.

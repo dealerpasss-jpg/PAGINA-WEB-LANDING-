@@ -1761,11 +1761,25 @@ a {
 @media(max-width:800px) { .mobile-nav { max-height:calc(100dvh - 74px); overflow-y:auto; overscroll-behavior:contain; } body:has(.workspace-shell) .mobile-nav { max-height:calc(100dvh - 60px); } }
 @media(min-width:801px) { .mobile-nav { display:none; } }
 
-/* A soft fade below the full photograph, never over its embedded provenance mark.
-   Only external shadows: no opacity, masking, cropping or image blur. */
-img.brand-photo-soft-edge {
-  box-shadow: 0 14px 18px -13px rgb(35 40 32 / .38), 0 28px 32px -25px rgb(35 40 32 / .22);
+/* Blend only the lower ground into white. The rightmost 16% is physically
+   outside the overlay, preserving each original Meta AI mark in full.
+   The photograph itself stays full-frame: no mask, opacity or filter. */
+.brand-photo-frame { position:relative; isolation:isolate; --brand-photo-fade-height:4%; --brand-photo-radius:16px; }
+.brand-photo-frame--inspection { --brand-photo-fade-height:14%; --brand-photo-radius:14px; }
+@supports (mask-image:linear-gradient(to right,#000,transparent)) {
+  .brand-photo-frame::after {
+    content:'';
+    position:absolute;
+    pointer-events:none;
+    left:0;
+    bottom:0;
+    width:84%;
+    height:var(--brand-photo-fade-height);
+    border-bottom-left-radius:var(--brand-photo-radius);
+    background:linear-gradient(to bottom,transparent,#fff);
+    mask-image:linear-gradient(to right,#000 66%,transparent 100%);
+  }
 }
-@media (prefers-reduced-transparency: reduce), (forced-colors: active) {
-  img.brand-photo-soft-edge { box-shadow: none; }
+@media (prefers-reduced-transparency:reduce), (forced-colors:active) {
+  .brand-photo-frame::after { display:none; }
 }
