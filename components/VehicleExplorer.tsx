@@ -2,7 +2,7 @@
 
 import { useSearchParams } from 'next/navigation';
 import type { CatalogueVehicle } from '@/data/vehicle-catalogue';
-import { filterCatalogue, readCatalogueFilters, vehicleMake } from '@/lib/vehicles/catalogue';
+import { filterCatalogue, readCatalogueFilters, vehicleMake, updateCatalogueParams, catalogueQuery, type CatalogueParam } from '@/lib/vehicles/catalogue';
 import VehicleCards from './VehicleCards';
 import ArrowIcon from './ArrowIcon';
 import styles from '@/app/vehiculos/vehicles.module.css';
@@ -14,9 +14,8 @@ export default function VehicleExplorer({ vehicles }: { vehicles: CatalogueVehic
   const makes = [...new Set(vehicles.map(vehicleMake))];
   const filtered = !!filters.query || !!filters.make;
 
-  function update(key: string, value: string) {
-    const next = new URLSearchParams(params.toString());
-    if (value && value !== 'featured') next.set(key, value); else next.delete(key);
+  function update(key: CatalogueParam, value: string) {
+    const next = updateCatalogueParams(params, key, value);
     window.history.replaceState(null, '', `${window.location.pathname}${next.size ? `?${next}` : ''}`);
   }
   function reset() {
@@ -34,7 +33,7 @@ export default function VehicleExplorer({ vehicles }: { vehicles: CatalogueVehic
       <div className={styles.makeFilters} role="group" aria-label="Filtrar por marca"><button type="button" aria-pressed={!filters.make} onClick={() => update('marca', '')}>Todas las marcas</button>{makes.map(make => <button type="button" key={make} aria-pressed={filters.make.toLowerCase() === make.toLowerCase()} onClick={() => update('marca', make)}>{make}<span>{vehicles.filter(vehicle => vehicleMake(vehicle) === make).length}</span></button>)}</div>
       <p className={styles.resultCount} role="status" aria-live="polite" aria-atomic="true">{filtered ? `${matches.length} de ${vehicles.length} vehículos` : `${matches.length} vehículos`}{(filtered || filters.sort !== 'featured') && <button type="button" onClick={reset}>Restablecer</button>}</p>
     </div>
-    {matches.length ? <VehicleCards vehicles={matches} priority /> : <div className={styles.emptyResults}><span className={styles.eyebrow}>SIN COINCIDENCIAS</span><h3>Probemos con otra búsqueda.</h3><p>No hay vehículos que coincidan con estos filtros. Prueba otra marca, un modelo o un año.</p><button type="button" onClick={reset}>Ver todo el inventario <ArrowIcon direction="right" /></button></div>}
+    {matches.length ? <VehicleCards vehicles={matches} priority search={catalogueQuery(params)} /> : <div className={styles.emptyResults}><span className={styles.eyebrow}>SIN COINCIDENCIAS</span><h3>Probemos con otra búsqueda.</h3><p>No hay vehículos que coincidan con estos filtros. Prueba otra marca, un modelo o un año.</p><button type="button" onClick={reset}>Ver todo el inventario <ArrowIcon direction="right" /></button></div>}
     <p className={styles.catalogueNote}>Datos proporcionados por el vendedor. Las portadas tienen el fondo editado; en cada ficha encontrarás también las fotografías originales.</p>
   </section>;
 }

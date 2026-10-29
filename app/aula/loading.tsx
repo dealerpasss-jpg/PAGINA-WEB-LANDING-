@@ -1,2 +1,2 @@
-import RouteLoading from '@/components/RouteLoading';
-export default function Loading() { return <RouteLoading workspace />; }
+import RouteLoading from "@/components/RouteLoading";
+export default function Loading() { return <RouteLoading variant="learning" />; }

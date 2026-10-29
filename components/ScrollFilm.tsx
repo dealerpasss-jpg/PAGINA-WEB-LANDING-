@@ -1,21 +1,37 @@
 "use client";
 import ArrowIcon from "@/components/ArrowIcon";
 
-import { useEffect, useRef, useState } from "react";
+import { useEffect, useRef, useState, useSyncExternalStore } from "react";
 import Image from "next/image";
 import Link from "next/link";
 import { testimonials } from "@/data/testimonials";
 import { dampProgress, filmState, handPoses, scrollProgress } from '@/lib/animation/scroll-film';
+import { canAnimateFilm, watchFilmAssets } from '@/lib/animation/film-assets';
 import '@/app/film-responsive.css';
+
+const reducedQuery = '(prefers-reduced-motion: reduce)';
+const compactQuery = '(max-height: 520px)';
+function motionSnapshot() {
+  return canAnimateFilm(matchMedia(reducedQuery).matches, matchMedia(compactQuery).matches);
+}
+function subscribeMotion(changed: () => void) {
+  const queries = [matchMedia(reducedQuery), matchMedia(compactQuery)];
+  queries.forEach(query => query.addEventListener('change', changed));
+  return () => queries.forEach(query => query.removeEventListener('change', changed));
+}
+const serverMotionSnapshot = () => false;
+
 export default function ScrollFilm() {
   const root = useRef<HTMLElement>(null);
   const [chapter, setChapter] = useState(0);
+  const motionAllowed = useSyncExternalStore(subscribeMotion, motionSnapshot, serverMotionSnapshot);
+  const [assetFailed, setAssetFailed] = useState(false);
+  const animate = motionAllowed && !assetFailed;
   useEffect(() => {
+    if (!animate) return;
     const el = root.current;
     const stage = el?.querySelector<HTMLElement>('.film-stage');
     if (!el || !stage) return;
-    const reduced = matchMedia('(prefers-reduced-motion: reduce)');
-    const compact = matchMedia('(max-height: 520px)');
     const hand=el.querySelector<HTMLElement>('.film-hand')!, car=el.querySelector<HTMLElement>('.film-car')!;
     const road=el.querySelector<HTMLElement>('.film-road')!, copy=el.querySelector<HTMLElement>('.film-copy')!;
     const arrival=el.querySelector<HTMLElement>('.film-arrival')!, readability=el.querySelector<HTMLElement>('.film-readability')!;
@@ -41,7 +57,7 @@ export default function ScrollFilm() {
     const draw=(time:number)=>{
       frame=0;
       if(disposed||document.hidden||!visible)return;
-      const still=reduced.matches||compact.matches||!ready;
+      const still=!ready;
       const target=still?0:scrollProgress(window.scrollY,geometry.top,geometry.height,geometry.stageHeight);
       progress=still?0:dampProgress(progress,target,previousTime?time-previousTime:16.67);
       previousTime=time;paint(progress);
@@ -61,24 +77,37 @@ export default function ScrollFilm() {
     observer.observe(el);
     const resize=new ResizeObserver(measure);resize.observe(el);resize.observe(stage);
     // Preserve original WebP pixels; decode the actual DOM assets before blending poses.
-    Promise.all([...poses,car.querySelector<HTMLImageElement>('img')!].map(image=>image.decode()))
-      .then(()=>{if(!disposed){ready=true;schedule();}}).catch(()=>{/* Static open hand remains usable if an asset fails. */});
+    const cancelDecode=watchFilmAssets([...poses,car.querySelector<HTMLImageElement>('img')!],loaded=>{
+      if(loaded){ready=true;schedule();}else setAssetFailed(true);
+    });
     document.fonts.ready.then(()=>{if(!disposed)measure();});
     window.addEventListener('scroll',schedule,{passive:true});window.addEventListener('resize',measure);
-    document.addEventListener('visibilitychange',visibility);reduced.addEventListener('change',measure);compact.addEventListener('change',measure);
+    document.addEventListener('visibilitychange',visibility);
     measure();paint(0);
     return()=>{
-      disposed=true;cancelAnimationFrame(frame);observer.disconnect();resize.disconnect();
+      disposed=true;cancelDecode();cancelAnimationFrame(frame);observer.disconnect();resize.disconnect();
+      // Preference changes must restore the opening copy and its interactive links.
+      paint(0);
       window.removeEventListener('scroll',schedule);window.removeEventListener('resize',measure);
-      document.removeEventListener('visibilitychange',visibility);reduced.removeEventListener('change',measure);compact.removeEventListener('change',measure);
+      document.removeEventListener('visibilitychange',visibility);
     };
-  }, []);
+  }, [animate]);
   return (
     <section
       ref={root}
       className="film-track"
-      aria-label="De la llave al camino: una historia controlada por el desplazamiento"
+      data-static={assetFailed}
+      aria-label={animate ? 'De la llave al camino: una historia controlada por el desplazamiento' : 'De la llave al camino'}
     >
+      {/* Keep eligible track geometry stable before hydration; no-JS still stays compact. */}
+      <noscript><style>{`
+        .hero-film .film-track{height:auto}
+        .hero-film .film-track .film-stage{position:relative;height:max(100svh,620px);min-height:0}
+        .hero-film .film-chapters,.hero-film .film-progress,.hero-film .film-scroll-hint{display:none}
+        .hero-film .film-controls{justify-content:flex-end}
+        .hero-film .film-hand,.hero-film .film-road{will-change:auto}
+        @media(max-height:520px){.hero-film .film-track .film-stage{height:600px}}
+      `}</style></noscript>
       <div className="film-stage" data-chapter={chapter}>
         <div className="film-canvas" aria-hidden="true">
           <Image
@@ -90,11 +119,11 @@ export default function ScrollFilm() {
             unoptimized
             sizes="100vw"
           />
-          <div className="film-car">
+          {animate && <div className="film-car">
             <Image src="/brand/film-car.webp" alt="" fill unoptimized loading="eager" fetchPriority="low" sizes="100vw" />
-          </div>
+          </div>}
           <div className="film-hand">
-            {handPoses.map((pose) => (
+            {handPoses.filter(pose => animate || pose.name === 'open').map((pose) => (
               <Image key={pose.name} className={`film-hand-${pose.name}`}
                 src={`/brand/film-${pose.name}.webp`} alt="" fill unoptimized priority={pose.name === "open"} loading={pose.name === "open" ? undefined : "eager"} fetchPriority={pose.name === "open" ? "high" : "low"} sizes="100vw" />
             ))}
@@ -180,7 +209,7 @@ export default function ScrollFilm() {
             </span>
           </div>
           <a href="#experiencia">
-            Saltar animación{" "}
+            {animate ? 'Saltar animación' : 'Continuar'}{" "}
             <span aria-hidden>
               <ArrowIcon direction="down" />
             </span>

@@ -54,3 +54,20 @@
  .hero-film .film-hand,.hero-film .film-road{will-change:auto;transform:none!important}
  .hero-film .film-hand img{transition:none}
 }
+/* Explicit asset failure uses the same compact still geometry as accessibility modes. */
+.hero-film .film-track[data-static="true"]{height:auto}
+.hero-film .film-track[data-static="true"] .film-stage{position:relative;height:max(100svh,620px);min-height:0}
+.hero-film .film-track[data-static="true"] .film-copy{opacity:1!important;visibility:visible!important;transform:none!important;pointer-events:auto}
+.hero-film .film-track[data-static="true"] .film-arrival,
+.hero-film .film-track[data-static="true"] .film-car,
+.hero-film .film-track[data-static="true"] .film-chapters,
+.hero-film .film-track[data-static="true"] .film-progress,
+.hero-film .film-track[data-static="true"] .film-scroll-hint{display:none}
+.hero-film .film-track[data-static="true"] .film-controls{justify-content:flex-end}
+.hero-film .film-track[data-static="true"] .film-hand,
+.hero-film .film-track[data-static="true"] .film-road{will-change:auto;transform:none!important;opacity:1}
+.hero-film .film-track[data-static="true"] .film-hand img{transition:none}
+.hero-film .film-track[data-static="true"] .film-hand-open{opacity:1!important}
+@media(max-height:520px){
+ .hero-film .film-track[data-static="true"] .film-stage{height:600px}
+}

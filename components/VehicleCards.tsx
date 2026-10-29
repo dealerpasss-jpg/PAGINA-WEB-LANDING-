@@ -7,10 +7,10 @@ import styles from '@/app/vehiculos/vehicles.module.css';
 
 const money = new Intl.NumberFormat('es-US', { style: 'currency', currency: 'USD', maximumFractionDigits: 0 });
 
-export default function VehicleCards({ vehicles, priority = false }: { vehicles: CatalogueVehicle[]; priority?: boolean }) {
+export default function VehicleCards({ vehicles, priority = false, search = '' }: { vehicles: CatalogueVehicle[]; priority?: boolean; search?: string }) {
   return <div className={styles.inventoryGrid}>
     {vehicles.map((vehicle, index) => {
-      const href = `/vehiculos/${vehicle.slug}`;
+      const href = `/vehiculos/${vehicle.slug}${search ? `?${search}` : ""}`;
       return <article className={styles.card} key={vehicle.slug}>
         <Link href={href} className={styles.cover} aria-label={`Ver fotos y detalles de ${vehicle.title}`}>
           <Image src={vehicle.photos[0].src} alt={`${vehicle.title}, fotografía de portada`} width={1448} height={1086} sizes="(max-width: 640px) 100vw, (max-width: 1100px) 50vw, 33vw" priority={priority && index === 0} />

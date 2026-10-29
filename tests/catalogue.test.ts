@@ -31,3 +31,17 @@ test('shared filter URLs validate sort and bound input length', () => {
   assert.equal(readCatalogueFilters(new URLSearchParams('orden=invalid')).sort, 'featured');
   assert.equal(readCatalogueFilters(new URLSearchParams({ buscar: 'a'.repeat(1000) })).query.length, 100);
 });
+
+test('URL updates only treat featured as the sort default, never as search text', async () => {
+  const { updateCatalogueParams, catalogueQuery } = await import('../lib/vehicles/catalogue.ts');
+  const initial = new URLSearchParams('marca=Ford&orden=price-asc');
+  const searched = updateCatalogueParams(initial, 'buscar', 'featured');
+  assert.equal(searched.get('buscar'), 'featured');
+  assert.equal(searched.get('orden'), 'price-asc');
+  const resetSort = updateCatalogueParams(searched, 'orden', 'featured');
+  assert.equal(resetSort.get('orden'), null);
+  assert.equal(resetSort.get('buscar'), 'featured');
+  assert.equal(initial.get('buscar'), null);
+  assert.equal(catalogueQuery(new URLSearchParams('buscar=Ford&marca=Ford&orden=price-asc&next=https://example.com')), 'buscar=Ford&marca=Ford&orden=price-asc');
+  assert.equal(catalogueQuery(new URLSearchParams('orden=invalid&next=//example.com')), '');
+});

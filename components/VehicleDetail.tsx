@@ -1,4 +1,6 @@
 import Link from 'next/link';
+import { Suspense } from 'react';
+import CatalogueReturnLink from './CatalogueReturnLink';
 import { notFound } from 'next/navigation';
 import ArrowIcon from './ArrowIcon';
 import VehicleGallery from './VehicleGallery';
@@ -16,7 +18,7 @@ export default function VehicleDetail({ slug }: { slug: string }) {
   const model = vehicle.title.replace(new RegExp(` ${year}$`), '');
   const related = vehicleCatalogue.filter(item => item.slug !== slug).sort((a, b) => Number(vehicleMake(b) === vehicleMake(vehicle)) - Number(vehicleMake(a) === vehicleMake(vehicle))).slice(0, 3);
   return <section className={`wrap ${styles.page}`}>
-    <Link href="/vehiculos" className={styles.back}><ArrowIcon direction="left" /> Todos los vehículos</Link>
+    <Suspense fallback={<Link href="/vehiculos" className={styles.back}><ArrowIcon direction="left" /> Todos los vehículos</Link>}><CatalogueReturnLink /></Suspense>
     <header className={styles.detailHeading}><span className="kicker">DEALERPASS / INVENTARIO</span><h1>{model} <span>{year}</span></h1><p>{vehicleSpec(vehicle, 'Millaje').replace(' mi', ' millas')} · {slug === 'subaru-impreza-2016' ? 'Hatchback' : 'SUV'} · {vehicleSpec(vehicle, 'Transmisión')}</p></header>
     <div className={styles.detailGrid}>
       <VehicleGallery photos={vehicle.photos} vehicle={vehicle.title} />

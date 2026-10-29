@@ -35,3 +35,18 @@ export function filterCatalogue(vehicles: CatalogueVehicle[], filters: Catalogue
   if (filters.sort === 'mileage-asc') result.sort((a, b) => number(a, 'Millaje') - number(b, 'Millaje'));
   return result;
 }
+
+export type CatalogueParam = 'buscar' | 'marca' | 'orden';
+export function updateCatalogueParams(params: Pick<URLSearchParams, 'toString'>, key: CatalogueParam, value: string) {
+  const next = new URLSearchParams(params.toString());
+  if (value && !(key === 'orden' && value === 'featured')) next.set(key, value); else next.delete(key);
+  return next;
+}
+export function catalogueQuery(params: Pick<URLSearchParams, 'get'>) {
+  const filters = readCatalogueFilters(params);
+  const query = new URLSearchParams();
+  if (filters.query) query.set('buscar', filters.query);
+  if (filters.make) query.set('marca', filters.make);
+  if (filters.sort !== 'featured') query.set('orden', filters.sort);
+  return query.toString();
+}

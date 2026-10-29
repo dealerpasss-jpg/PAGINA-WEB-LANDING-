@@ -265,3 +265,7 @@ body:has(.workspace-shell) .mobile-nav a { border-color:#ffffff20; }
 .dashboard-learning-empty>span { font-size:13px; line-height:1.7; color:#6c7164; margin-top:9px; }
 .dashboard-learning-empty>a { display:flex; align-items:center; gap:14px; min-height:44px; margin-top:14px; font-size:12px; color:#a33300; }
 @media(max-width:600px) { .workspace-collection { margin:24px 0; }.workspace-collection-heading { align-items:flex-start; flex-direction:column; gap:10px; }.workspace-collection-heading h2 { font-size:23px; }.workspace-collection-tools { padding:16px; }.workspace-collection-tools input { font-size:16px; }.workspace-status-filters { gap:6px; }.workspace-status-filters button { min-height:44px; padding:8px 10px; }.dashboard-learning-empty { padding:20px; } }
+
+/* Editable names and vehicle titles must not widen narrow screens. */
+.workspace-content,.workspace-content .account-heading,.workspace-content .account-shell { min-width:0; }
+.workspace-content :is(.account-shell h1,.account-card h2,.account-card h3,.workspace-application summary,.account-welcome) { overflow-wrap:anywhere; }

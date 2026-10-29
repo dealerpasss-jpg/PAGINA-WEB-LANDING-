@@ -45,6 +45,17 @@ for (const [route, { html, ids }] of documents) {
     checkedImages++;
   }
 }
+// Initial HTML is usable without motion and must not fetch six unused animation assets.
+const film = documents.get('/')?.html.match(/<section\b[^>]*class="film-track"[^>]*>[\s\S]*?<\/section>/)?.[0];
+assert.ok(film, 'Homepage must retain the original film hero.');
+assert.match(film, /data-static="false"/, 'Eligible hero track geometry must not change during hydration.');
+assert.match(film, /<noscript>[\s\S]*<style>[\s\S]*height:auto/, 'No-JS visitors must retain a compact native fallback.');
+const filmImages = [...film.matchAll(/<img\b[^>]*\bsrc="(\/brand\/film-[^"]+)"/g)].map(match => match[1]);
+assert.deepEqual(filmImages.sort(), ['/brand/film-open.webp', '/brand/film-road.webp'], 'Initial hero must only request the original opening artwork.');
+for (const asset of ['road', 'open', 'eighth', 'quarter', 'half', 'three-quarter', 'closed', 'car']) {
+  assert.ok(existsSync(path.join(root, 'public/brand', `film-${asset}.webp`)), `Missing original film asset: ${asset}`);
+}
 if (errors.length) { console.error(errors.join('\n')); process.exit(1); }
 console.log(`Build structure passed: ${documents.size} static pages, ${checkedLinks} internal links, ${checkedImages} image references. No missing static anchors or duplicate IDs.`);
+console.log('Hero fallback passed: only road/open hand in initial HTML; stable eligible geometry and native no-JS fallback; original motion assets available.');
 console.log('Not covered: hydration, visual layout, responsive interaction, authenticated data, form delivery, payment or phone/browser QA.');
