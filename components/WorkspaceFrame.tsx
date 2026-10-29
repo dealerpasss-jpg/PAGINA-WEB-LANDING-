@@ -3,6 +3,7 @@ import Link from "next/link";
 import { usePathname } from "next/navigation";
 import ArrowIcon from "./ArrowIcon";
 import WorkspaceIcon, { type WorkspaceIconName } from "./WorkspaceIcon";
+import WorkspaceAtmosphere from "./WorkspaceAtmosphere";
 const links: {href:string;label:string;mark:WorkspaceIconName}[] = [
   { href: "/mi-cuenta", label: "Resumen", mark: "home" },
   { href: "/aula", label: "Mi formación", mark: "learn" },
@@ -15,6 +16,7 @@ export default function WorkspaceFrame({ children, team = false }: { children: R
   const privatePage = ["/mi-cuenta", "/aula", "/equipo"].some(p => path === p || path.startsWith(p + "/"));
   if (!privatePage) return <>{children}</>;
   return <div className="workspace-shell">
+    <WorkspaceAtmosphere />
     <aside className="workspace-sidebar">
       <div className="workspace-label"><span className="workspace-dot" /> MI ESPACIO</div>
       <nav aria-label="Navegación de mi espacio">{links.map(l => <Link key={l.href} href={l.href} aria-current={(l.href === "/mi-cuenta" ? path === l.href : path === l.href || path.startsWith(l.href + "/")) ? "page" : undefined}><span className="workspace-icon"><WorkspaceIcon name={l.mark} /></span>{l.label}<ArrowIcon direction="right" /></Link>)}</nav>

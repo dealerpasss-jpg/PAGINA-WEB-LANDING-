@@ -14,6 +14,7 @@ import "./plan-comparison.css";
 import "./sales-journey.css";
 import "./platform.css";
 import "./workspace.css";
+import "./workspace-tech.css";
 import "./buttons.css";
 
 const body = Inter({
