@@ -1,4 +1,4 @@
-# DealerPass Calc
+# DP Calc
 
 ## Scope and math
 
@@ -8,7 +8,7 @@ Three main questions: realistic resale estimate → additional expenses → targ
 
 ## Device interaction
 
-The device is named **DealerPass Calc** in plain text. It does not create a new DP symbol or replace the site's official DealerPass logo.
+The device is named **DP Calc** in plain text. It does not create a new DP symbol or replace the site's official DealerPass logo. The approved finish is neutral brushed silver on the case and keys, a recessed charcoal display, black digits, and fine orange edge reflections/Next action. Static layered CSS gradients provide texture without raster artwork, blur filters or animation. Solid reduced-transparency and system forced-color fallbacks preserve readability; keypad geometry and interaction are unchanged.
 
 One compact device: question/amount display, integrated0–9/decimal/backspace keypad, C for current amount, and Siguiente. No persistent result sidebar or final price while entering values, even when the underlying fields are complete. Only the final action mounts the result receipt; incomplete costs show a pending state without a bid. The optional offer evaluator reuses the keypad and cannot alter scenario fields.
 
