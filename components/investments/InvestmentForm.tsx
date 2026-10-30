@@ -4,12 +4,13 @@ import { unstable_rethrow } from 'next/navigation';
 import { saveInvestment } from '@/app/mi-cuenta/inversiones/actions';
 const PendingContext = createContext(false);
 export function useInvestmentPending() { return useContext(PendingContext); }
-export default function InvestmentForm({ children, className }: { children: React.ReactNode; className?: string }) {
+export default function InvestmentForm({ children, className, confirmMessage }: { children: React.ReactNode; className?: string; confirmMessage?: string }) {
   const [pending, startTransition] = useTransition();
   const [error, setError] = useState('');
   return <PendingContext.Provider value={pending}><form className={className} aria-busy={pending} onSubmit={event => {
     event.preventDefault();
     if (pending) return;
+    if (confirmMessage && !window.confirm(confirmMessage)) return;
     // Capture before disabling controls; a failed save keeps every entered value.
     const data = new FormData(event.currentTarget);
     setError('');

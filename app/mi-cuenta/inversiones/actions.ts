@@ -23,11 +23,11 @@ export async function saveInvestment(f:FormData) {
  } else if(action==='expense') {
  const category=text(f,'category',20);if(!ownKey(categories,category))throw new Error('Categoría inválida.');
  checked(await db.from('investment_expenses').insert({vehicle_id:id,category,description:text(f,'description',500,true),amount_cents:cents(f.get('amount_cents')),incurred_on:investmentDate(text(f,'incurred_on',10,true),true)}));
- } else if(action==='void-expense') { const expense=text(f,'expense_id',36);if(!uuid.test(expense))throw new Error('Gasto inválido.');checked(await db.from('investment_expenses').update({voided_at:new Date().toISOString()}).eq('id',expense).eq('vehicle_id',id));
+ } else if(action==='void-expense') { const expense=text(f,'expense_id',36).toLowerCase();if(!uuid.test(expense))throw new Error('Gasto inválido.');const result=checked(await db.from('investment_expenses').update({voided_at:new Date().toISOString()}).eq('id',expense).eq('vehicle_id',id).is('voided_at',null).select('id'));if(result.data?.length!==1||result.data[0].id!==expense)throw new Error('No se anuló el gasto. Puede estar ya anulado o no estar disponible en este vehículo. Recarga la ficha para comprobarlo.');
  } else if(action==='member') {
  const email=text(f,'email',254,true).toLowerCase();if(!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email))throw new Error('Correo inválido.');
  checked(await db.from('investment_members').upsert({vehicle_id:id,email,name:text(f,'name',100,true),contribution_cents:cents(f.get('contribution_cents')),returned_cents:cents(f.get('returned_cents')),revoked_at:null},{onConflict:'vehicle_id,email'}));
- } else if(action==='revoke') {const member=text(f,'member_id',36);if(!uuid.test(member))throw new Error('Participante inválido.');checked(await db.from('investment_members').update({revoked_at:new Date().toISOString()}).eq('id',member).eq('vehicle_id',id));
+ } else if(action==='revoke') {const member=text(f,'member_id',36).toLowerCase();if(!uuid.test(member))throw new Error('Participante inválido.');const result=checked(await db.from('investment_members').update({revoked_at:new Date().toISOString()}).eq('id',member).eq('vehicle_id',id).is('revoked_at',null).select('id'));if(result.data?.length!==1||result.data[0].id!==member)throw new Error('No se retiró el acceso. Puede estar ya retirado o no estar disponible en este vehículo. Recarga la ficha para comprobarlo.');
  } else throw new Error('Acción inválida.');
  } catch(e) {return {error:e instanceof Error && !('code' in e) ? e.message : 'No se pudo guardar. Tus datos siguen en el formulario. Revisa los datos e inténtalo de nuevo.'};}
  revalidatePath('/mi-cuenta/inversiones','layout');redirect(next+'?message='+encodeURIComponent(message));
