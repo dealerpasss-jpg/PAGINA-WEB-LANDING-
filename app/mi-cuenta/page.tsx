@@ -27,13 +27,16 @@ export default async function Page({
   if (!configured())
     return (
       <AccountShell title="Tu espacio está en preparación.">
+        <section className="workspace-preparation">
+        <span className="dashboard-eyebrow">ACCESO EN PREPARACIÓN</span>
         <p>
           Pronto podrás crear tu cuenta y elegir tu formación. Todavía no se
           reciben pagos.
         </p>
         <Link className="btn-primary" href="/planes">
-          Explorar planes
+          Explorar planes <ArrowIcon direction="right" />
         </Link>
+        </section>
       </AccountShell>
     );
   const selected = plans.find((p) => p.id === searchParams.plan);

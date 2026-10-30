@@ -38,7 +38,10 @@ test('workspace glass keeps opaque fallback, static input surfaces and mobile na
   assert.match(css, /@media\(max-width:800px\)/);
   assert.match(css, /workspace-atmosphere \{ inset:60px 0 0/);
   assert.match(css, /background:#fcfdfa; border-color:#aeb8aa/);
-  sheet.walkDecls(decl => assert.notEqual(decl.prop, 'grid-template-columns'));
+  sheet.walkDecls('grid-template-columns', decl => {
+    assert.equal(decl.parent?.type, 'rule');
+    assert.match((decl.parent as postcss.Rule).selector, /workspace-profile-form/);
+  });
   sheet.walkRules('.workspace-shell', rule => {
     assert.ok(!rule.nodes.some(node => node.type === 'decl' && node.prop === 'padding-bottom'));
   });
