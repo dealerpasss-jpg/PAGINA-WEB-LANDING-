@@ -2,7 +2,8 @@
 import { revalidatePath } from 'next/cache';
 import { redirect } from 'next/navigation';
 import { investmentIdentity } from '@/lib/investments/server';
-import { cents, statuses, categories } from '@/lib/investments/money';
+import { cents, statuses } from '@/lib/investments/money';
+import { expenseConcept } from '@/lib/investments/expense-presets';
 import { investmentDate, investmentVersion, ownKey } from '@/lib/investments/validation';
 import { checked } from '@/lib/academy/server';
 const uuid = /^[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12}$/i;
@@ -21,8 +22,8 @@ export async function saveInvestment(f:FormData) {
  if(action==='create'){const row=checked(await db.from('investment_vehicles').insert(data).select('id').single()).data;if(!row)throw new Error('No se pudo crear el vehículo.');next+='/'+row.id;}
  else {const version=investmentVersion(f.get('version'));const result=checked(await db.from('investment_vehicles').update({...data,version:version+1}).eq('id',id).eq('version',version).select('id'));if(!result.data?.length)throw new Error('La ficha cambió en otra ventana. Recárgala antes de guardar.');}
  } else if(action==='expense') {
- const category=text(f,'category',20);if(!ownKey(categories,category))throw new Error('Categoría inválida.');
- checked(await db.from('investment_expenses').insert({vehicle_id:id,category,description:text(f,'description',500,true),amount_cents:cents(f.get('amount_cents')),incurred_on:investmentDate(text(f,'incurred_on',10,true),true)}));
+ const concept=expenseConcept(text(f,'expense_preset',30),text(f,'category',20),text(f,'description',500));
+ checked(await db.from('investment_expenses').insert({vehicle_id:id,...concept,amount_cents:cents(f.get('amount_cents')),incurred_on:investmentDate(text(f,'incurred_on',10,true),true)}));
  } else if(action==='void-expense') { const expense=text(f,'expense_id',36).toLowerCase();if(!uuid.test(expense))throw new Error('Gasto inválido.');const result=checked(await db.from('investment_expenses').update({voided_at:new Date().toISOString()}).eq('id',expense).eq('vehicle_id',id).is('voided_at',null).select('id'));if(result.data?.length!==1||result.data[0].id!==expense)throw new Error('No se anuló el gasto. Puede estar ya anulado o no estar disponible en este vehículo. Recarga la ficha para comprobarlo.');
  } else if(action==='member') {
  const email=text(f,'email',254,true).toLowerCase();if(!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email))throw new Error('Correo inválido.');
@@ -30,5 +31,5 @@ export async function saveInvestment(f:FormData) {
  } else if(action==='revoke') {const member=text(f,'member_id',36).toLowerCase();if(!uuid.test(member))throw new Error('Participante inválido.');const result=checked(await db.from('investment_members').update({revoked_at:new Date().toISOString()}).eq('id',member).eq('vehicle_id',id).is('revoked_at',null).select('id'));if(result.data?.length!==1||result.data[0].id!==member)throw new Error('No se retiró el acceso. Puede estar ya retirado o no estar disponible en este vehículo. Recarga la ficha para comprobarlo.');
  } else throw new Error('Acción inválida.');
  } catch(e) {return {error:e instanceof Error && !('code' in e) ? e.message : 'No se pudo guardar. Tus datos siguen en el formulario. Revisa los datos e inténtalo de nuevo.'};}
- revalidatePath('/mi-cuenta/inversiones','layout');redirect(next+'?message='+encodeURIComponent(message));
+ revalidatePath('/mi-cuenta/inversiones','layout');revalidatePath('/mi-cuenta');redirect(next+'?message='+encodeURIComponent(message));
 }

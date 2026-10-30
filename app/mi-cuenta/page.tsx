@@ -1,6 +1,8 @@
 import { greetingName } from "@/lib/academy/profile";
 import { redirect } from "next/navigation";
 import StudentDashboard from "@/components/StudentDashboard";
+import InvestmentDashboard from "@/components/investments/InvestmentDashboard";
+import { investmentDashboardFor } from "@/lib/investments/dashboard-server";
 import ArrowIcon from "@/components/ArrowIcon";
 import AccountShell from "@/components/AccountShell";
 import {
@@ -52,10 +54,11 @@ export default async function Page({
     failed = true;
   }
   const db = database();
-  const [vipResult, lessonsResult, progressResult] = await Promise.all([
+  const [vipResult, lessonsResult, progressResult, investmentDashboard] = await Promise.all([
     db.from("vip_applications").select("status").eq("user_id", who.user.id).maybeSingle(),
     db.from("lessons").select("id,title,module_title,allowed_plans").eq("published",true).order("position"),
     db.from("lesson_progress").select("lesson_id").eq("user_id",who.user.id),
+    !selected && who.profile.role === 'admin' ? investmentDashboardFor(who.profile.role) : Promise.resolve({state:'hidden'} as const),
   ]);
   const vip = vipResult.error ? null : vipResult.data;
   const learningFailed = !!(lessonsResult.error || progressResult.error);
@@ -85,6 +88,7 @@ export default async function Page({
         </p>
       )}
       {!selected && <>
+      {who.profile.role === 'admin' && <InvestmentDashboard data={investmentDashboard} />}
       {who.profile.role !== "student" && <section className="dashboard-panel workspace-team-welcome"><div><span className="dashboard-eyebrow">CENTRO DE OPERACIONES</span><h2>Todo listo para avanzar.</h2><p>Gestiona la formación{who.profile.role === "admin" ? ", las admisiones y las cuentas de tus vehículos" : " del equipo"} desde tu panel.</p></div><div className="investment-admin-actions"><Link className="dashboard-cta" href="/mi-cuenta/inversiones">Mis vehículos <ArrowIcon direction="right" /></Link><Link className="dashboard-cta" href="/mi-cuenta/calculadora">Calculadora <ArrowIcon /></Link><Link className="dashboard-text-link" href="/equipo">Panel del equipo <ArrowIcon /></Link></div></section>}
       <details className="workspace-learning" open={who.profile.role === "student"}><summary>Mi formación y membresía</summary><StudentDashboard now={now} active={active} lessons={lessonsResult.data || []} completedIds={(progressResult.data || []).map(p=>p.lesson_id)} unavailable={failed || learningFailed} profileComplete={profileComplete} paymentStates={paymentStates} /></details>
       </>}

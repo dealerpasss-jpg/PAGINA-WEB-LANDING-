@@ -32,3 +32,39 @@
 }
 @media(prefers-reduced-transparency:reduce) { .investment-workflow li,.investment-field-group { background:#fff; } }
 @media(forced-colors:active) { .investment-workflow li,.investment-field-group,.investment-category-totals { background:Canvas; border-color:CanvasText; color:CanvasText; } }
+
+/* Expense shortcuts are native radios: keyboard arrows and labels stay native. */
+.investment-expense-form { margin-top:12px; gap:22px; }
+.expense-picker,.expense-entry { min-width:0; margin:0; padding:0; border:0; }
+.expense-picker legend,.expense-entry legend { padding:0; font-size:12px; font-weight:650; letter-spacing:.03em; }
+.workspace-shell .account-card .expense-picker-hint { margin:8px 0 14px; color:#535b60; font-size:12px; line-height:1.6; }
+.expense-options { display:grid; grid-template-columns:repeat(2,minmax(0,1fr)); gap:8px; }
+.investment-form .expense-option { position:relative; display:block; min-width:0; cursor:pointer; }
+.investment-form .expense-option input[type=radio] { position:absolute; width:1px; height:1px; min-height:0; margin:0; padding:0; border:0; clip-path:inset(50%); overflow:hidden; }
+.expense-option-surface { display:grid; grid-template-columns:24px minmax(0,1fr) 16px; align-items:center; gap:9px; min-height:76px; height:100%; padding:12px; border:1px solid #c7cdce; border-radius:12px; background:linear-gradient(160deg,#fff,#f1f3f2); box-shadow:inset 0 1px 0 #fff,0 2px 5px #18212808; color:#262d31; font-size:12px; line-height:1.4; font-weight:600; transition:border-color .15s,background-color .15s; }
+.expense-option-surface>svg { color:#a4390a; flex:none; }
+.expense-option-surface>span:not(.expense-option-check) { min-width:0; overflow-wrap:anywhere; }
+.expense-option-check { display:grid; place-items:center; width:16px; height:16px; border:1px solid #9ba4a8; border-radius:50%; }
+.expense-option-check svg { visibility:hidden; }
+.expense-option input:checked+.expense-option-surface { color:#fff; background:linear-gradient(160deg,#333c40,#1b2226); border-color:#1b2226; box-shadow:inset 0 1px 0 #ffffff35,0 2px 7px #17202618; }
+.expense-option input:checked+.expense-option-surface>svg { color:#ff9a70; }
+.expense-option input:checked+.expense-option-surface .expense-option-check { color:#171b1d; background:#ff8c5b; border-color:#ff8c5b; }
+.expense-option input:checked+.expense-option-surface .expense-option-check svg { visibility:visible; }
+.expense-option input:focus-visible+.expense-option-surface { outline:3px solid #a63607; outline-offset:3px; }
+.expense-option input:disabled+.expense-option-surface { opacity:.6; cursor:wait; }
+.expense-option-other { grid-column:1/-1; }
+.expense-option-other .expense-option-surface { min-height:54px; }
+.expense-concept { display:grid; gap:12px; padding:14px; border:1px solid #d6dbd9; border-radius:12px; background:#ffffffda; }
+.workspace-shell .account-card .expense-group-note { margin:0; font-size:12px; line-height:1.6; color:#535b60; }
+.expense-entry-grid { display:grid; grid-template-columns:repeat(2,minmax(0,1fr)); gap:12px; margin-top:14px; }
+.expense-entry-grid>* { min-width:0; }
+.investment-form .expense-date { display:grid; align-content:start; gap:4px; }
+.investment-form .expense-today { justify-self:end; min-height:44px; padding:8px 4px; border:0; background:transparent; color:#96360e; font:inherit; font-size:12px; font-weight:600; text-decoration:underline; text-underline-offset:4px; cursor:pointer; }
+.expense-save { display:grid; gap:12px; padding-top:16px; border-top:1px solid #d9dddb; }
+.workspace-shell .account-card .expense-save p { margin:0; font-size:12px; line-height:1.6; color:#535b60; }
+.expense-save button { width:100%; }
+@media(hover:hover) { .expense-option input:not(:checked):not(:disabled)+.expense-option-surface:hover { border-color:#a84c24; background:#fff; } }
+@media(max-width:420px) { .expense-option-surface { grid-template-columns:22px minmax(0,1fr); padding:10px; gap:8px; min-height:82px; }.expense-option-check { grid-column:1; grid-row:2; }.expense-option-surface>svg { grid-column:1; grid-row:1; }.expense-option-surface>span:not(.expense-option-check) { grid-column:2; grid-row:1/3; }.expense-option input:checked+.expense-option-surface { border-color:#ff9566; }.expense-entry-grid { grid-template-columns:1fr; } }
+@media(prefers-reduced-motion:reduce) { .expense-option-surface { transition:none; } }
+@media(prefers-reduced-transparency:reduce) { .expense-option-surface,.expense-concept { background:#fff; box-shadow:none; }.expense-option input:checked+.expense-option-surface { background:#20282c; box-shadow:none; } }
+@media(forced-colors:active) { .expense-option-surface,.expense-concept { background:Canvas; color:CanvasText; box-shadow:none; border-color:CanvasText; }.expense-option input:checked+.expense-option-surface { background:Highlight; color:HighlightText; border-color:Highlight; box-shadow:none; }.expense-option-surface>svg,.expense-option input:checked+.expense-option-surface>svg { color:inherit; }.expense-option input:focus-visible+.expense-option-surface { outline-color:Highlight; }.expense-option input:checked+.expense-option-surface .expense-option-check { background:HighlightText; color:Highlight; border-color:HighlightText; }.investment-form .expense-today { color:LinkText; } }

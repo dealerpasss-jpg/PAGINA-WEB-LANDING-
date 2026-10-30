@@ -3,8 +3,10 @@ import assert from 'node:assert/strict';
 import { vehicleCatalogue } from '../data/vehicle-catalogue.ts';
 import { defaultCatalogueFilters, filterCatalogue, readCatalogueFilters } from '../lib/vehicles/catalogue.ts';
 
-test('catalogue preserves all six real vehicles and original ordering by default', () => {
-  assert.equal(vehicleCatalogue.length, 6);
+test('catalogue includes approved Elantra and preserves six previous vehicles in their original order', () => {
+  assert.equal(vehicleCatalogue.length, 7);
+  assert.equal(vehicleCatalogue[0].slug,'hyundai-elantra-eco-2018');
+  assert.deepEqual(vehicleCatalogue.slice(1).map(v=>v.slug),['ford-escape-se-2016','ford-edge-2021','ford-edge-titanium-2018','ford-explorer-xlt-2013','subaru-forester-2015','subaru-impreza-2016']);
   assert.deepEqual(filterCatalogue(vehicleCatalogue, defaultCatalogueFilters), vehicleCatalogue);
 });
 test('search is accent insensitive, case insensitive, and matches every word', () => {
