@@ -90,7 +90,7 @@ export default function PurchaseCalculator() {
 
   return <div className={styles.calculator}>
     <div className={styles.device}>
-      <div className={styles.deviceBar}><span><b>DP</b> / MARGEN</span><span>USD</span></div>
+      <div className={styles.deviceBar}><span className={styles.deviceName}>DealerPass Calc</span><span>USD</span></div>
       {draft.example && <p className={styles.example}>Ejemplo ilustrativo · reemplaza los importes por los tuyos.</p>}
       {step !== 3 ? <form noValidate onSubmit={advance} onKeyDown={keyboard}>
         <div className={styles.screen}>

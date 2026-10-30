@@ -1,4 +1,4 @@
-# DealerPass keypad calculator
+# DealerPass Calc
 
 ## Scope and math
 
@@ -7,6 +7,8 @@ Shared public `/metodo-margen` and authorized workspace component. No auth, plan
 Three main questions: realistic resale estimate → additional expenses → target profit. The final answer is the maximum **hammer bid**, not a predicted sale price or guaranteed gain. The aggregate cost shortcut requires explicit confirmation of applicable auction/dealer, transport, repairs, tax, documents and contingency; it excludes vehicle purchase price and profit. Optional detail mode asks each of six costs on the same display/keypad. Blank/invalid stays pending, never zero. Switching modes preserves independent raw drafts and cannot double-count; modifying the total resets confirmation.
 
 ## Device interaction
+
+The device is named **DealerPass Calc** in plain text. It does not create a new DP symbol or replace the site's official DealerPass logo.
 
 One compact device: question/amount display, integrated0–9/decimal/backspace keypad, C for current amount, and Siguiente. No persistent result sidebar or final price while entering values, even when the underlying fields are complete. Only the final action mounts the result receipt; incomplete costs show a pending state without a bid. The optional offer evaluator reuses the keypad and cannot alter scenario fields.
 

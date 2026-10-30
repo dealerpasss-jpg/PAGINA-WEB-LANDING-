@@ -28,6 +28,8 @@ const Calculator=componentModule(resolve(root,'components/PurchaseCalculator.tsx
 test('real calculator initially presents one question, mobile numeric input and no invented result',()=>{
   const html=renderToStaticMarkup(React.createElement(Calculator));
   assert.match(html,/PREGUNTA 1 DE 3/);
+  assert.match(html,/<span class="deviceName">DealerPass Calc<\/span>/);
+  assert.doesNotMatch(html,/<b>DP<\/b>|\/ MARGEN/);
   assert.match(html,/¿En cuánto lo venderías\?/);
   assert.match(html,/inputMode="decimal"/);
   assert.match(html,/aria-label="Teclado numérico"/);
