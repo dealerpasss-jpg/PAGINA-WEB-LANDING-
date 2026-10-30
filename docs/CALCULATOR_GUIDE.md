@@ -21,3 +21,7 @@ No persistence added: the UI states values are lost on reload/leave. Optional of
 ## Verification
 
 Regression tests cover original/aggregate parity, unknown vs explicit zero, review confirmation invalidation, mode isolation, exact raw Undo, malformed inputs, negative budgets and cents. Actual component SSR checks initial one-question semantics. Full build and browser interaction checks are recorded in the release checkpoint, not inferred from these unit tests. Real-phone and authenticated workspace rendering require separate QA.
+
+## Sticky-header focus correction
+
+Public browser QA found that native `focus()` could put the mobile result amount behind the sticky header. Explicit step/review navigation now focuses without automatic scrolling, then reveals the heading at the start of the viewport with a scoped 110px scroll margin. Scrolling is instant (no motion added), initial mount does not scroll, and typing does not trigger navigation. The same helper is used by “Editar mis valores”. Math, values, layout and permissions are unchanged.

@@ -7,6 +7,7 @@ import { createRequire } from 'node:module';
 import ts from 'typescript';
 import React from 'react';
 import { renderToStaticMarkup } from 'react-dom/server';
+import { focusCalculatorHeading } from '../lib/academy/calculator-focus.ts';
 const require=createRequire(import.meta.url);
 const root=fileURLToPath(new URL('../',import.meta.url));
 const cache=new Map<string,{exports:Record<string,unknown>}>();
@@ -47,4 +48,17 @@ test('calculator retains explicit total confirmation, unknown exit and native op
   assert.match(source,/Confirma la tarifa para el rango calculado/);
   assert.match(source,/<details className=\{styles.bid\}>/);
   assert.doesNotMatch(source,/localStorage|sessionStorage|fetch\(/);
+});
+test('explicit calculator navigation focuses without native scrolling then reveals the heading instantly',()=>{
+  const calls:unknown[]=[];
+  focusCalculatorHeading({focus:options=>{calls.push(['focus',options]);},scrollIntoView:options=>{calls.push(['scroll',options]);}});
+  assert.deepEqual(calls,[['focus',{preventScroll:true}],['scroll',{block:'start',behavior:'instant'}]]);
+  focusCalculatorHeading(null);
+  assert.equal(calls.length,2);
+  const source=readFileSync(resolve(root,'components/PurchaseCalculator.tsx'),'utf8');
+  const css=readFileSync(resolve(root,'components/PurchaseCalculator.module.css'),'utf8');
+  assert.match(source,/if \(mounted.current\) focusCalculatorHeading\(step === 3 \? resultHeading.current : heading.current\); else mounted.current = true/);
+  assert.match(source,/\[step, focusRevision\]/);
+  assert.match(source,/onClick=\{\(\) => focusCalculatorHeading\(heading.current\)\}/);
+  assert.match(css,/\.question,\.amount,\.empty\{scroll-margin-top:110px\}/);
 });

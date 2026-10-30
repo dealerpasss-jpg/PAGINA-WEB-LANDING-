@@ -3,6 +3,7 @@ import { useEffect, useId, useReducer, useRef, useState, type FormEvent } from '
 import { calculatorFields, parseCalculatorAmount } from '@/lib/academy/calculator';
 import { calculatorDraftReducer, emptyCalculatorDraft, hasCalculatorInput } from '@/lib/academy/calculator-draft';
 import { calculatorGuide, calculatorLabels, calculatorSources, costIndexes } from '@/lib/academy/calculator-guide';
+import { focusCalculatorHeading } from '@/lib/academy/calculator-focus';
 import ArrowIcon from './ArrowIcon';
 import styles from './PurchaseCalculator.module.css';
 const money = (cents: number) => new Intl.NumberFormat('es-US', { style: 'currency', currency: 'USD' }).format(cents / 100);
@@ -29,7 +30,7 @@ export default function PurchaseCalculator() {
   const resultHeading = useRef<HTMLHeadingElement>(null);
   const [focusRevision, setFocusRevision] = useState(0);
   const mounted = useRef(false);
-  useEffect(() => { if (mounted.current) (step === 3 ? resultHeading.current : heading.current)?.focus(); else mounted.current = true; }, [step, focusRevision]);
+  useEffect(() => { if (mounted.current) focusCalculatorHeading(step === 3 ? resultHeading.current : heading.current); else mounted.current = true; }, [step, focusRevision]);
   const guide = calculatorGuide(draft);
   const { values, bid, example } = draft;
   const { result, ready } = guide;
@@ -79,7 +80,7 @@ export default function PurchaseCalculator() {
       <p className={styles.resultCaption}>{result ? result.maximum > 0 ? 'Precio del carro en subasta, antes de comisiones y demás gastos.' : 'Los gastos y el objetivo consumen la venta estimada.' : 'Lo calculamos cuando confirmes venta, gastos y objetivo.'}</p>
       <p className={styles.status} role="status">{ready.filter(Boolean).length} de 3 datos listos{!ready[1] ? ' · Gastos pendientes' : ''}</p>
       <dl className={styles.summary}>{['Venta estimada', 'Gastos adicionales', 'Ganancia objetivo'].map((label, index) => <div key={label}><dt>{label}</dt><dd>{stepValues[index]}</dd></div>)}</dl>
-      {step === 3 && <button className={styles.editValues} data-dp-button="inverse" data-dp-size="compact" type="button" onClick={() => heading.current?.focus()}>{result ? 'Editar mis valores' : 'Completar datos pendientes'}<ArrowIcon /></button>}
+      {step === 3 && <button className={styles.editValues} data-dp-button="inverse" data-dp-size="compact" type="button" onClick={() => focusCalculatorHeading(heading.current)}>{result ? 'Editar mis valores' : 'Completar datos pendientes'}<ArrowIcon /></button>}
       {result ? <><div className={styles.goal}><span>Inversión al pujar el máximo{result.maximum > 0 ? ', con reserva' : ''}</span><strong>{result.maximum > 0 ? money(result.maximum + result.costs) : 'No disponible'}</strong></div>{result.maximum <= 0 && <p className={styles.warning}>Gastos y objetivo consumen toda la venta{result.maximum < 0 ? ` y la superan en ${money(-result.maximum)}` : ''}.</p>}
         <details className={styles.breakdown}><summary>Ver cómo se calcula</summary><p>Venta estimada − gastos adicionales − ganancia objetivo = límite de puja.</p><dl><div><dt>Venta estimada</dt><dd>{money(result.sale)}</dd></div><div><dt>− Gastos y reserva</dt><dd>{money(result.costs)}</dd></div><div><dt>− Ganancia objetivo</dt><dd>{money(result.profit)}</dd></div><div><dt>= Límite calculado</dt><dd>{money(result.maximum)}</dd></div></dl></details></> : <p className={styles.warning}>Los importes pendientes no se cuentan como cero. Todavía no hay un límite de puja completo.</p>}
       <details className={styles.bid}><summary>¿Ya tienes una oferta en mente?</summary><label htmlFor={`${id}-bid`}>Tu posible puja <small>Precio de martillo, sin comisiones.</small></label><div className={styles.input}><span aria-hidden="true">$</span><input id={`${id}-bid`} type="text" inputMode="decimal" autoComplete="off" maxLength={12} placeholder="Escribe un monto" value={bid} onChange={event => dispatch({ type: 'bid', value: event.target.value })} aria-invalid={bid.trim() !== '' && bidCents === null} aria-describedby={`${id}-bid-result`} /></div><div id={`${id}-bid-result`} aria-live="polite">{bid.trim() !== '' && bidCents === null ? <p className={styles.warning}>Usa un monto válido, sin separador de miles y con hasta 2 decimales.</p> : projected !== null && result ? <><p>Inversión con reserva: <strong>{money((bidCents ?? 0) + result.costs)}</strong></p><p>{projected < 0 ? 'Pérdida estimada' : 'Ganancia estimada'}: <strong>{money(projected)}</strong></p><p className={projected < result.profit ? styles.warning : undefined}>{projected < result.profit ? `${money(result.profit - projected)} por debajo de tu objetivo.` : 'Alcanzas tu objetivo con estos supuestos.'}</p></> : bid.trim() !== '' ? <p>Confirma venta, gastos y objetivo para evaluar esta oferta.</p> : null}</div></details>
