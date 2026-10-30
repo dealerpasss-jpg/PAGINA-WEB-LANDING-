@@ -13,3 +13,7 @@ test('optimized exact approved full-frame asset and real public route/sitemap ex
  assert.match(readFileSync(new URL('../app/vehiculos/hyundai-elantra-eco-2018/page.tsx',import.meta.url),'utf8'),/VehicleDetail slug="hyundai-elantra-eco-2018"/);
  assert.match(readFileSync(new URL('../app/sitemap.ts',import.meta.url),'utf8'),/\/vehiculos\/hyundai-elantra-eco-2018/);
 });
+test('catalogue overview never promises original photos for every listing',()=>{
+ const source=readFileSync(new URL('../components/VehicleExplorer.tsx',import.meta.url),'utf8');
+ assert.match(source,/algunas portadas son editadas o provisionales/);assert.doesNotMatch(source,/en cada ficha encontrarás también las fotografías originales/);
+});

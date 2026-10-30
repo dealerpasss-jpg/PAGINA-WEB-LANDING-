@@ -40,6 +40,6 @@ export default function VehicleExplorer({ vehicles }: { vehicles: CatalogueVehic
       <p className={styles.resultCount} role="status" aria-live="polite" aria-atomic="true">{filtered ? `${matches.length} de ${vehicles.length} vehículos` : `${matches.length} vehículos`}{(filtered || filters.sort !== 'featured') && <button data-dp-button="quiet" type="button" onClick={reset}>Restablecer</button>}</p>
     </div>
     {matches.length ? <VehicleCards vehicles={matches} priority search={catalogueQuery(params)} /> : <div className={styles.emptyResults}><span className={styles.eyebrow}>SIN COINCIDENCIAS</span><h3>Probemos con otra búsqueda.</h3><p>No hay vehículos que coincidan con estos filtros. Prueba otra marca, un modelo o un año.</p><button data-dp-button="primary" type="button" onClick={reset}>Ver todo el inventario <ArrowIcon direction="right" /></button></div>}
-    <p className={styles.catalogueNote}>Datos proporcionados por el vendedor. Las portadas tienen el fondo editado; en cada ficha encontrarás también las fotografías originales.</p>
+    <p className={styles.catalogueNote}>Datos proporcionados por el vendedor. Revisa las notas de cada imagen: algunas portadas son editadas o provisionales. Solicita fotos actuales antes de comprar.</p>
   </section>;
 }
