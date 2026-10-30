@@ -28,12 +28,14 @@ const Calculator=componentModule(resolve(root,'components/PurchaseCalculator.tsx
 test('real calculator initially presents one question, mobile numeric input and no invented result',()=>{
   const html=renderToStaticMarkup(React.createElement(Calculator));
   assert.match(html,/PREGUNTA 1 DE 3/);
-  assert.match(html,/¿En cuánto podrías vender el carro\?/);
+  assert.match(html,/¿En cuánto lo venderías\?/);
   assert.match(html,/inputMode="decimal"/);
-  assert.match(html,/aria-current="step"/);
-  assert.match(html,/0 de 3 datos listos/);
-  assert.match(html,/No se guarda al salir o recargar/);
-  assert.match(html,/Los importes pendientes no se cuentan como cero/);
+  assert.match(html,/aria-label="Teclado numérico"/);
+  assert.match(html,/aria-label="Borrar último dígito"/);
+  assert.match(html,/aria-label="Borrar monto actual"/);
+  assert.match(html,/>Siguiente</);
+  assert.match(html,/No se guardan al salir o recargar/);
+  assert.doesNotMatch(html,/Resultado de la calculadora|Tu límite de puja|<aside/);
   assert.doesNotMatch(html,/\$6,200|\$0\.00/);
   assert.equal((html.match(/<form/g)||[]).length,1);
   assert.equal((html.match(/type="submit"/g)||[]).length,1);
@@ -41,12 +43,15 @@ test('real calculator initially presents one question, mobile numeric input and 
 test('calculator retains explicit total confirmation, unknown exit and native optional offer details',()=>{
   const source=readFileSync(resolve(root,'components/PurchaseCalculator.tsx'),'utf8');
   assert.match(source,/event.preventDefault\(\)/);
-  assert.match(source,/if \(!ready\[step\]\)/);
-  assert.match(source,/No incluyas lo que pagarías por el carro/);
-  assert.match(source,/Lo confirmaré después/);
+  assert.match(source,/if \(!currentValid/);
+  assert.match(source,/no incluyas el precio del carro/);
+  assert.match(source,/Todavía no lo sé/);
   assert.match(source,/checked=\{draft.costsReviewed\}/);
-  assert.match(source,/Confirma la tarifa para el rango calculado/);
-  assert.match(source,/<details className=\{styles.bid\}>/);
+  assert.match(source,/Confirma las comisiones para la puja calculada/);
+  assert.match(source,/const result = step === 3 \? guide.result : null/);
+  assert.match(source,/step !== 3 \? <form/);
+  assert.match(source,/step === 4 \? draft.bid/);
+  assert.match(source,/calculatorKeypadEdit\(raw, key, selection.current\)/);
   assert.doesNotMatch(source,/localStorage|sessionStorage|fetch\(/);
 });
 test('explicit calculator navigation focuses without native scrolling then reveals the heading instantly',()=>{
@@ -57,8 +62,8 @@ test('explicit calculator navigation focuses without native scrolling then revea
   assert.equal(calls.length,2);
   const source=readFileSync(resolve(root,'components/PurchaseCalculator.tsx'),'utf8');
   const css=readFileSync(resolve(root,'components/PurchaseCalculator.module.css'),'utf8');
-  assert.match(source,/if \(mounted.current\) focusCalculatorHeading\(step === 3 \? resultHeading.current : heading.current\); else mounted.current = true/);
-  assert.match(source,/\[step, focusRevision\]/);
-  assert.match(source,/onClick=\{\(\) => focusCalculatorHeading\(heading.current\)\}/);
-  assert.match(css,/\.question,\.amount,\.empty\{scroll-margin-top:110px\}/);
+  assert.match(source,/if \(mounted.current\) focusCalculatorHeading\(heading.current\); else mounted.current = true/);
+  assert.match(source,/\[step, detail, focusRevision\]/);
+  assert.match(source,/move\(index,true\)/);
+  assert.match(css,/\.question,\.resultTitle\{scroll-margin-top:110px/);
 });

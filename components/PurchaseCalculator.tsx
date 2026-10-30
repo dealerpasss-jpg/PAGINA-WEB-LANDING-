@@ -1,90 +1,133 @@
 "use client";
-import { useEffect, useId, useReducer, useRef, useState, type FormEvent } from 'react';
-import { calculatorFields, parseCalculatorAmount } from '@/lib/academy/calculator';
+import { useEffect, useId, useReducer, useRef, useState, type FormEvent, type KeyboardEvent } from 'react';
+import { parseCalculatorAmount } from '@/lib/academy/calculator';
 import { calculatorDraftReducer, emptyCalculatorDraft, hasCalculatorInput } from '@/lib/academy/calculator-draft';
 import { calculatorGuide, calculatorLabels, calculatorSources, costIndexes } from '@/lib/academy/calculator-guide';
 import { focusCalculatorHeading } from '@/lib/academy/calculator-focus';
+import { calculatorKeypadEdit, type CalculatorKey, type CalculatorSelection } from '@/lib/academy/calculator-keypad';
+import { calculatorToolNavigation, type CalculatorView } from '@/lib/academy/calculator-device';
 import ArrowIcon from './ArrowIcon';
 import styles from './PurchaseCalculator.module.css';
 const money = (cents: number) => new Intl.NumberFormat('es-US', { style: 'currency', currency: 'USD' }).format(cents / 100);
-const steps = ['Venta', 'Gastos', 'Objetivo'];
-const questions = ['¿En cuánto podrías vender el carro?', '¿Cuánto gastarías además de la compra?', '¿Cuánto quieres que te quede?'];
-const formatHelp = 'Sin separador de miles: 12000. Punto o coma solo para decimales, por ejemplo 12000,50.';
-
-function AmountField({ id, label, value, hint, invalid, onChange, large = false }: { id: string; label: string; value: string; hint?: string; invalid: boolean; onChange: (value: string) => void; large?: boolean }) {
-  return <div className={`${styles.field} ${large ? styles.largeField : ''}`}>
-    <label htmlFor={id}>{label}</label>
-    <div className={styles.input}><span aria-hidden="true">$</span><input id={id} type="text" inputMode="decimal" autoComplete="off" maxLength={12} placeholder="Escribe un monto" value={value} aria-invalid={invalid} aria-describedby={`${id}-help${invalid ? ` ${id}-error` : ''}`} onChange={event => onChange(event.target.value)} /></div>
-    <small id={`${id}-help`}>{hint || formatHelp}</small>
-    {invalid && <small className={styles.error} id={`${id}-error`}>Ingresa un monto válido de 0 a 999999999, con hasta 2 decimales.{label === 'Venta estimada' ? ' La venta debe ser mayor que cero.' : ''}</small>}
-  </div>;
-}
+const questions = ['¿En cuánto lo venderías?', '¿Cuánto suman los gastos?', '¿Cuánto quieres ganar?'];
+const detailQuestions = ['¿Cuánto cobran subasta y dealer?', '¿Cuánto cuesta el transporte?', '¿Cuánto cuesta repararlo?', '¿Cuánto pagarías en impuestos?', '¿Cuánto cuestan título y trámites?', '¿Cuánto reservas para imprevistos?'];
+const digits = ['7','8','9','4','5','6','1','2','3','0'] as const;
 
 export default function PurchaseCalculator() {
   const id = useId();
   const [draft, dispatch] = useReducer(calculatorDraftReducer, undefined, emptyCalculatorDraft);
   const [step, setStep] = useState(0);
-  const [attempted, setAttempted] = useState(false);
+  const [detail, setDetail] = useState(0);
   const [editing, setEditing] = useState(false);
-  const heading = useRef<HTMLHeadingElement>(null);
-  const resultHeading = useRef<HTMLHeadingElement>(null);
+  const [attempted, setAttempted] = useState(false);
+  const [keyMessage, setKeyMessage] = useState('');
   const [focusRevision, setFocusRevision] = useState(0);
+  const heading = useRef<HTMLHeadingElement>(null);
+  const amountInput = useRef<HTMLInputElement>(null);
+  const undoView = useRef<CalculatorView | null>(null);
+  const [keypadRevision, setKeypadRevision] = useState(0);
   const mounted = useRef(false);
-  useEffect(() => { if (mounted.current) focusCalculatorHeading(step === 3 ? resultHeading.current : heading.current); else mounted.current = true; }, [step, focusRevision]);
+  const selection = useRef<CalculatorSelection | null>(null);
+  useEffect(() => { if (selection.current) amountInput.current?.setSelectionRange(selection.current.start, selection.current.end); }, [keypadRevision]);
+  useEffect(() => { if (mounted.current) focusCalculatorHeading(heading.current); else mounted.current = true; }, [step, detail, focusRevision]);
   const guide = calculatorGuide(draft);
-  const { values, bid, example } = draft;
-  const { result, ready } = guide;
-  const bidCents = parseCalculatorAmount(bid);
+  const detailed = step === 1 && draft.costsMode === 'details';
+  const fieldIndex = step === 0 ? 0 : step === 2 ? 7 : costIndexes[detail];
+  const raw = step === 4 ? draft.bid : step === 1 && !detailed ? draft.totalCosts : draft.values[fieldIndex];
+  const parsed = parseCalculatorAmount(raw);
+  const currentValid = parsed !== null && (step !== 0 || parsed > 0);
+  const invalid = (raw.trim() !== '' || attempted) && !currentValid;
+  const question = step === 4 ? '¿Cuánto piensas pujar?' : detailed ? detailQuestions[detail] : questions[step];
+  const fieldLabel = step === 4 ? 'Tu posible puja' : step === 1 && !detailed ? 'Total de gastos adicionales' : calculatorLabels[fieldIndex];
+  const result = step === 3 ? guide.result : null;
+  const bidCents = parseCalculatorAmount(draft.bid);
   const projected = result && bidCents !== null ? result.sale - result.costs - bidCents : null;
-  const invalid = (value: string, positive = false) => (value.trim() !== '' || attempted) && (parseCalculatorAmount(value) === null || (positive && parseCalculatorAmount(value) === 0));
-  function move(next: number, edit = false) { setAttempted(false); setEditing(edit); setStep(next); setFocusRevision(value => value + 1); }
-  function edit(index: number) { move(index, step === 3 || editing); }
-  function advance(event: FormEvent) {
-    event.preventDefault();
-    if (!ready[step]) { setAttempted(true); return; }
-    move(editing ? 3 : step + 1);
+  const stepValues = [guide.sale !== null && guide.sale > 0 ? money(guide.sale) : 'Pendiente', guide.costs !== null ? `${money(guide.costs)}${guide.costsComplete ? '' : ' · parcial'}` : 'Pendiente', guide.profit !== null ? money(guide.profit) : 'Pendiente'];
+
+  function move(next: number, edit = false, nextDetail = 0) {
+    setStep(next); setDetail(nextDetail); setEditing(edit); setAttempted(false); setKeyMessage(''); selection.current = null; setFocusRevision(value => value + 1);
+  }
+  function change(value: string) {
+    if (step === 4) dispatch({ type: 'bid', value });
+    else if (step === 1 && !detailed) dispatch({ type: 'cost-total', value });
+    else dispatch({ type: 'field', index: fieldIndex, value });
+    setKeyMessage('');
+  }
+  function press(key: CalculatorKey) {
+    const edit = calculatorKeypadEdit(raw, key, selection.current);
+    if (!edit.accepted) { setKeyMessage('Hasta 9 cifras y 2 decimales. Puedes borrar o corregir el monto.'); return; }
+    change(edit.value); selection.current = { start: edit.caret, end: edit.caret }; setKeypadRevision(value => value + 1);
+  }
+  function advance(event?: FormEvent) {
+    event?.preventDefault();
+    if (!currentValid || (step === 1 && !detailed && !draft.costsReviewed)) { setAttempted(true); return; }
+    if (detailed && detail < 5) { move(1, editing, detail + 1); return; }
+    move(editing || step === 4 ? 3 : step + 1);
+  }
+  function skip() {
+    if (detailed && detail < 5) move(1, editing, detail + 1);
+    else move(editing ? 3 : 2);
+  }
+  function back() {
+    if (detailed && detail > 0) move(1, editing, detail - 1);
+    else if (editing || step === 4) move(3);
+    else move(Math.max(0, step - 1), false, step === 2 && draft.costsMode === 'details' ? 5 : 0);
+  }
+  function keyboard(event: KeyboardEvent<HTMLFormElement>) {
+    if (event.altKey || event.ctrlKey || event.metaKey || event.nativeEvent.isComposing) return;
+    const target = event.target as HTMLElement;
+    if (target.closest('summary')) return;
+    if (event.key === 'Enter' && !target.closest('button, a, input[type="checkbox"]')) { event.preventDefault(); advance(); return; }
+    if (target.tagName === 'INPUT' || target.tagName === 'TEXTAREA') return;
+    const key = /^\d$/.test(event.key) ? event.key as CalculatorKey : ['.',','].includes(event.key) ? 'decimal' : event.key === 'Backspace' ? 'backspace' : event.key === 'Delete' ? 'clear' : null;
+    if (key) { event.preventDefault(); press(key); }
   }
   function tool(type: 'example' | 'clear' | 'undo') {
-    dispatch({ type });
-    move(type === 'clear' ? 0 : 3);
+    if (type === 'undo' && !draft.undo) return;
+    const next = calculatorToolNavigation({ step, detail, editing }, undoView.current, type, calculatorDraftReducer(draft, { type }) !== draft, hasCalculatorInput(draft));
+    undoView.current = next.undo; dispatch({ type }); move(next.view.step, next.view.editing, next.view.detail);
   }
-  const stepValues = [guide.sale !== null && guide.sale > 0 ? money(guide.sale) : 'Pendiente', guide.costs !== null ? `${money(guide.costs)}${guide.costsComplete ? '' : ' · parcial'}` : 'Pendiente', guide.profit !== null ? money(guide.profit) : 'Pendiente'];
+
   return <div className={styles.calculator}>
-    <div className={styles.toolbar}><span className={styles.currency}>USD <span>· Dólares estadounidenses</span></span><div><button data-dp-button="secondary" data-dp-size="compact" type="button" onClick={() => tool('example')}>Usar ejemplo</button><button data-dp-button="secondary" data-dp-size="compact" type="button" disabled={!hasCalculatorInput(draft)} onClick={() => tool('clear')}>Limpiar</button></div></div>
-    {draft.notice && <div className={styles.draftNotice}><p role="status">{draft.notice === 'cleared' ? 'Se limpiaron los valores.' : draft.notice === 'example' ? 'Se cargó un ejemplo ilustrativo.' : 'Restauramos tus valores anteriores.'}</p>{draft.undo && <button data-dp-button="secondary" data-dp-size="compact" type="button" onClick={() => tool('undo')}>Deshacer</button>}</div>}
-    {example && <p className={styles.example}><span />Ejemplo ilustrativo. No son tarifas ni precios recomendados; reemplázalos por tus valores.</p>}
-    <div className={styles.layout} data-review={step === 3}><div className={styles.formArea}>
-      <nav className={styles.progress} aria-label="Pasos del cálculo">{steps.map((label, index) => <button key={label} type="button" aria-current={step === index ? 'step' : undefined} onClick={() => edit(index)}><span>{ready[index] ? '✓' : `0${index + 1}`}</span>{label}</button>)}</nav>
-      <p className={styles.stepCount}>{step === 3 ? 'TU RESUMEN' : `PREGUNTA ${step + 1} DE 3`}</p>
-      <h3 ref={heading} tabIndex={-1} className={styles.question}>{step === 3 ? result ? 'Un límite claro. Una mejor decisión.' : 'Revisa lo que falta por confirmar.' : questions[step]}</h3>
-      {step < 3 ? <form noValidate onSubmit={advance}>
-        {step === 0 && <><p className={styles.intro}>Partimos de una venta realista para calcular hacia atrás cuánto podrías pagar.</p><AmountField id={`${id}-sale`} label="Venta estimada" large value={values[0]} invalid={invalid(values[0], true)} onChange={value => dispatch({ type: 'field', index: 0, value })} /><div className={styles.source}><span>¿DÓNDE ENCUENTRO ESTE VALOR?</span><p>{calculatorSources[0]}</p></div></>}
-        {step === 1 && <><p className={styles.intro}>Solo gastos adicionales. <strong>No incluyas lo que pagarías por el carro</strong> ni tu ganancia.</p>
-          <div className={styles.mode} role="group" aria-label="Cómo ingresar los gastos"><button data-dp-button="chip" aria-pressed={draft.costsMode === 'total'} type="button" onClick={() => { dispatch({ type: 'cost-mode', value: 'total' }); setAttempted(false); }}>Ya tengo el total</button><button data-dp-button="chip" aria-pressed={draft.costsMode === 'details'} type="button" onClick={() => { dispatch({ type: 'cost-mode', value: 'details' }); setAttempted(false); }}>Ayúdame a sumarlos</button></div>
-          {draft.costsMode === 'total' ? <><AmountField id={`${id}-total`} label="Total de gastos adicionales" large value={draft.totalCosts} invalid={invalid(draft.totalCosts)} onChange={value => dispatch({ type: 'cost-total', value })} />
-            <label className={styles.confirm}><input type="checkbox" checked={draft.costsReviewed} onChange={event => dispatch({ type: 'cost-reviewed', value: event.target.checked })} /><span>Revisé comisiones de subasta y dealer, transporte, reparaciones, impuestos, documentos e imprevistos. Este total incluye lo que aplica a mi operación.</span></label>
-            <p className={styles.tip}>Si aún no tienes el total, usa “Ayúdame a sumarlos” con tus cotizaciones. No pongas 0 en un gasto que todavía no conoces.</p></> : <><p className={styles.tip}>Usa tus cotizaciones. Deja pendiente lo que no conoces; escribe 0 solo si no aplica o decides no reservar ese monto.</p><div className={styles.fields}>{costIndexes.map(index => <AmountField key={index} id={`${id}-${calculatorFields[index].key}`} label={calculatorLabels[index]} value={values[index]} hint={calculatorSources[index]} invalid={invalid(values[index])} onChange={value => dispatch({ type: 'field', index, value })} />)}</div><p className={styles.format}>{formatHelp}</p><p className={styles.costSum}>Gastos ingresados <strong>{money(guide.knownCosts)}</strong>{guide.missingCosts.length > 0 && <span>Faltan {guide.missingCosts.length} por confirmar; no están incluidos en esta suma.</span>}</p></>}
-        </>}
-        {step === 2 && <><p className={styles.intro}>Elige tu ganancia objetivo. La restaremos junto a los gastos para encontrar tu límite de puja.</p><AmountField id={`${id}-profit`} label="Ganancia objetivo" large value={values[7]} invalid={invalid(values[7])} onChange={value => dispatch({ type: 'field', index: 7, value })} /><div className={styles.source}><span>TU OBJETIVO, NO UNA PROMESA</span><p>{calculatorSources[7]} Si no buscas ganancia, escribe 0.</p></div></>}
-        {attempted && !ready[step] && <p className={styles.validation} role="alert">{step === 1 ? draft.costsMode === 'total' ? 'Escribe un total válido y confirma qué gastos incluye, o déjalo pendiente.' : 'Revisa los gastos señalados. Si falta una cotización, puedes continuar con ese dato pendiente.' : 'Revisa el monto para continuar.'}</p>}
-        <div className={styles.navigation}>{step > 0 || editing ? <button data-dp-button="secondary" type="button" onClick={() => move(editing ? 3 : step - 1)}>{editing ? 'Volver al resumen' : 'Atrás'}</button> : <span />}<button data-dp-button="primary" type="submit">{editing ? 'Actualizar resumen' : step === 2 ? 'Ver mi límite' : 'Continuar'}<ArrowIcon /></button></div>
-        {step === 1 && !ready[1] && <button className={styles.skip} type="button" onClick={() => move(editing ? 3 : 2)}>Lo confirmaré después →</button>}
-      </form> : <div className={styles.review}>
-        <p className={styles.intro}>{result ? 'Este cálculo usa tus importes. Puedes cambiar cualquier valor sin empezar de nuevo.' : 'Puedes seguir editando sin perder nada. Un gasto desconocido no es $0: necesitamos confirmarlo antes de mostrar una puja máxima.'}</p>
-        {steps.map((label, index) => <button className={styles.reviewRow} type="button" key={label} onClick={() => edit(index)}><span><small>{['Venta estimada', 'Gastos adicionales', 'Ganancia objetivo'][index]}</small><strong>{stepValues[index]}</strong></span><span>{ready[index] ? 'Editar' : 'Completar'} <ArrowIcon /></span></button>)}
-        {!ready[1] && draft.costsMode === 'details' && <p className={styles.tip}>Pendientes: {guide.missingCosts.map(index => calculatorLabels[index]).join(', ')}.</p>}
-        <p className={styles.reviewNote}>Las comisiones pueden cambiar con la puja. Confirma la tarifa para el rango calculado antes de comprar.</p>
+    <div className={styles.device}>
+      <div className={styles.deviceBar}><span><b>DP</b> / MARGEN</span><span>USD</span></div>
+      {draft.example && <p className={styles.example}>Ejemplo ilustrativo · reemplaza los importes por los tuyos.</p>}
+      {step !== 3 ? <form noValidate onSubmit={advance} onKeyDown={keyboard}>
+        <div className={styles.screen}>
+          <div className={styles.screenMeta}><span>{step === 4 ? 'COMPROBAR UNA OFERTA' : `PREGUNTA ${step + 1} DE 3${detailed ? ` · GASTO ${detail + 1} DE 6` : ''}`}</span><span className={styles.dots} aria-hidden="true">{[0,1,2].map(index => <i key={index} data-active={index === step} />)}</span></div>
+          <h3 ref={heading} tabIndex={-1} className={styles.question}>{question}</h3>
+          <label htmlFor={`${id}-amount`} className={styles.amountLabel}>{fieldLabel}</label>
+          <div className={styles.screenAmount}><span aria-hidden="true">$</span><input ref={amountInput} id={`${id}-amount`} aria-describedby={`${id}-hint${invalid ? ` ${id}-error` : ''}`} aria-invalid={invalid} data-long={raw.length > 8} inputMode="decimal" type="text" autoComplete="off" maxLength={12} placeholder="—" value={raw} onChange={event => { change(event.target.value); selection.current = { start: event.target.selectionStart ?? event.target.value.length, end: event.target.selectionEnd ?? event.target.value.length }; }} onSelect={event => { selection.current = { start: event.currentTarget.selectionStart ?? raw.length, end: event.currentTarget.selectionEnd ?? raw.length }; }} /></div>
+          <p id={`${id}-hint`} className={styles.screenHint}>{step === 1 ? 'Gastos adicionales: no incluyas el precio del carro ni tu ganancia.' : step === 4 ? 'Precio de martillo, sin comisiones.' : step === 0 ? 'Usa una venta realista, no el anuncio más alto.' : 'Tu objetivo en dólares. No es una promesa de ganancia.'}</p>
+        </div>
+        <div className={styles.controls}>
+          <div className={styles.controlBar}><button type="button" className={styles.back} disabled={step === 0 && !editing} onClick={back}>← {editing || step === 4 ? 'Resultado' : 'Atrás'}</button><span>Marca el monto</span><button type="button" className={styles.clearKey} aria-label="Borrar monto actual" onClick={() => press('clear')}>C</button></div>
+          <div className={styles.keypad} role="group" aria-label="Teclado numérico">{digits.slice(0,9).map(digit => <button type="button" key={digit} onClick={() => press(digit)}>{digit}</button>)}<button type="button" aria-label="Separador decimal" onClick={() => press('decimal')}>.</button><button type="button" onClick={() => press('0')}>0</button><button type="button" aria-label="Borrar último dígito" onClick={() => press('backspace')}><svg aria-hidden="true" viewBox="0 0 24 24" fill="none"><path d="M9 5h11v14H9l-6-7 6-7Z"/><path d="m11 9 6 6m0-6-6 6"/></svg></button></div>
+          {invalid && <p className={styles.error} id={`${id}-error`} role="alert">Usa un monto {step === 0 ? 'mayor que 0' : 'de 0 a 999999999'} y hasta 2 decimales. Sin separadores de miles.</p>}
+          {keyMessage && <p className={styles.error} role="status">{keyMessage}</p>}
+          {step === 1 && !detailed && <label className={styles.confirm}><input type="checkbox" checked={draft.costsReviewed} onChange={event => dispatch({ type: 'cost-reviewed', value: event.target.checked })} /><span>Mi total incluye todos los gastos que aplican.<small>Subasta/dealer · transporte · reparación · impuestos · documentos · reserva.</small></span></label>}
+          {attempted && step === 1 && !detailed && !draft.costsReviewed && <p className={styles.error} role="alert">Confirma qué gastos incluye el total, o déjalo pendiente.</p>}
+          <button className={styles.next} type="submit">{step === 4 ? 'Evaluar oferta' : editing && (!detailed || detail === 5) ? 'Ver resultado' : step === 2 ? 'Calcular mi límite' : 'Siguiente'}<ArrowIcon /></button>
+          {step === 1 && (!currentValid || (!detailed && !draft.costsReviewed)) && <button type="button" className={styles.skip} onClick={skip}>Todavía no lo sé · dejar pendiente</button>}
+          {step === 1 && <div className={styles.costMode}><button type="button" aria-pressed={draft.costsMode === 'total'} onClick={() => { dispatch({ type: 'cost-mode', value: 'total' }); move(1, editing); }}>Tengo el total</button><button type="button" aria-pressed={draft.costsMode === 'details'} onClick={() => { dispatch({ type: 'cost-mode', value: 'details' }); move(1, editing); }}>Sumar gasto por gasto</button></div>}
+          <details key={`${step}-${detail}`} className={styles.help}><summary>¿De dónde saco este valor?</summary><p>{step === 4 ? 'Usa el precio de martillo que estás considerando. Al evaluar lo sumaremos a tus gastos confirmados.' : step === 1 && !detailed ? 'Suma tus cotizaciones de subasta y dealer, transporte, reparaciones, impuestos, documentos e imprevistos. No incluyas lo que pagarías por el carro ni tu ganancia. Confirma las comisiones para el rango de puja calculado.' : calculatorSources[fieldIndex]}</p><p>Sin separador de miles: 12000. Usa punto o coma para decimales: 12000,50. Un gasto que no conoces queda pendiente; escribe 0 solo si no aplica.</p></details>
+        </div>
+      </form> : <div className={styles.result} aria-label="Resultado de la calculadora">
+        <div className={styles.screen}><div className={styles.screenMeta}><span>{result ? 'CÁLCULO COMPLETO' : 'AÚN FALTAN DATOS'}</span><span>USD</span></div><h3 ref={heading} tabIndex={-1} className={styles.resultTitle}>{result ? 'Tu límite de puja' : 'Completa lo pendiente'}</h3>{result ? <><p className={result.maximum > 0 ? styles.finalAmount : styles.noMargin}>{result.maximum > 0 ? money(result.maximum) : 'Sin margen para pujar'}</p><p className={styles.screenHint}>{result.maximum > 0 ? 'Precio del carro en subasta, antes de comisiones y demás gastos.' : 'Los gastos y tu objetivo consumen la venta estimada.'}</p></> : <p className={styles.pending}>Todavía no hay un precio final. Los importes desconocidos no se cuentan como cero.</p>}</div>
+        <div className={styles.receipt}>
+          <p className={styles.receiptTitle}>TUS NÚMEROS <span>TOCA PARA EDITAR</span></p>
+          {['Venta estimada','Gastos adicionales','Ganancia objetivo'].map((label,index) => <button className={styles.editRow} type="button" key={label} onClick={() => move(index,true)}><span>{label}</span><strong>{stepValues[index]}</strong><ArrowIcon /><span className={styles.srOnly}>{guide.ready[index] ? 'Editar' : 'Completar'}</span></button>)}
+          {!guide.costsComplete && draft.costsMode === 'details' && <p className={styles.note}>Pendientes: {guide.missingCosts.map(index => calculatorLabels[index]).join(', ')}.</p>}
+          {result && <><div className={styles.investment}><span>Inversión al pujar el máximo, con reserva</span><strong>{result.maximum > 0 ? money(result.maximum + result.costs) : 'No disponible'}</strong></div>{result.maximum <= 0 && <p className={styles.error}>Gastos y objetivo consumen toda la venta{result.maximum < 0 ? ` y la superan en ${money(-result.maximum)}` : ''}.</p>}<details className={styles.help}><summary>Ver cómo se calcula</summary><p>Venta estimada − gastos adicionales − ganancia objetivo = límite de puja.</p><p className={styles.formula}>{money(result.sale)} − {money(result.costs)} − {money(result.profit)} = {money(result.maximum)}</p></details></>}
+          {projected !== null && result && <div className={styles.offer}><span>CON TU OFERTA DE {money(bidCents!)}</span><p>Inversión con reserva <strong>{money(bidCents! + result.costs)}</strong></p><p>{projected < 0 ? 'Pérdida estimada' : 'Ganancia estimada'} <strong>{money(projected)}</strong></p><small>{projected < result.profit ? `${money(result.profit - projected)} por debajo de tu objetivo.` : 'Alcanzas tu objetivo con estos supuestos.'}</small></div>}
+          {result && <button className={styles.evaluate} type="button" onClick={() => move(4)}>¿Y si pujo otra cantidad?<ArrowIcon /></button>}
+          <p className={styles.note}>Estimación, no garantía de ganancia. Confirma las comisiones para la puja calculada, la condición del carro y su precio de venta.</p>
+        </div>
       </div>}
-    </div><aside className={styles.result} aria-label="Resumen y resultado de la calculadora">
-      <span className={styles.eyebrow}>HASTA CUÁNTO PODRÍA PUJAR</span><h3 ref={resultHeading} tabIndex={-1} className={result && result.maximum > 0 ? styles.amount : styles.empty}>{result ? result.maximum > 0 ? money(result.maximum) : 'Sin margen para pujar' : 'Tu límite, sin adivinar.'}</h3>
-      <p className={styles.resultCaption}>{result ? result.maximum > 0 ? 'Precio del carro en subasta, antes de comisiones y demás gastos.' : 'Los gastos y el objetivo consumen la venta estimada.' : 'Lo calculamos cuando confirmes venta, gastos y objetivo.'}</p>
-      <p className={styles.status} role="status">{ready.filter(Boolean).length} de 3 datos listos{!ready[1] ? ' · Gastos pendientes' : ''}</p>
-      <dl className={styles.summary}>{['Venta estimada', 'Gastos adicionales', 'Ganancia objetivo'].map((label, index) => <div key={label}><dt>{label}</dt><dd>{stepValues[index]}</dd></div>)}</dl>
-      {step === 3 && <button className={styles.editValues} data-dp-button="inverse" data-dp-size="compact" type="button" onClick={() => focusCalculatorHeading(heading.current)}>{result ? 'Editar mis valores' : 'Completar datos pendientes'}<ArrowIcon /></button>}
-      {result ? <><div className={styles.goal}><span>Inversión al pujar el máximo{result.maximum > 0 ? ', con reserva' : ''}</span><strong>{result.maximum > 0 ? money(result.maximum + result.costs) : 'No disponible'}</strong></div>{result.maximum <= 0 && <p className={styles.warning}>Gastos y objetivo consumen toda la venta{result.maximum < 0 ? ` y la superan en ${money(-result.maximum)}` : ''}.</p>}
-        <details className={styles.breakdown}><summary>Ver cómo se calcula</summary><p>Venta estimada − gastos adicionales − ganancia objetivo = límite de puja.</p><dl><div><dt>Venta estimada</dt><dd>{money(result.sale)}</dd></div><div><dt>− Gastos y reserva</dt><dd>{money(result.costs)}</dd></div><div><dt>− Ganancia objetivo</dt><dd>{money(result.profit)}</dd></div><div><dt>= Límite calculado</dt><dd>{money(result.maximum)}</dd></div></dl></details></> : <p className={styles.warning}>Los importes pendientes no se cuentan como cero. Todavía no hay un límite de puja completo.</p>}
-      <details className={styles.bid}><summary>¿Ya tienes una oferta en mente?</summary><label htmlFor={`${id}-bid`}>Tu posible puja <small>Precio de martillo, sin comisiones.</small></label><div className={styles.input}><span aria-hidden="true">$</span><input id={`${id}-bid`} type="text" inputMode="decimal" autoComplete="off" maxLength={12} placeholder="Escribe un monto" value={bid} onChange={event => dispatch({ type: 'bid', value: event.target.value })} aria-invalid={bid.trim() !== '' && bidCents === null} aria-describedby={`${id}-bid-result`} /></div><div id={`${id}-bid-result`} aria-live="polite">{bid.trim() !== '' && bidCents === null ? <p className={styles.warning}>Usa un monto válido, sin separador de miles y con hasta 2 decimales.</p> : projected !== null && result ? <><p>Inversión con reserva: <strong>{money((bidCents ?? 0) + result.costs)}</strong></p><p>{projected < 0 ? 'Pérdida estimada' : 'Ganancia estimada'}: <strong>{money(projected)}</strong></p><p className={projected < result.profit ? styles.warning : undefined}>{projected < result.profit ? `${money(result.profit - projected)} por debajo de tu objetivo.` : 'Alcanzas tu objetivo con estos supuestos.'}</p></> : bid.trim() !== '' ? <p>Confirma venta, gastos y objetivo para evaluar esta oferta.</p> : null}</div></details>
-      <p className={styles.disclaimer}>Estimación, no garantía de ganancia. Confirma tarifas para tu puja, inspecciona el carro y revisa su valor de venta.</p><small className={styles.unsaved}>Puedes volver y editar aquí sin perder datos. No se guarda al salir o recargar.</small>
-    </aside></div>
+      <div className={styles.deviceFoot}><span>DEALERPASS</span><span>CRITERIO ANTES DE PUJAR</span></div>
+    </div>
+    <div className={styles.tools}><button type="button" onClick={() => tool('example')}>Usar ejemplo</button><button type="button" disabled={!hasCalculatorInput(draft)} onClick={() => tool('clear')}>Borrar todo</button>{draft.undo && <button type="button" onClick={() => tool('undo')}>Deshacer</button>}</div>
+    {draft.notice && <p className={styles.notice} role="status">{draft.notice === 'cleared' ? 'Se borraron los valores. Puedes deshacer.' : draft.notice === 'example' ? 'Ejemplo ilustrativo: no son tarifas ni precios recomendados.' : 'Restauramos tus valores anteriores.'}</p>}
+    <p className={styles.unsaved}>Puedes volver y editar sin perder tus valores. No se guardan al salir o recargar.</p>
   </div>;
 }

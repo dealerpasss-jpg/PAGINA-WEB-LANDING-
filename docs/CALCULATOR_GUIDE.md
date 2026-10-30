@@ -1,27 +1,25 @@
-# Guided purchase calculator
+# DealerPass keypad calculator
 
-## Scope
+## Scope and math
 
-Shared public `/metodo-margen` and authorized workspace calculator presentation. No change to authentication, plans, payments, data storage or account writes. The original `calculator.ts` parser and `calculatorScenario`/`purchaseBudget` functions are unchanged.
+Shared public `/metodo-margen` and authorized workspace component. No auth, plans, payment, account data or persistence changes. Original `calculator.ts`, `purchaseBudget`, guide adapter and draft reducer are unchanged.
 
-## Fast path
+Three main questions: realistic resale estimate → additional expenses → target profit. The final answer is the maximum **hammer bid**, not a predicted sale price or guaranteed gain. The aggregate cost shortcut requires explicit confirmation of applicable auction/dealer, transport, repairs, tax, documents and contingency; it excludes vehicle purchase price and profit. Optional detail mode asks each of six costs on the same display/keypad. Blank/invalid stays pending, never zero. Switching modes preserves independent raw drafts and cannot double-count; modifying the total resets confirmation.
 
-Three questions: realistic resale estimate → additional operating costs → desired profit. The result is the maximum **hammer bid for the vehicle**, not a sale-price prediction. A single additional-cost total requires an explicit confirmation that applicable auction/dealer fees, transport, repairs, taxes, documents and contingency are included. It excludes the vehicle price and target profit.
+## Device interaction
 
-The optional detailed mode uses the existing six cost fields. Each must contain a valid explicit amount, including zero only when known/not applicable. Blank or invalid is pending, never assumed zero. The displayed partial subtotal labels missing costs and cannot unlock a final bid. Unknown costs can be left pending while continuing to the objective and review.
+One compact device: question/amount display, integrated0–9/decimal/backspace keypad, C for current amount, and Siguiente. No persistent result sidebar or final price while entering values, even when the underlying fields are complete. Only the final action mounts the result receipt; incomplete costs show a pending state without a bid. The optional offer evaluator reuses the keypad and cannot alter scenario fields.
 
-Total and detailed drafts are independent: switching never overwrites manual totals, adds both modes, or copies incomplete sums. Editing the total invalidates its confirmation. The aggregate adapter sends the one explicit reviewed total through the existing exact-cent calculation; internal zero placeholders are not represented as confirmed individual categories.
+The display remains an accessible editable text input with decimal inputMode and native keyboard/paste/selection support. Keypad edits preserve the logical caret/selection and synchronize input selection without focusing it or opening a phone keyboard. Key handling is scoped to the active form, not the document. Digits/backspace work from within that form; Enter on the display/question advances; buttons, checkboxes, links and summaries keep native activation. There is no operation submission, navigation or network call.
 
-## Interaction
+Keypad rejects duplicate separators, more than2decimal places, overlong/raw or out-of-range amounts. Native pasted invalid text is retained for correction and cannot advance. Decimal comma/point and exact-cent parser remain unchanged. C clears only the active entry; Borrar todo clears all values and offers Undo. Example begins at question1 with illustrative values (not an instant price). Undo restores raw values, mode/review/bid and the previous step/detail/editing context; later edits invalidate stale Undo.
 
-Native form Enter validates the current question and advances without navigation. Back, step navigation and review edits retain raw input strings. Headings receive focus after navigation; mobile review brings the result above editing controls and offers a direct focus action back to them. No input auto-focus on initial mount. Decimal mobile keyboard, comma/point decimal support, no thousand separators; validation errors remain visible. Example and Clear keep one-step Undo for raw detailed fields, total, mode, review checkbox and optional bid. Further edits invalidate Undo. Example remains labeled illustrative.
+Explicit question/result navigation uses focus preventScroll then instant scrollIntoView(start), with110px scoped heading margin to clear sticky navigation. No autofocus on initial mount or digit input. Reduced-motion/transparency and forced-color fallbacks are scoped. Key targets are at least44px, keypad50–57px, Next54–56px.
 
-No persistence added: the UI states values are lost on reload/leave. Optional offer evaluation remains available; no final evaluation with incomplete inputs. Negative/zero maximum is not presented as a usable bid. Fee amounts must be rechecked for the resulting bid range. No invented fee presets, rates or guaranteed profit.
+## Result
 
-## Verification
+A receipt replaces the keypad only at the end: maximum bid, editable sale/cost/profit rows, investment at maximum, optional formula and alternate offer. A zero/negative budget says no margin rather than presenting a usable bid. Unknown expenses never unlock a final answer. Reminders require actual applicable fee amounts and checking the fee for the resulting bid range. No invented rates or presets. Values are not saved on leaving/reloading.
 
-Regression tests cover original/aggregate parity, unknown vs explicit zero, review confirmation invalidation, mode isolation, exact raw Undo, malformed inputs, negative budgets and cents. Actual component SSR checks initial one-question semantics. Full build and browser interaction checks are recorded in the release checkpoint, not inferred from these unit tests. Real-phone and authenticated workspace rendering require separate QA.
+## Verification limits
 
-## Sticky-header focus correction
-
-Public browser QA found that native `focus()` could put the mobile result amount behind the sticky header. Explicit step/review navigation now focuses without automatic scrolling, then reveals the heading at the start of the viewport with a scoped 110px scroll margin. Scrolling is instant (no motion added), initial mount does not scroll, and typing does not trigger navigation. The same helper is used by “Editar mis valores”. Math, values, layout and permissions are unchanged.
+Unit tests cover core math parity, invalid/blank/zero, mode isolation, Undo, keypad selection/decimal/bounds and UI tool restoration. Actual component SSR confirms a single input/keypad and no premature result DOM. Full aggregate checks and actual preview/browser outcomes are recorded separately in the release checkpoint; source tests do not imply browser/phone/authenticated visual verification.
