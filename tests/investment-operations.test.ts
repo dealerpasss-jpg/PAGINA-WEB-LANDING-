@@ -125,3 +125,13 @@ test('nonadmins can choose a table without receiving or rendering finance data',
  const html=renderToStaticMarkup(React.createElement(C,{items:[{id:'safe',title:'Assigned car',status:'repairing',photo:null,facts:[{label:'Año',value:'2018'}]}],admin:false}));
  assert.match(html,/<table/);assert.match(html,/2018/);assert.doesNotMatch(html,/scope="col">Inversión|scope="col">Resultado|Datos por completar|Mayor inversión|Ganancia|\$/);
 });
+
+
+test('table scroll region contains its absolute accessible caption on narrow screens',()=>{
+ const css=readFileSync(new URL('../app/mi-cuenta/inversiones/investments.css',import.meta.url),'utf8');
+ assert.match(css,/\.inventory-table-wrap \{ position:relative; display:block; min-width:0; max-width:100%; overflow-x:auto;/);
+ const C=component('components/investments/InventoryCollection.tsx','vista=table');
+ const html=renderToStaticMarkup(React.createElement(C,{items:[{id:'safe',title:'Car',status:'listed',photo:null}],admin:false}));
+ assert.match(html,/class="inventory-table-wrap"[^>]*role="region"[^>]*tabIndex="0"/i);
+ assert.match(html,/<caption class="sr-only">/);
+});
