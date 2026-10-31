@@ -68,8 +68,8 @@ export default async function Page({
   const name = greetingName(who.user.user_metadata);
   const profileComplete = ["first_name","last_name","country","region","experience","goal","language"].every(k=>!!who.user.user_metadata?.[k]);
   return (
-    <AccountShell team={who.profile.role !== "student"} title={name ? `Hola, ${name}.` : "Bienvenido a tu espacio."}>
-      <p className="account-welcome"><span className="account-role">{who.profile.role === "student" ? "Estudiante" : who.profile.role === "admin" ? "Administración" : "Equipo DealerPass"}</span> Tu formación y herramientas, en un solo lugar.</p>
+    <AccountShell overview={!selected && who.profile.role === "admin"} team={who.profile.role !== "student"} title={name ? `Hola, ${name}.` : "Bienvenido a tu espacio."}>
+      {(selected || who.profile.role !== "admin") && <p className="account-welcome"><span className="account-role">{who.profile.role === "student" ? "Estudiante" : who.profile.role === "admin" ? "Administración" : "Equipo DealerPass"}</span> Tu formación y herramientas, en un solo lugar.</p>}
       {searchParams.message && (
         <p className="account-notice" role="status">
           {searchParams.message}

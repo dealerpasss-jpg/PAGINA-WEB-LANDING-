@@ -167,3 +167,6 @@
  .dialogCaption { flex-direction:column; gap:8px; padding-top:14px; }.dialogCaption span { font-size:10px; }
 }
 @media(prefers-reduced-motion:reduce) { .card,.cover img,.makeFilters button { transition:none; }.cover:hover img { transform:none; } }
+
+/* Keep the provisional image’s original bottom-left label unobscured. */
+.gallery[data-provisional="true"] .expandHint { top:12px; bottom:auto; }

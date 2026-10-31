@@ -16,7 +16,7 @@ export async function investmentDashboardFor(role:string):Promise<InvestmentDash
     const db=database();
     const [vehicles,expenses]=await Promise.all([
       allRows<DashboardVehicle>((from,to)=>db.from('investment_vehicles').select('id,title,status,purchase_cents,asking_cents,sale_cents,created_at').order('created_at',{ascending:false}).order('id').range(from,to)),
-      allRows<DashboardExpense>((from,to)=>db.from('investment_expenses').select('vehicle_id,amount_cents').is('voided_at',null).order('id').range(from,to)),
+      allRows<DashboardExpense>((from,to)=>db.from('investment_expenses').select('vehicle_id,amount_cents,category').is('voided_at',null).order('id').range(from,to)),
     ]);
     return {state:'ready',snapshot:dashboardInvestmentSummary(vehicles,expenses)};
   } catch {

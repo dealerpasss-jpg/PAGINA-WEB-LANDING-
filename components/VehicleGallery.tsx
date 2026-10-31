@@ -67,7 +67,7 @@ export default function VehicleGallery({ photos, vehicle, notice }: { photos: Ca
     dialog.current?.showModal();
   }
 
-  return <div className={styles.gallery} id="fotografias" role="region" aria-label={`Fotografías de ${vehicle}`}>
+  return <div className={styles.gallery} data-provisional={notice ? true : undefined} id="fotografias" role="region" aria-label={`Fotografías de ${vehicle}`}>
     <div className={styles.mainPhoto} onKeyDown={onKeyDown} onTouchStart={onTouchStart} onTouchEnd={onTouchEnd}>
       <button className={styles.photoExpand} type="button" onClick={open} aria-label={`Ampliar foto ${selected + 1}: ${photo.caption}`}><Image key={photo.src} src={photo.src} alt={`${vehicle}: ${photo.caption}`} width={1448} height={1086} sizes="(max-width: 900px) 100vw, 65vw" priority={selected === 0} /><span className={styles.expandHint}><svg viewBox="0 0 24 24" fill="none" aria-hidden="true"><path d="M8 4H4v4m12-4h4v4M4 16v4h4m12-4v4h-4" /></svg>Ampliar</span></button>
       {photos.length>1&&<><button type="button" data-dp-button="icon" className={styles.previous} aria-label="Foto anterior" onClick={() => move(-1)}><ArrowIcon direction="left" /></button><button type="button" data-dp-button="icon" className={styles.next} aria-label="Foto siguiente" onClick={() => move(1)}><ArrowIcon direction="right" /></button></>}

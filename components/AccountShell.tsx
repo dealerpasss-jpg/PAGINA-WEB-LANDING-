@@ -6,17 +6,19 @@ export default function AccountShell({
   kicker = "DEALERPASS / MI ESPACIO",
   compact = false,
   team = false,
+  overview = false,
   children,
 }: {
   title: string;
   kicker?: string;
   compact?: boolean;
   team?: boolean;
+  overview?: boolean;
   children: React.ReactNode;
 }) {
   return (
     <WorkspaceFrame team={team}><section
-      className={`account-shell${compact ? " account-shell-compact" : ""}`}
+      className={`account-shell${compact ? " account-shell-compact" : ""}${overview ? " account-shell-overview" : ""}`}
     >
       <header className="account-heading">
       <div className="account-top">

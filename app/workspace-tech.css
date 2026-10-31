@@ -257,3 +257,16 @@ body:has(.workspace-shell) { background:#f3f3ef; }
   .workspace-shell .workspace-sidebar nav a[aria-current="page"] { color:HighlightText; background:Highlight; border:1px solid Highlight; }
   .workspace-shell .workspace-content :is(.workspace-profile-group,.workspace-profile-save,.workspace-preparation) { background:Canvas; color:CanvasText; border:1px solid CanvasText; box-shadow:none; backdrop-filter:none; -webkit-backdrop-filter:none; }
 }
+
+/* Main administrator overview only: data precedes the long account introduction. */
+.workspace-shell .workspace-content .account-shell-overview { padding-top:22px; }
+.workspace-shell .workspace-content .account-shell-overview .account-heading { display:flex; align-items:center; justify-content:space-between; gap:16px; margin-bottom:18px; padding-bottom:14px; }
+.workspace-shell .workspace-content .account-shell-overview .account-top { margin:0; }
+.workspace-shell .workspace-content .account-shell-overview .account-top>a { display:none; }
+.workspace-shell .workspace-content .account-shell-overview h1 { font-size:25px; letter-spacing:-.035em; overflow-wrap:anywhere; }
+@media(max-width:800px) {
+  .workspace-shell .workspace-content .account-shell-overview { padding-top:16px; }
+  .workspace-shell .workspace-content .account-shell-overview .account-heading { margin-bottom:12px; padding-bottom:12px; }
+  .workspace-shell .workspace-content .account-shell-overview .account-top { display:none; }
+  .workspace-shell .workspace-content .account-shell-overview h1 { font-size:22px; }
+}
