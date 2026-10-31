@@ -1,5 +1,24 @@
-export type CatalogueVehicle = {slug:string;title:string;price:number;specs:string[][];description:string;bodyStyle?:string;photoNotice?:string;photos:{src:string;caption:string}[]};
+export type CatalogueVehicle = {slug:string;title:string;price:number;specs:string[][];description:string;bodyStyle?:string;photoNotice?:string;originalPhotos?:boolean;photos:{src:string;caption:string}[]};
 export const vehicleCatalogue: CatalogueVehicle[] = [
+  {
+    slug: 'mazda6-grand-touring-2016',
+    title: 'Mazda6 Grand Touring 2016',
+    price: 850000,
+    bodyStyle: 'Sedán',
+    originalPhotos: true,
+    specs: [['Año','2016'],['Versión','Grand Touring'],['Millaje','161.000 mi'],['Exterior','Blanco'],['Interior','Crema / marfil'],['Rines','Oscuros'],['Techo','Sunroof'],['Título','Limpio*']],
+    description: 'Mazda6 Grand Touring blanco, con interior crema / marfil, rines oscuros y sunroof. El propietario reporta título limpio y ausencia de fallas mecánicas; esta información no sustituye una inspección independiente ni certifica el historial de accidentes. Las ocho fotografías originales permiten revisar el exterior, el interior y sus detalles de uso. Confirma la condición y disponibilidad antes de comprar.',
+    photos: [
+      {src:'/vehicles/mazda6-grand-touring-2016/portada.webp',caption:'Vista delantera en diagonal · fotografía original'},
+      {src:'/vehicles/mazda6-grand-touring-2016/frente.webp',caption:'Vista frontal'},
+      {src:'/vehicles/mazda6-grand-touring-2016/diagonal-opuesta.webp',caption:'Vista delantera opuesta'},
+      {src:'/vehicles/mazda6-grand-touring-2016/trasera.webp',caption:'Vista trasera'},
+      {src:'/vehicles/mazda6-grand-touring-2016/conductor.webp',caption:'Puesto de conducción y puerta del conductor'},
+      {src:'/vehicles/mazda6-grand-touring-2016/asientos.webp',caption:'Asientos delanteros e interior crema / marfil'},
+      {src:'/vehicles/mazda6-grand-touring-2016/consola.webp',caption:'Tablero, pantalla y consola central'},
+      {src:'/vehicles/mazda6-grand-touring-2016/techo-interior.webp',caption:'Vista de la cabina y sunroof desde los asientos traseros'},
+    ],
+  },
   {
     slug: 'hyundai-elantra-eco-2018',
     title: 'Hyundai Elantra ECO 2018',

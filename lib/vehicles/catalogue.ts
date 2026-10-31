@@ -9,7 +9,8 @@ export function vehicleSpec(vehicle: CatalogueVehicle, name: string) {
   return vehicle.specs.find(([key]) => key === name)?.[1] || '';
 }
 export function vehicleMake(vehicle: CatalogueVehicle) {
-  return vehicle.title.split(' ')[0];
+  const first = vehicle.title.split(' ')[0];
+  return first === 'Mazda6' ? 'Mazda' : first;
 }
 function normalize(value: string) {
   return value.normalize('NFD').replace(/[\u0300-\u036f]/g, '').toLocaleLowerCase('es').trim();

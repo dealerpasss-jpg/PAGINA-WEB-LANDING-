@@ -17,7 +17,7 @@ export default function VehicleCards({ vehicles, priority = false, search = '' }
           <span className={styles.photoBadge}>{vehicle.photos.length} {vehicle.photos.length===1?'foto':'fotos'} <ArrowIcon direction="up-right" /></span>
         </Link>
         <div className={styles.cardBody}>
-          <span className={styles.eyebrow}>{vehicleSpec(vehicle, 'Año')} · {vehicleSpec(vehicle, 'Combustible')}</span>
+          <span className={styles.eyebrow}>{['Año', 'Combustible'].map(key => vehicleSpec(vehicle, key)).filter(Boolean).join(' · ')}</span>
           <h3><Link href={href}>{vehicle.title}</Link></h3>
           {vehicle.photoNotice&&<p className={styles.provisionalNote}>{vehicle.photoNotice}</p>}
           <div className={styles.chips}>{['Millaje','Transmisión','Exterior'].map(key=>vehicleSpec(vehicle,key)).filter(Boolean).map(value=><span key={value}>{value}</span>)}</div>
