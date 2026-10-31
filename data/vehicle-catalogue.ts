@@ -1,4 +1,4 @@
-export type CatalogueVehicle = {slug:string;title:string;price:number;specs:string[][];description:string;bodyStyle?:string;photoNotice?:string;originalPhotos?:boolean;photos:{src:string;caption:string}[]};
+export type CatalogueVehicle = {slug:string;title:string;price:number|null;availability?:'available'|'coming-soon'|'sold'|'unverified';specs:string[][];description:string;bodyStyle?:string;photoNotice?:string;originalPhotos?:boolean;photos:{src:string;caption:string}[]};
 export const vehicleCatalogue: CatalogueVehicle[] = [
   {
     slug: 'mazda6-grand-touring-2016',
@@ -26,8 +26,8 @@ export const vehicleCatalogue: CatalogueVehicle[] = [
     bodyStyle: 'Sedán',
     photoNotice: 'Foto provisional: visualización de pintura. Fotos actualizadas próximamente.',
     specs: [['Año','2018'],['Versión','ECO'],['Millaje','104.609 mi'],['Combustible','Gasolina'],['Exterior','Blanco'],['Título','Limpio*'],['Estado actual','En proceso de pintura']],
-    description: 'Elantra ECO blanco, actualmente en proceso de pintura. El propietario reporta título limpio y buen funcionamiento del motor, la transmisión y el aire acondicionado; estos datos no sustituyen una inspección independiente. La única imagen disponible es una visualización de pintura, no una fotografía del acabado actual. Confirma la condición y disponibilidad antes de comprar.',
-    photos: [{src:'/vehicles/hyundai-elantra-eco-2018/visualizacion-pintura.webp',caption:'Visualización de pintura · imagen editada; el vehículo sigue en proceso de pintura'}],
+    description: 'Elantra ECO blanco. Consulta su disponibilidad actual en esta ficha. El propietario reporta título limpio y buen funcionamiento del motor, la transmisión y el aire acondicionado; estos datos no sustituyen una inspección independiente. La única imagen disponible es una visualización de pintura, no una fotografía del acabado actual. Confirma la condición y disponibilidad antes de comprar.',
+    photos: [{src:'/vehicles/hyundai-elantra-eco-2018/visualizacion-pintura.webp',caption:'Visualización de pintura · imagen editada, no representa necesariamente el estado actual'}],
   },
   {
     "slug": "ford-escape-se-2016",

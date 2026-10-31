@@ -7,7 +7,9 @@ import type { CatalogueVehicle } from '@/data/vehicle-catalogue';
 import styles from '@/app/vehiculos/vehicles.module.css';
 
 export default function VehicleGallery({ photos, vehicle, notice, originalPhotos = false }: { photos: CatalogueVehicle['photos']; vehicle: string; notice?:string; originalPhotos?:boolean }) {
-  const [selected, setSelected] = useState(0);
+  const [selectedSrc, setSelectedSrc] = useState(()=>photos[0]?.src??'');
+  const selected=Math.max(0,photos.findIndex(item=>item.src===selectedSrc));
+  const setSelected=(index:number)=>setSelectedSrc(photos[index]?.src??photos[0]?.src??'');
   const [expanded, setExpanded] = useState(false);
   const thumbnails = useRef<HTMLDivElement>(null);
   const dialog = useRef<HTMLDialogElement>(null);
@@ -33,7 +35,7 @@ export default function VehicleGallery({ photos, vehicle, notice, originalPhotos
   }, [selected]);
 
   function move(delta: number) {
-    setSelected(current => (current + delta + photos.length) % photos.length);
+    setSelectedSrc(current=>{const index=Math.max(0,photos.findIndex(item=>item.src===current));return photos[(index+delta+photos.length)%photos.length]?.src??'';});
   }
   function onKeyDown(event: KeyboardEvent<HTMLElement>) {
     if (event.key === 'ArrowLeft' || event.key === 'ArrowRight') {
@@ -67,6 +69,7 @@ export default function VehicleGallery({ photos, vehicle, notice, originalPhotos
     dialog.current?.showModal();
   }
 
+  if(!photo)return <p className={styles.note}>No hay fotografías publicadas.</p>;
   return <div className={styles.gallery} data-provisional={notice ? true : undefined} id="fotografias" role="region" aria-label={`Fotografías de ${vehicle}`}>
     <div className={styles.mainPhoto} onKeyDown={onKeyDown} onTouchStart={onTouchStart} onTouchEnd={onTouchEnd}>
       <button className={styles.photoExpand} type="button" onClick={open} aria-label={`Ampliar foto ${selected + 1}: ${photo.caption}`}><Image key={photo.src} src={photo.src} alt={`${vehicle}: ${photo.caption}`} width={1448} height={1086} sizes="(max-width: 900px) 100vw, 65vw" priority={selected === 0} /><span className={styles.expandHint}><svg viewBox="0 0 24 24" fill="none" aria-hidden="true"><path d="M8 4H4v4m12-4h4v4M4 16v4h4m12-4v4h-4" /></svg>Ampliar</span></button>

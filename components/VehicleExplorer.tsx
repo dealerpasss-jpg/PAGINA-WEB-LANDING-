@@ -5,11 +5,13 @@ import { useSyncExternalStore } from 'react';
 import type { CatalogueVehicle } from '@/data/vehicle-catalogue';
 import { filterCatalogue, readCatalogueFilters, vehicleMake, updateCatalogueParams, catalogueQuery, type CatalogueParam } from '@/lib/vehicles/catalogue';
 import { catalogueHistorySnapshot, replaceCatalogueHistory, subscribeCatalogueHistory } from '@/lib/vehicles/catalogue-history';
+import { useLiveCatalogue } from '@/lib/vehicles/use-live-catalogue';
 import VehicleCards from './VehicleCards';
 import ArrowIcon from './ArrowIcon';
 import styles from '@/app/vehiculos/vehicles.module.css';
 
-export default function VehicleExplorer({ vehicles }: { vehicles: CatalogueVehicle[] }) {
+export default function VehicleExplorer({ vehicles:initial }: { vehicles: CatalogueVehicle[] }) {
+  const vehicles=useLiveCatalogue(initial);
   // Keep Next's navigation subscription/SSR snapshot, but never control an input
   // with its delayed history reflection: rapid typing otherwise drops characters.
   const routerParams = useSearchParams();

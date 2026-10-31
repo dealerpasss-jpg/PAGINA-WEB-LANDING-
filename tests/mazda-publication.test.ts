@@ -42,12 +42,12 @@ test('all eight approved optimized photo files match their full-frame publicatio
 test('Mazda route, metadata, sitemap and original-photo notice are correctly wired', () => {
   const route = readFileSync(new URL('../app/vehiculos/mazda6-grand-touring-2016/page.tsx', import.meta.url), 'utf8');
   assert.match(route, /VehicleDetail slug="mazda6-grand-touring-2016"/);
-  assert.match(route, /US\$8\.500/);
+  assert.match(route, /generateMetadata/);assert.match(route,/publicVehicleMetadata/);
   assert.match(route, /161\.000 millas/);
-  assert.match(readFileSync(new URL('../app/sitemap.ts', import.meta.url), 'utf8'), /\/vehiculos\/mazda6-grand-touring-2016/);
+  assert.match(readFileSync(new URL('../app/sitemap.ts', import.meta.url), 'utf8'), /publicCatalogueFallback\(\)\.map/);
   const gallery = readFileSync(new URL('../components/VehicleGallery.tsx', import.meta.url), 'utf8');
   assert.match(gallery, /originalPhotos = false/);
   assert.match(gallery, /Fotografías originales proporcionadas por el vendedor/);
   assert.match(gallery, /La portada tiene el fondo editado/);
-  assert.match(readFileSync(new URL('../components/VehicleDetail.tsx', import.meta.url), 'utf8'), /originalPhotos=\{vehicle.originalPhotos\}/);
+  assert.match(readFileSync(new URL('../components/VehicleDetailView.tsx', import.meta.url), 'utf8'), /originalPhotos=\{vehicle.originalPhotos\}/);
 });

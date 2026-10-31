@@ -38,5 +38,6 @@ export async function saveInvestment(f:FormData) {
  } else if(action==='revoke') {const member=text(f,'member_id',36).toLowerCase();if(!uuid.test(member))throw new Error('Participante inválido.');const result=checked(await db.from('investment_members').update({revoked_at:new Date().toISOString()}).eq('id',member).eq('vehicle_id',id).is('revoked_at',null).select('id'));if(result.data?.length!==1||result.data[0].id!==member)throw new Error('No se retiró el acceso. Puede estar ya retirado o no estar disponible en este vehículo. Recarga la ficha para comprobarlo.');
  } else throw new Error('Acción inválida.');
  } catch(e) {return {error:e instanceof Error && !('code' in e) ? e.message : 'No se pudo guardar. Tus datos siguen en el formulario. Revisa los datos e inténtalo de nuevo.'};}
+ if(action==='vehicle'){revalidatePath('/');revalidatePath('/vehiculos','layout');}
  revalidatePath('/mi-cuenta/inversiones','layout');revalidatePath('/mi-cuenta');redirect(next+'?'+(context?context+'&':'')+'message='+encodeURIComponent(message));
 }

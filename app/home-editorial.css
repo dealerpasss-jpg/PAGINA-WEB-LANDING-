@@ -169,3 +169,6 @@
 }
 @media(max-width:420px) { .home-editorial .he-academy-illustration { grid-template-columns:1fr; gap:16px; text-align:center; }.home-editorial .he-academy-illustration>img { width:208px; max-width:100%; margin-inline:auto; }.home-editorial .he-academy-illustration strong { max-width:240px; margin:9px auto 12px; } }
 @media(prefers-reduced-motion:reduce) { .home-editorial a,.home-editorial img,.home-editorial svg { transition:none!important; transform:none!important; } }
+
+.home-editorial .he-vehicle-meta>.he-vehicle-price-row { flex-wrap:wrap; gap:12px; min-width:0; }
+.home-editorial .he-vehicle-price-row strong { min-width:0; overflow-wrap:anywhere; font-size:clamp(20px,2vw,24px); }

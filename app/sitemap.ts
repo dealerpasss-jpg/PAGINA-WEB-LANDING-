@@ -1,2 +1,3 @@
 import type { MetadataRoute } from "next";
-export default function sitemap(): MetadataRoute.Sitemap { return ["","/academy","/planes","/metodo-margen","/vehiculos","/vehiculos/mazda6-grand-touring-2016","/vehiculos/hyundai-elantra-eco-2018","/vehiculos/ford-escape-se-2016","/vehiculos/ford-edge-2021","/vehiculos/ford-edge-titanium-2018","/vehiculos/ford-explorer-xlt-2013","/vehiculos/subaru-forester-2015","/vehiculos/subaru-impreza-2016","/contacto","/vip"].map(path=>({url:`https://dealerpasss.com${path}`, changeFrequency:"weekly", priority:path ? .7 : 1})); }
+import { publicCatalogueFallback } from "@/lib/vehicles/publication-server";
+export default function sitemap(): MetadataRoute.Sitemap { return ["","/academy","/planes","/metodo-margen","/vehiculos",...publicCatalogueFallback().map(v=>`/vehiculos/${v.slug}`),"/contacto","/vip"].map(path=>({url:`https://dealerpasss.com${path}`, changeFrequency:"weekly", priority:path ? .7 : 1})); }

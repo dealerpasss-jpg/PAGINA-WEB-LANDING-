@@ -170,3 +170,15 @@
 
 /* Keep the provisional image’s original bottom-left label unobscured. */
 .gallery[data-provisional="true"] .expandHint { top:12px; bottom:auto; }
+
+/* Availability is explicit text + icon, never a color-only promise. */
+.availability { display:inline-flex; align-items:center; align-self:flex-start; gap:8px; max-width:100%; padding:8px 11px; margin:0 0 14px; border:1px solid #b5cdbb; border-radius:9px; background:#eef7ef; color:#245239; font-size:12px; font-weight:600; line-height:1.45; overflow-wrap:anywhere; }
+.availability svg { width:17px; height:17px; flex:none; }
+.availability[data-availability=coming-soon] { background:#fff1e5; border-color:#e3bea0; color:#8a350b; }
+.availability[data-availability=sold] { background:#eeeaf6; border-color:#c7bbdf; color:#574274; }
+.availability[data-availability=unverified] { background:#f1f2ee; border-color:#c9cec3; color:#51584d; }
+.availabilityMessage { margin:0 0 20px; color:#51584d; font-size:13px; line-height:1.7; }
+.card[data-availability=sold] { border-color:#cfc5df; }
+.card[data-availability=sold] .cardPrice .price { font-size:26px; color:#574274; }
+.pricePending,.cardBody .price.pricePending { font-size:clamp(22px,2.2vw,30px); }
+@media(forced-colors:active) { .availability,.availability[data-availability=coming-soon],.availability[data-availability=sold],.availability[data-availability=unverified] { background:Canvas; color:CanvasText; border-color:CanvasText; }.card[data-availability=sold] .cardPrice .price,.availabilityMessage { color:CanvasText; } }

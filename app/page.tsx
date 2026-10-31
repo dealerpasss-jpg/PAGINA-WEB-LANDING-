@@ -5,11 +5,11 @@ import ArrowIcon from "@/components/ArrowIcon";
 import Reveal from "@/components/Reveal";
 import Testimonials from "@/components/Testimonials";
 import FAQ from "@/components/FAQ";
-import { vehicleCatalogue } from "@/data/vehicle-catalogue";
+import HomeInventory from "@/components/HomeInventory";
+import { publicCatalogueFallback } from "@/lib/vehicles/publication-server";
 import { marginMethod } from "@/data/margen";
 import "./home-editorial.css";
 
-const money = new Intl.NumberFormat("es-US", { style: "currency", currency: "USD", maximumFractionDigits: 0 });
 const routes = [
   { number: "01", title: "Aprende a mirar.", description: "Historial, condición y documentación. Empieza con las preguntas correctas.", href: "/academy", link: "Conoce la academia" },
   { number: "02", title: "Ponle números.", description: "Reparación, gastos y margen. Define tu límite antes de levantar la mano.", href: "/metodo-margen#calculadora", link: "Prueba la calculadora" },
@@ -58,13 +58,7 @@ export default function HomePage() {
         </div>
       </section>
 
-      <section className="he-section he-inventory" aria-labelledby="inventory-home-title">
-        <Reveal className="he-intro"><div><span className="he-eyebrow">04 / VEHÍCULOS DEALERPASS</span><h2 id="inventory-home-title">Cada carro,<br /><span>con su propia historia.</span></h2></div><div><p>Explora fotografías, características y precios. Revisa cada detalle antes de dar el siguiente paso.</p><Link href="/vehiculos" className="he-inline-link">Ver los {vehicleCatalogue.length} vehículos <ArrowIcon /></Link></div></Reveal>
-        <div className="he-inventory-grid">{vehicleCatalogue.slice(0,3).map(vehicle => <Link className="he-vehicle" href={`/vehiculos/${vehicle.slug}`} key={vehicle.slug}>
-          <div className="he-vehicle-image"><Image src={vehicle.photos[0].src} alt={vehicle.title} fill sizes="(max-width: 640px) 100vw, (max-width: 1000px) 50vw, 33vw"/><span>{vehicle.photos.length} fotos <ArrowIcon direction="up-right" /></span></div>
-          <div className="he-vehicle-meta"><span>{vehicle.specs.find(([label])=>label==='Millaje')?.[1]} · {vehicle.specs.find(([label])=>label==='Transmisión')?.[1]}</span><h3>{vehicle.title}</h3><div><strong>{money.format(vehicle.price/100)}</strong><span className="he-vehicle-arrow">Ver carro <ArrowIcon /></span></div></div>
-        </Link>)}</div><p className="he-disclosure">Datos proporcionados por el vendedor. Consulta condiciones y fotografías en cada ficha.</p>
-      </section>
+      <HomeInventory initial={publicCatalogueFallback()}/>
       <Testimonials />
       <FAQ compact />
       <section className="he-section he-close" aria-labelledby="elite-home-title"><div><span className="he-eyebrow">DEALERPASS ELITE / ADMISIÓN INDIVIDUAL</span><h2 id="elite-home-title">Tu siguiente capítulo<br />empieza con<br /><span>una conversación.</span></h2></div><div className="he-close-action"><span className="he-close-mark" aria-hidden="true"><ArrowIcon direction="up-right" /></span><p>Primero conocemos tu experiencia y tus objetivos. Después evaluamos juntos si Elite es para ti.</p><Link href="/vip" className="he-primary">Solicitar entrevista <ArrowIcon /></Link><small>Acceso sujeto a evaluación y aprobación.</small></div></section>

@@ -85,6 +85,12 @@ assert.match(menu, /aria-label="Acceso a tu cuenta"/, 'Account actions must have
 for (const href of ['/academy', '/vehiculos', '/metodo-margen', '/planes', '/mi-cuenta', '/contacto']) {
   assert.ok(menu.includes(`href="${href}"`), `Mobile navigation lost destination: ${href}`);
 }
+// Server-only publication identities must never ship in a client chunk or HTML.
+const publicationManifest=readFileSync(path.join(root,'lib/vehicles/publication-manifest.ts'),'utf8');
+const privatePublicationIds=[...publicationManifest.matchAll(/'([a-f0-9-]{36})'/g)].map(match=>match[1]);
+assert.equal(privatePublicationIds.length,8,'Reviewed publication manifest must retain eight exact identities.');
+const publicOutputs=[...walk(path.join(root,'.next/static')).filter(file=>file.endsWith('.js')),...pages];
+for(const file of publicOutputs){const content=readFileSync(file,'utf8');for(const id of privatePublicationIds)assert.ok(!content.includes(id),`Private publication identity leaked into ${path.relative(root,file)}`);}
 if (errors.length) { console.error(errors.join('\n')); process.exit(1); }
 console.log(`Build structure passed: ${documents.size} static pages, ${checkedLinks} internal links, ${checkedImages} image references. No missing static anchors or duplicate IDs.`);
 console.log('Hero fallback passed: only road/open hand in initial HTML; stable eligible geometry and native no-JS fallback; original motion assets available.');

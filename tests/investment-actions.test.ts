@@ -121,3 +121,10 @@ test('return-context tampering cannot redirect off-site or bypass save validatio
 test('legacy submissions without inventory context retain their previous success destination',async()=>{
  const h=harness();await assert.rejects(h.save(closingForm(h)),/TEST_REDIRECT/);assert.deepEqual(h.calls.find(x=>x[0]==='redirect'),['redirect','/mi-cuenta/inversiones/'+vehicle+'?message=Cambios%20guardados.']);
 });
+
+test('successful vehicle edit invalidates public catalogue and home without altering mutation payload',async()=>{
+ const h=harness();await assert.rejects(h.save(closingForm(h)),/TEST_REDIRECT/);
+ assert.ok(h.calls.some(c=>JSON.stringify(c)===JSON.stringify(['revalidate','/'])));
+ assert.ok(h.calls.some(c=>JSON.stringify(c)===JSON.stringify(['revalidate','/vehiculos','layout'])));
+ const update=h.calls.find(c=>c[0]==='update')?.[1] as Record<string,unknown>;assert.equal('publication' in update,false);assert.equal('photos' in update,false);
+});

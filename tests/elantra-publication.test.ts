@@ -11,7 +11,7 @@ test('approved Elantra has one labelled paint visualization and owner-attributed
 test('optimized exact approved full-frame asset and real public route/sitemap exist',()=>{
  const image=readFileSync(new URL('../public/vehicles/hyundai-elantra-eco-2018/visualizacion-pintura.webp',import.meta.url));assert.equal(createHash('sha256').update(image).digest('hex'),'438c2d9799b07658b42cc8da3bd4d736c66c8dee89f5c345f69476e3fde2c86b');assert.ok(image.length<250*1024);
  assert.match(readFileSync(new URL('../app/vehiculos/hyundai-elantra-eco-2018/page.tsx',import.meta.url),'utf8'),/VehicleDetail slug="hyundai-elantra-eco-2018"/);
- assert.match(readFileSync(new URL('../app/sitemap.ts',import.meta.url),'utf8'),/\/vehiculos\/hyundai-elantra-eco-2018/);
+ assert.match(readFileSync(new URL('../app/sitemap.ts',import.meta.url),'utf8'),/publicCatalogueFallback\(\)\.map/);
 });
 test('catalogue overview never promises original photos for every listing',()=>{
  const source=readFileSync(new URL('../components/VehicleExplorer.tsx',import.meta.url),'utf8');
@@ -20,5 +20,5 @@ test('catalogue overview never promises original photos for every listing',()=>{
 
 test('Elantra metadata matches the approved public asking price',()=>{
  const page=readFileSync(new URL('../app/vehiculos/hyundai-elantra-eco-2018/page.tsx',import.meta.url),'utf8');
- assert.match(page,/US\$7\.500/);assert.doesNotMatch(page,/US\$8\.200/);
+ assert.match(page,/generateMetadata/);assert.match(page,/publicVehicleMetadata\('hyundai-elantra-eco-2018'/);assert.doesNotMatch(page,/US\$/);
 });

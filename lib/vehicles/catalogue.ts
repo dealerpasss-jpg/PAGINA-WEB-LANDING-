@@ -30,8 +30,9 @@ export function filterCatalogue(vehicles: CatalogueVehicle[], filters: Catalogue
     return (!filters.make || normalize(vehicleMake(vehicle)) === normalize(filters.make)) && words.every(word => text.includes(word));
   });
   const number = (vehicle: CatalogueVehicle, name: string) => Number(vehicleSpec(vehicle, name).replace(/\D/g, ''));
-  if (filters.sort === 'price-asc') result.sort((a, b) => a.price - b.price);
-  if (filters.sort === 'price-desc') result.sort((a, b) => b.price - a.price);
+  const priceOrder = (a:CatalogueVehicle,b:CatalogueVehicle,direction:number) => a.price===null?(b.price===null?0:1):b.price===null?-1:(a.price-b.price)*direction;
+  if (filters.sort === 'price-asc') result.sort((a, b) => priceOrder(a,b,1));
+  if (filters.sort === 'price-desc') result.sort((a, b) => priceOrder(a,b,-1));
   if (filters.sort === 'year-desc') result.sort((a, b) => number(b, 'Año') - number(a, 'Año'));
   if (filters.sort === 'mileage-asc') result.sort((a, b) => number(a, 'Millaje') - number(b, 'Millaje'));
   return result;
