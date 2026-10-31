@@ -103,11 +103,11 @@ test('reopening requires both close fields cleared and preserves optimistic lock
 });
 
 test('successful save retains only bounded inventory context with fixed local destination',async()=>{
- const h=harness();const f=closingForm(h);f.set('inventory_query','buscar=Ford+%26+blanco&estado=listed&pendientes=purchase&orden=result-desc&next=https://evil.test&message=forged');
+ const h=harness();const f=closingForm(h);f.set('inventory_query','buscar=Ford+%26+blanco&estado=listed&pendientes=purchase&orden=result-desc&vista=table&next=https://evil.test&message=forged');
  await assert.rejects(h.save(f),/TEST_REDIRECT/);
  const destination=new URL(String(h.calls.find(x=>x[0]==='redirect')?.[1]),'https://dealerpasss.com');
  assert.equal(destination.origin,'https://dealerpasss.com');assert.equal(destination.pathname,'/mi-cuenta/inversiones/'+vehicle);
- assert.deepEqual(Object.fromEntries(destination.searchParams),{buscar:'Ford & blanco',estado:'listed',pendientes:'purchase',orden:'result-desc',message:'Cambios guardados.'});
+ assert.deepEqual(Object.fromEntries(destination.searchParams),{buscar:'Ford & blanco',estado:'listed',pendientes:'purchase',orden:'result-desc',vista:'table',message:'Cambios guardados.'});
  const data=h.calls.find(x=>x[0]==='update')?.[1] as Record<string,unknown>;assert.equal('inventory_query' in data,false);assert.equal(data.sale_cents,20050);assert.equal(data.version,2);
 });
 test('return-context tampering cannot redirect off-site or bypass save validation',async()=>{

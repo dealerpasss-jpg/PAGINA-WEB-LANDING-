@@ -9,22 +9,22 @@ export function filterInvestmentView<T extends { title: string; status: string }
 
 export const investmentSorts=['recent','title','cost-desc','result-desc','purchase-oldest'] as const;
 export type InvestmentSort=typeof investmentSorts[number];
-export type InvestmentFilters={query:string;status:string;pending:''|'all'|MissingField;sort:InvestmentSort};
-export type InvestmentParam='buscar'|'estado'|'pendientes'|'orden';
+export type InvestmentFilters={query:string;status:string;pending:''|'all'|MissingField;sort:InvestmentSort;view:'cards'|'table'};
+export type InvestmentParam='buscar'|'estado'|'pendientes'|'orden'|'vista';
 export function readInvestmentFilters(params:Pick<URLSearchParams,'get'>):InvestmentFilters {
  const status=params.get('estado')??'';
  const pending=params.get('pendientes')??'';
  const sort=params.get('orden')??'recent';
- return {query:(params.get('buscar')??'').slice(0,100),status:Object.hasOwn(statuses,status)?status:'',pending:pending==='all'||Object.hasOwn(missingFields,pending)?pending as InvestmentFilters['pending']:'',sort:investmentSorts.includes(sort as InvestmentSort)?sort as InvestmentSort:'recent'};
+ return {query:(params.get('buscar')??'').slice(0,100),status:Object.hasOwn(statuses,status)?status:'',pending:pending==='all'||Object.hasOwn(missingFields,pending)?pending as InvestmentFilters['pending']:'',sort:investmentSorts.includes(sort as InvestmentSort)?sort as InvestmentSort:'recent',view:params.get('vista')==='table'?'table':'cards'};
 }
 export function investmentQuery(params:Pick<URLSearchParams,'get'>) {
  const f=readInvestmentFilters(params);const query=new URLSearchParams();
- if(f.query)query.set('buscar',f.query);if(f.status)query.set('estado',f.status);if(f.pending)query.set('pendientes',f.pending);if(f.sort!=='recent')query.set('orden',f.sort);
+ if(f.query)query.set('buscar',f.query);if(f.status)query.set('estado',f.status);if(f.pending)query.set('pendientes',f.pending);if(f.sort!=='recent')query.set('orden',f.sort);if(f.view==='table')query.set('vista','table');
  return query.toString();
 }
 export function updateInvestmentParams(params:Pick<URLSearchParams,'toString'>,key:InvestmentParam,value:string) {
  const next=new URLSearchParams(params.toString());
- if(value&&!(key==='orden'&&value==='recent'))next.set(key,value);else next.delete(key);
+ if(value&&!((key==='orden'&&value==='recent')||(key==='vista'&&value==='cards')))next.set(key,value);else next.delete(key);
  return next;
 }
 export type InvestmentViewItem={title:string;status:string;financial?:{cost:number|null;result:number|null;purchasedOn:string|null;missing:MissingField[]}};

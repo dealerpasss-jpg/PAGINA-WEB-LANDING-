@@ -23,9 +23,9 @@ test('pending queue uses known missing fields, explicit zeros are complete, sold
 });
 test('inventory URL state whitelists fields, bounds search, encodes delimiters and ignores redirect destinations',()=>{
  const q=new URLSearchParams('buscar=Ford+%26+blanco&estado=listed&pendientes=all&orden=result-desc&next=https://evil.test&message=secret');
- assert.deepEqual(view.readInvestmentFilters(q),{query:'Ford & blanco',status:'listed',pending:'all',sort:'result-desc'});
+ assert.deepEqual(view.readInvestmentFilters(q),{query:'Ford & blanco',status:'listed',pending:'all',sort:'result-desc',view:'cards'});
  const round=new URLSearchParams(view.investmentQuery(q));assert.equal(round.get('buscar'),'Ford & blanco');assert.deepEqual([...round.keys()],['buscar','estado','pendientes','orden']);
- assert.deepEqual(view.readInvestmentFilters(new URLSearchParams('estado=constructor&pendientes=__proto__&orden=bogus')),{query:'',status:'',pending:'',sort:'recent'});
+ assert.deepEqual(view.readInvestmentFilters(new URLSearchParams('estado=constructor&pendientes=__proto__&orden=bogus')),{query:'',status:'',pending:'',sort:'recent',view:'cards'});
  assert.equal(view.readInvestmentFilters(new URLSearchParams({buscar:'x'.repeat(1000)})).query.length,100);
  assert.equal(view.updateInvestmentParams(new URLSearchParams(),'buscar','recent').get('buscar'),'recent');
 });
@@ -68,11 +68,11 @@ function component(path:string,params='',overrides:Record<string,unknown>={}) {
  const code=ts.transpileModule(readFileSync(new URL('../'+path,import.meta.url),'utf8'),{compilerOptions:{module:ts.ModuleKind.CommonJS,target:ts.ScriptTarget.ES2022,jsx:ts.JsxEmit.ReactJSX,esModuleInterop:true}}).outputText;
  const module={exports:{} as any};new Function('require','module','exports',code)((id:string)=>{assert.ok(id in imports,'Unexpected import '+id);return imports[id];},module,module.exports);return module.exports.default;
 }
-test('actual inventory renders semantic desktop table and mobile cards with filtered safe return context',()=>{
- const C=component('components/investments/InventoryCollection.tsx','buscar=Ford&estado=listed&orden=result-desc&message=not-carried');
+test('explicit table view renders semantic columns with filtered safe return context',()=>{
+ const C=component('components/investments/InventoryCollection.tsx','buscar=Ford&estado=listed&orden=result-desc&vista=table&message=not-carried');
  const items=rows.map(row=>({...row,photo:null,financial:{...row.financial,purchase:row.financial.cost,expenses:0,reference:1000}}));
  const html=renderToStaticMarkup(React.createElement(C,{items,admin:true}));
- assert.match(html,/<table/);assert.match(html,/scope="col"/);assert.match(html,/inventory-cards-admin/);assert.match(html,/2 de 4 vehículos/);assert.match(html,/-\$1.00/);assert.match(html,/data-negative="true"/);assert.match(html,/buscar=Ford&amp;estado=listed&amp;orden=result-desc/);assert.doesNotMatch(html,/not-carried/);assert.match(html,/No confirma cobros/);
+ assert.match(html,/<table/);assert.match(html,/scope="col"/);assert.doesNotMatch(html,/class="investment-grid inventory-cards"/);assert.match(html,/2 de 4 vehículos/);assert.match(html,/-\$1.00/);assert.match(html,/data-negative="true"/);assert.match(html,/buscar=Ford&amp;estado=listed&amp;orden=result-desc/);assert.doesNotMatch(html,/not-carried/);assert.match(html,/No confirma cobros/);
 });
 test('nonadmin display never renders financial columns or missing-data tools, even with a crafted URL',()=>{
  const C=component('components/investments/InventoryCollection.tsx','pendientes=all&orden=cost-desc');
@@ -96,13 +96,32 @@ test('detail quick actions preserve real form contracts and place expense entry 
 test('empty filtered inventory stays actionable and reset returns keyboard focus to search',()=>{
  const noResults=component('components/investments/InventoryCollection.tsx','buscar=does-not-exist&estado=listed');
  const html=renderToStaticMarkup(React.createElement(noResults,{items:rows.map(r=>({...r,photo:null})),admin:true}));assert.match(html,/No hay vehículos con estos filtros/);assert.match(html,/Ver todo el inventario/);assert.doesNotMatch(html,/<table/);
- const browser=new EventTarget();let url=new URL('https://dealerpasss.com/mi-cuenta/inversiones?buscar=missing&estado=listed&pendientes=all&orden=cost-desc&message=known#inventario');
+ const browser=new EventTarget();let url=new URL('https://dealerpasss.com/mi-cuenta/inversiones?buscar=missing&estado=listed&pendientes=all&orden=cost-desc&vista=table&message=known#inventario');
  Object.defineProperty(browser,'location',{get:()=>url});Object.defineProperty(browser,'history',{value:{replaceState:(_a:unknown,_b:unknown,next:string)=>{url=new URL(next,url);}}});
  const previous=Object.getOwnPropertyDescriptor(globalThis,'window');Object.defineProperty(globalThis,'window',{value:browser,configurable:true});let focused=0;
  try {
   const C=component('components/investments/InventoryCollection.tsx',url.search,{react:{...React,useId:()=> 'reset-test',useRef:()=>({current:{focus:()=>{focused++;}}}),useSyncExternalStore:(_sub:unknown,_snap:unknown,ssr:()=>string)=>ssr()}});
   const tree=C({items:rows.map(r=>({...r,photo:null})),admin:true});
   const find=(node:any):any=>!node||typeof node!=='object'?null:node.type==='button'&&node.props.children==='Ver todo el inventario'?node:React.Children.toArray(node.props?.children).map(find).find(Boolean);
-  const reset=find(tree);assert.ok(reset);reset.props.onClick();assert.equal(focused,1);assert.equal(url.search,'?message=known');assert.equal(url.hash,'#inventario');
+  const reset=find(tree);assert.ok(reset);reset.props.onClick();assert.equal(focused,1);assert.equal(url.search,'?vista=table&message=known');assert.equal(url.hash,'#inventario');
  } finally {if(previous)Object.defineProperty(globalThis,'window',previous);else Reflect.deleteProperty(globalThis,'window');}
+});
+
+
+test('cards are default on every screen, include real photos and known technical facts without invented fields',()=>{
+ const C=component('components/investments/InventoryCollection.tsx');
+ const html=renderToStaticMarkup(React.createElement(C,{items:[{id:'car',title:'Sample car',status:'listed',photo:{src:'/existing-photo.webp',unoptimized:false},facts:[{label:'Millaje',value:'101.000 mi'},{label:'Exterior',value:'Blanco'}],photoNotice:'Foto provisional: visualización de pintura.'}],admin:true}));
+ assert.match(html,/class="investment-grid inventory-cards"/);assert.doesNotMatch(html,/<table/);assert.match(html,/src="\/existing-photo.webp"/);assert.match(html,/101.000 mi/);assert.match(html,/visualización de pintura/);
+ assert.match(html,/aria-pressed="true"[^>]*>.*?Tarjetas con fotos/);assert.match(html,/aria-pressed="false"[^>]*>.*?Tabla/);
+});
+test('view state is allowlisted, persists with return/save context and defaults safely',()=>{
+ for(const value of ['','cards','constructor','https://evil.test'])assert.equal(view.readInvestmentFilters(new URLSearchParams({vista:value})).view,'cards');
+ const q=new URLSearchParams('buscar=Ford&estado=listed&vista=table');assert.equal(view.readInvestmentFilters(q).view,'table');assert.equal(view.investmentQuery(q),'buscar=Ford&estado=listed&vista=table');
+ assert.equal(view.updateInvestmentParams(q,'vista','cards').get('vista'),null);assert.equal(view.updateInvestmentParams(q,'buscar','cards').get('buscar'),'cards');
+ const C=component('components/investments/InventoryReturnLink.tsx','buscar=Ford&vista=table&next=https://evil.test');const html=renderToStaticMarkup(React.createElement(C));assert.match(html,/buscar=Ford&amp;vista=table#inventario/);assert.doesNotMatch(html,/evil/);
+});
+test('nonadmins can choose a table without receiving or rendering finance data',()=>{
+ const C=component('components/investments/InventoryCollection.tsx','vista=table&pendientes=all&orden=cost-desc');
+ const html=renderToStaticMarkup(React.createElement(C,{items:[{id:'safe',title:'Assigned car',status:'repairing',photo:null,facts:[{label:'Año',value:'2018'}]}],admin:false}));
+ assert.match(html,/<table/);assert.match(html,/2018/);assert.doesNotMatch(html,/scope="col">Inversión|scope="col">Resultado|Datos por completar|Mayor inversión|Ganancia|\$/);
 });
