@@ -22,7 +22,7 @@ export const vehicleCatalogue: CatalogueVehicle[] = [
   {
     slug: 'hyundai-elantra-eco-2018',
     title: 'Hyundai Elantra ECO 2018',
-    price: 820000,
+    price: 750000,
     bodyStyle: 'Sedán',
     photoNotice: 'Foto provisional: visualización de pintura. Fotos actualizadas próximamente.',
     specs: [['Año','2018'],['Versión','ECO'],['Millaje','104.609 mi'],['Combustible','Gasolina'],['Exterior','Blanco'],['Título','Limpio*'],['Estado actual','En proceso de pintura']],

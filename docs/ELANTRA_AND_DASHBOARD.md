@@ -2,7 +2,7 @@
 
 ## Public catalogue
 - One new static listing: `/vehiculos/hyundai-elantra-eco-2018`.
-- Asking price USD8,200; 2018 ECO, white, 104,609 miles, sedan. Exact transmission specification is not confirmed and is omitted, not guessed.
+- Asking price USD7,500 (owner correction, 2026-10-31; public catalogue only); 2018 ECO, white, 104,609 miles, sedan. Exact transmission specification is not confirmed and is omitted, not guessed.
 - Clean title / engine, transmission and AC condition are attributed to the owner's report, not independent inspection. Vehicle remains in painting. No assertion of finished actual paintwork.
 - Exactly one approved edited image, labelled “Visualización de pintura”. Separate readable notice: “Foto provisional: visualización de pintura. Fotos actualizadas próximamente.” No hidden implication of original additional photos. The single-image gallery omits irrelevant previous/next/thumbnail controls; enlarge/close remains.
 - Full 1448×1086 derivative, no crop or watermark removal. Source `exec-711429e9-5066-4bc7-87e0-42e163afa87b.png`, SHA256 `838b8222458e9c9fa4bf226de29620924f76997d9d7b54070f5d718579e59c80`; WebP `438c2d9799b07658b42cc8da3bd4d736c66c8dee89f5c345f69476e3fde2c86b`,202702bytes. Cover badge moves away from embedded lower-left label, zoom disabled on this provisional cover.
