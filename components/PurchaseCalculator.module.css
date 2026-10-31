@@ -5,3 +5,45 @@
 @media(prefers-reduced-motion:reduce){.keypad button{transition:none}.keypad button:active,.next:active{transform:none}}
 @media(prefers-reduced-transparency:reduce){.device{background:#d4d8da;border-color:#8c969c;box-shadow:none}.screen{background:#202426}.keypad button,.back,.clearKey,.deviceBar>span:last-child{background:#e8ecee;box-shadow:none}.example{background:#e1e6e9;box-shadow:none}.next{background:#ff601c}.publicSection{background:#fff}}
 @media(forced-colors:active){.device,.deviceBar>span:last-child,.screen,.keypad button,.next,.back,.clearKey,.confirm,.costMode button,.evaluate,.offer,.example{background:Canvas;color:CanvasText;border-color:CanvasText;box-shadow:none}.deviceName,.deviceBar>span:last-child,.question,.resultTitle,.screenMeta,.screenHint,.screenAmount>span,.finalAmount,.noMargin,.pending{color:CanvasText!important}.screenAmount input{color:CanvasText!important}.costMode button[aria-pressed=true]{background:Highlight;color:HighlightText;outline:2px solid Highlight}.keypad button:hover,.keypad button:active,.next:hover,.next:active{background:Canvas;color:CanvasText;border-color:CanvasText;box-shadow:none}.dots i[data-active=true]{background:Highlight;box-shadow:none}}
+
+/* Desktop composition only. Keep the approved phone rules above byte-for-byte. */
+@media (min-width:1024px) {
+  .calculator {
+    width:min(100%,960px);
+    container:dp-calc / inline-size;
+  }
+  .device { max-width:520px; margin-inline:auto; }
+  @container dp-calc (min-width:720px) {
+    .device { max-width:none; padding:22px; border-radius:26px; }
+    .deviceBar { padding:3px 5px 20px; }
+    .device > form,.result {
+      display:grid;
+      grid-template-columns:minmax(0,1.05fr) minmax(0,1fr);
+      gap:24px;
+      align-items:start;
+    }
+    .screen {
+      display:flex;
+      flex-direction:column;
+      min-height:340px;
+      padding:28px 26px;
+    }
+    .question,.resultTitle { font-size:28px; line-height:1.2; margin:25px 0 22px; }
+    .amountLabel { font-size:12px; }
+    .screenAmount { margin-top:6px; }
+    .screenAmount input { min-height:78px; font-size:clamp(42px,6.25cqi,60px)!important; }
+    .screenAmount input[data-long=true] { font-size:34px!important; }
+    .screenHint { margin-top:auto!important; padding-top:20px; font-size:12px!important; }
+    .controls { padding:0; }
+    .controlBar { margin-bottom:12px; }
+    .keypad { gap:10px; }
+    .keypad button { min-height:60px; }
+    .next { margin-top:20px; }
+    .receipt { padding:2px 2px 0; }
+    .receiptTitle { margin-bottom:10px!important; }
+    .editRow { min-height:64px; }
+    .finalAmount { font-size:46px!important; }
+    .noMargin { font-size:30px!important; }
+    .deviceFoot { padding:22px 5px 1px; }
+  }
+}

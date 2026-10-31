@@ -25,3 +25,9 @@ A receipt replaces the keypad only at the end: maximum bid, editable sale/cost/p
 ## Verification limits
 
 Unit tests cover core math parity, invalid/blank/zero, mode isolation, Undo, keypad selection/decimal/bounds and UI tool restoration. Actual component SSR confirms a single input/keypad and no premature result DOM. Full aggregate checks and actual preview/browser outcomes are recorded separately in the release checkpoint; source tests do not imply browser/phone/authenticated visual verification.
+
+## Desktop composition (local revision)
+
+At viewport widths of at least1024px, the component may use up to960px of available content width. A named inline-size container requires at least720px of actual space before arranging the existing display left and keypad/actions right. This accounts for the private dashboard sidebar rather than assuming the entire viewport is available. If the content area is narrower, the device retains its520px maximum stacked layout. Public and private routes reuse the same component.
+
+The final receipt uses the same two-column composition only after the existing explicit completion action. No persistent final price is added during entry, no fields are duplicated or reordered in DOM, and all input/focus/navigation/math handlers are unchanged. The original mobile stylesheet is byte-identical before the desktop-only extension; no phone breakpoints, colors, surfaces, buttons or dimensions changed. Container-query unsupported browsers fall back to the original stacked device. Full browser desktop and mobile regression remains a separate release check, not implied by CSS tests.
