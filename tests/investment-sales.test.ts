@@ -48,11 +48,11 @@ test('closing validation preserves legacy missing date but never manufactures on
 const require=createRequire(import.meta.url);
 const source=readFileSync(new URL('../components/investments/SalesPerformance.tsx',import.meta.url),'utf8');
 const code=ts.transpileModule(source,{compilerOptions:{module:ts.ModuleKind.CommonJS,target:ts.ScriptTarget.ES2022,jsx:ts.JsxEmit.ReactJSX,esModuleInterop:true}}).outputText;
-const imports:Record<string,unknown>={'react/jsx-runtime':require('react/jsx-runtime'),'next/link':({children,...props}:any)=>React.createElement('a',props,children),'@/lib/investments/sales':sales,'@/lib/investments/money':money,'./SalesPerformance.module.css':new Proxy({},{get:(_,key)=>String(key)})};
+const imports:Record<string,unknown>={'react/jsx-runtime':require('react/jsx-runtime'),'next/link':({children,...props}:any)=>React.createElement('a',props,children),'@/lib/investments/sales':sales,'@/lib/investments/money':money,'./SalesPerformance.module.css':{__esModule:true,default:new Proxy({},{get:(_,key)=>String(key)})}};
 const module={exports:{} as any};new Function('require','module','exports',code)((id:string)=>{assert.ok(id in imports);return imports[id];},module,module.exports);
 const render=(rows:sales.RecordedSale[])=>renderToStaticMarkup(React.createElement(module.exports.default,{sales:rows,today,period:'month'}));
 test('actual sales UI empty state draws no invented graph and labels receipts limitation',()=>{
-  const html=render([]);assert.match(html,/Sin ventas registradas en este período/);assert.doesNotMatch(html,/<polyline|<svg/);assert.match(html,/no cobros/);assert.match(html,/No confirma cobros/);assert.match(html,/aria-current="page">Mes/);assert.match(html,/name="fecha"/);
+  const html=render([]);assert.match(html,/Sin ventas registradas en este período/);assert.doesNotMatch(html,/<polyline|<svg[^>]*role="img"/);assert.match(html,/no cobros/);assert.match(html,/No confirma cobros/);assert.match(html,/aria-current="page">Mes/);assert.match(html,/name="fecha"/);
 });
 test('actual sales UI preserves losses and date warnings with exact accessible day table',()=>{
   const html=render([{sold_on:'2026-10-30',sale_cents:10000,realized:-5000},{sold_on:null,sale_cents:99000,realized:999}]);
@@ -66,4 +66,18 @@ test('early calendar years stay bounded to one month and lower navigation never 
  for(const year of ['0001','0099']) {const p=sales.salesPeriod('month',year+'-01-01',today);assert.equal(p.days.length,31);assert.equal(p.end,year+'-01-31');}
  const first=sales.salesPeriod('month','0001-01-01',today);assert.equal(first.previous,null);assert.equal(first.next,'0001-02-01');
  assert.equal(sales.salesPeriod('week','0001-01-01',today).days.length,7);
+});
+
+test('period report is compact and closed by default, expands explicitly and retains open state on period navigation',()=>{
+ const closed=render([]);assert.match(closed,/<details class="report">/);assert.doesNotMatch(closed,/<details class="report" open/);assert.match(closed,/Ver detalle/);assert.match(closed,/reporte=1#ventas-periodo/);assert.match(closed,/name="reporte" value="1"/);
+ const open=renderToStaticMarkup(React.createElement(module.exports.default,{sales:[],today,expanded:true}));assert.match(open,/<details class="report" open="">/);
+});
+test('compact report still shows incomplete-date and cost warnings while collapsed',()=>{
+ const html=render([{sold_on:null,sale_cents:10000,realized:5000},{sold_on:'2026-10-30',sale_cents:1000,realized:null}]);const summary=html.slice(0,html.indexOf('</summary>'));assert.match(summary,/2026/);
+ assert.match(summary,/1 cierres sin fecha válida/);assert.match(summary,/Resultado parcial/);assert.match(summary,/importes pendientes/);
+});
+
+test('compact revenue clearly marks missing prices and summary spacing wins workspace defaults',()=>{
+ const html=render([{sold_on:'2026-10-30',sale_cents:null,realized:null}]);const summary=html.slice(0,html.indexOf('</summary>'));assert.match(summary,/Ventas · subtotal conocido/);assert.match(summary,/Pendiente/);
+ const css=readFileSync(new URL('../components/investments/SalesPerformance.module.css',import.meta.url),'utf8');assert.match(css,/\.report>\.compactSummary/);
 });

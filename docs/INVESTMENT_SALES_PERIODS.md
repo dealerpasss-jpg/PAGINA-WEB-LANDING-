@@ -26,3 +26,8 @@ All four existing states retain original meanings: Comprado (blue car), En repar
 
 ## Verification
 Pure calendar/totals tests: DST midnight, leap year, week/year crossings, early years, future/invalid dates, unknown values, losses, zero, period reconciliation and all-cost attribution. Mocked real actions: new closure required date, legacy undated, optimistic conflict, no unauthorized reads/writes, reopening explicit clears. Actual JSX SSR tests verify labels, daily table, no fake graph for empty data and icon semantics. Full verify and independent source review required before release. Authenticated date-form submission is not tested on live data.
+
+## Compact overview revision
+- Portfolio KPIs precede the sales report. Estimated profit remains a separate forecast, calculated only for active cars with known purchase and asking reference; sold cars are excluded. Pending count, known/total coverage, explicit zeros and losses remain visible. This is not the whole portfolio's profit when some scenarios are unknown.
+- The report is a native collapsed disclosure by default, with compact revenue/realized/count/period context. Undated or incomplete sales warnings remain in its summary. Users open it to see the existing calendar/chart/table. Filter links/date GET form carry `reporte=1` so choosing a period does not unexpectedly close the report; ordinary dashboard entry is collapsed.
+- No database, financial record, authentication or mutation changes in this presentation revision.

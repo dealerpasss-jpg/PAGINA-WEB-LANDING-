@@ -48,21 +48,22 @@ function VehicleComparison({ vehicle }: { vehicle:Snapshot['recent'][number] }) 
   </>;
 }
 
-export default function InvestmentDashboard({ data, today, period, anchor }: { data:InvestmentDashboardState; today?:string; period?:string; anchor?:string }) {
+export default function InvestmentDashboard({ data, today, period, anchor, expanded }: { data:InvestmentDashboardState; today?:string; period?:string; anchor?:string; expanded?:boolean }) {
   if(data.state==='hidden') return null;
   const s=data.state==='ready'?data.snapshot:null;
   const p=s?.portfolio;
   return <section className={styles.section} aria-labelledby="vehicle-dashboard-title">
     <div className={styles.heading}><div><span className={styles.eyebrow}>CONTROL FINANCIERO · PRIVADO</span><h2 id="vehicle-dashboard-title">Tus inversiones.</h2></div><Link className={styles.manageLink} href="/mi-cuenta/inversiones">Ver fichas <ArrowIcon direction="right" /></Link></div>
     {data.state==='unavailable' ? <div className={styles.empty} role="alert"><h3>No pudimos cargar tus inversiones.</h3><p>No se muestran ceros ni totales parciales ante un error. Vuelve a cargar el panel o entra a tus fichas.</p><Link href="/mi-cuenta/inversiones">Abrir inversiones <ArrowIcon /></Link></div> : s&&p ? <>
-      {today&&<SalesPerformance sales={s.sales} today={today} period={period} anchor={anchor}/>}
       <dl className={styles.metrics} aria-label="Resumen financiero administrativo">
         <div className={styles.capitalMetric}><dt>{p.activeMissingPurchase?'Inversión parcial':'Inversión registrada'}</dt><dd>{usd(p.activeRecordedCost)}</dd><small>Compra + gastos · activos</small></div>
+        <div className={styles.estimatedMetric} data-negative={s.estimated.amount<0}><dt>Ganancia estimada{s.estimated.pendingCount?' · parcial':''}¹</dt><dd>{s.estimated.knownCount?usd(s.estimated.amount):p.activeCount?'Pendiente':usd(0)}</dd><small>{s.estimated.knownCount} de {p.activeCount} activos con cálculo</small></div>
         <div><dt>Gastos registrados</dt><dd>{usd(s.activeExpenses)}</dd><small>Incluidos en inversión · activos</small></div>
-        <div><dt>Carros activos</dt><dd>{p.activeCount}</dd><small>Comprados, reparación y venta</small></div>
-        <div><dt>Carros vendidos</dt><dd>{p.soldCount}</dd><small>{s.count} registrados en total</small></div>
+        <div><dt>Carros activos</dt><dd>{p.activeCount}</dd><small>{p.soldCount} vendidos · {s.count} registrados</small></div>
       </dl>
+      <p className={styles.estimateNote}>¹ Referencia de venta menos compra y gastos registrados de carros aún activos. <strong>No es ganancia realizada ni dinero cobrado.</strong>{s.estimated.pendingCount>0&&` Faltan datos de compra o precio de referencia en ${s.estimated.pendingCount} carros; no se cuentan como ganancia cero.`}</p>
       {p.activeMissingPurchase>0&&<p className={styles.coverage}><span aria-hidden="true">!</span><span><strong>{p.activeMissingPurchase} {p.activeMissingPurchase===1?'compra pendiente':'compras pendientes'} de completar.</strong> El subtotal incluye sus gastos, no compras en cero.</span></p>}
+      {today&&<SalesPerformance sales={s.sales} today={today} period={period} anchor={anchor} expanded={expanded}/>}
       {s.count>0 ? <FinancialCharts snapshot={s} /> : <div className={styles.empty}><h3>Aún no has registrado compras.</h3><p>Tu primer carro y sus gastos aparecerán aquí cuando los guardes.</p><Link className="dashboard-cta" href="/mi-cuenta/inversiones#nuevo-vehiculo">Registrar una compra <ArrowIcon /></Link></div>}
       <div className={styles.closing}><div><span>Ventas registradas</span><strong>{p.soldCount?p.soldMissingSale===p.soldCount?'Pendiente':usd(p.registeredSales):'Sin ventas'}</strong>{p.soldMissingSale>0&&<small>{p.soldMissingSale} precios de cierre pendientes</small>}</div><div><span>{p.realizedPendingCount?'Resultado parcial · vendidos':'Resultado realizado · vendidos'}</span><strong>{p.realizedKnownCount?usd(p.realizedRecorded):p.soldCount?'Pendiente':'Sin ventas'}</strong>{p.realizedPendingCount>0&&<small>{p.realizedPendingCount} cierres sin compra o venta completas</small>}</div></div>
       <p className={styles.disclaimer}>USD · Las ventas registradas no confirman cobros recibidos. No es saldo de caja. Solo costos registrados; los aportes de socios no son ventas ni ganancias.</p>

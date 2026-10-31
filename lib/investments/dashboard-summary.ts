@@ -20,6 +20,7 @@ export function dashboardInvestmentSummary(vehicles:DashboardVehicle[], activeEx
     byCategory.set(category,(byCategory.get(category)??0)+expense.amount_cents);
   }
   return {
+    estimated:{amount:activeRows.reduce((sum,row)=>sum+(row.summary.estimated??0),0),knownCount:activeRows.filter(row=>row.summary.estimated!==null).length,pendingCount:activeRows.filter(row=>row.summary.estimated===null).length},
     sales:rows.filter(row=>row.status==='sold').map(row=>({sold_on:row.sold_on??null,sale_cents:row.sale_cents,realized:row.summary.realized})),
     activePurchase:activeRows.reduce((sum,row)=>sum+(row.purchase_cents??0),0),
     activeExpenses:activeRows.reduce((sum,row)=>sum+row.summary.expensesTotal,0),
