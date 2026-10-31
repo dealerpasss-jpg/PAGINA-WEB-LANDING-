@@ -16,7 +16,10 @@ function load(path:string,overrides:Record<string,unknown>={}) {
  return module.exports.default as React.ComponentType<any>;
 }
 const Overview=load('components/investments/PortfolioOverview.tsx');
+const SaleFields=load('components/investments/SaleFields.tsx');
 const Vehicle=load('components/investments/VehicleForm.tsx',{
+ './SaleFields':SaleFields,
+ '@/lib/investments/sales':{businessDate:()=> '2026-10-31'},
  './InvestmentForm':({children,...props}:any)=>React.createElement('form',props,children),
  './Submit':({children}:any)=>React.createElement('button',{type:'submit'},children),
 });
@@ -29,10 +32,10 @@ test('grouped vehicle form preserves exact fields once, raw defaults and pending
  const vehicle={id:'synthetic',title:'Test car',vin:'',auction:'',purchased_on:null,purchase_cents:null,asking_cents:123456,sale_cents:0,status:'sold',notes:'Test only',version:7};
  const html=renderToStaticMarkup(React.createElement(Vehicle,{vehicle}));
  const names=[...html.matchAll(/ name="([^"]+)"/g)].map(m=>m[1]).sort();
- assert.deepEqual(names,['action','vehicle_id','version','title','vin','auction','purchased_on','purchase_cents','asking_cents','sale_cents','status','notes'].sort());
+ assert.deepEqual(names,['action','vehicle_id','version','title','vin','auction','purchased_on','purchase_cents','asking_cents','sale_cents','sold_on','status','notes'].sort());
  assert.equal((html.match(/<form/g)||[]).length,1);assert.equal((html.match(/type="submit"/g)||[]).length,1);
  assert.match(html,/name="purchase_cents"[^>]*value=""/);assert.match(html,/name="sale_cents"[^>]*value="0.00"/);assert.match(html,/name="asking_cents"[^>]*value="1234.56"/);assert.match(html,/name="version"[^>]*value="7"/);
- assert.match(html,/01 \/ Identifica/);assert.match(html,/02 \/ Registra/);assert.match(html,/03 \/ Venta/);assert.match(html,/inputMode="decimal"/);assert.match(html,/no confirma cuánto te han pagado/);
+ assert.match(html,/01 \/ Identifica/);assert.match(html,/02 \/ Registra/);assert.match(html,/03 \/ Venta/);assert.match(html,/inputMode="decimal"/);assert.match(html,/no el cobro/);
 });
 test('destructive confirmation cancellation and pending guard never call the server action',()=>{
  for(const pending of [false,true]) {
@@ -57,4 +60,24 @@ test('destructive forms are confirmed and administrative financial data stays ga
  assert.match(detail,/admin\?allRows<\{id:string;category/);assert.match(detail,/\.filter\(e=>!e.voided_at\)/);
  const css=readFileSync(new URL('../app/mi-cuenta/inversiones/investments.css',import.meta.url),'utf8');
  assert.match(css,/@media\(max-width:700px\)[\s\S]*investment-vehicle-form[\s\S]*grid-template-columns:1fr/);
+});
+
+const Status=load('components/investments/VehicleStatus.tsx',{'./VehicleStatus.module.css':new Proxy({},{get:(_,key)=>String(key)})});
+test('all four canonical vehicle states have consistent accessible text and decorative real icons',()=>{
+ for(const [status,label] of Object.entries(money.statuses)) {
+  const html=renderToStaticMarkup(React.createElement(Status,{status}));assert.match(html,new RegExp(label));assert.match(html,new RegExp('data-status="'+status+'"'));assert.match(html,/<svg[^>]*aria-hidden="true"[^>]*focusable="false"/);assert.doesNotMatch(html,/<button/);
+ }
+ const css=readFileSync(new URL('../components/investments/VehicleStatus.module.css',import.meta.url),'utf8');for(const status of ['repairing','listed','sold'])assert.ok(css.includes('[data-status='+status+']'));assert.match(css,/forced-colors/);assert.match(css,/color:inherit/);
+});
+test('reopening an existing close keeps its values enabled for explicit clearing, not silent omission',()=>{
+ const Reopening=load('components/investments/SaleFields.tsx',{react:{...React,useState:()=>['listed',()=>{}]}});
+ const html=renderToStaticMarkup(React.createElement(Reopening,{status:'sold',asking:'300.00',sale:'200.50',soldOn:'2026-10-30',today:'2026-10-31'}));
+ for(const name of ['sale_cents','sold_on']) {const input=html.match(new RegExp('<input[^>]*name="'+name+'"[^>]*>'))?.[0]??'';assert.ok(input);assert.doesNotMatch(input,/disabled|required/);}
+ assert.match(html,/value="200.50"/);assert.match(html,/value="2026-10-30"/);assert.match(html,/borra explícitamente/);
+});
+test('new close requires date while legacy undated stays editable and active-only fields are disabled',()=>{
+ for(const [status,soldOn,required] of [['sold','2026-10-30',true],['sold',null,false],['purchased',null,false]] as const) {
+  const html=renderToStaticMarkup(React.createElement(SaleFields,{status,asking:'',sale:'',soldOn,today:'2026-10-31'}));const input=html.match(/<input[^>]*name="sold_on"[^>]*>/)?.[0]??'';
+  assert.equal(input.includes('required='),required);assert.equal(input.includes('disabled='),status==='purchased');
+ }
 });

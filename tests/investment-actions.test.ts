@@ -4,6 +4,7 @@ import { readFileSync } from 'node:fs';
 import ts from 'typescript';
 import * as money from '../lib/investments/money.ts';
 import * as validation from '../lib/investments/validation.ts';
+import * as sales from '../lib/investments/sales.ts';
 import * as expensePresets from '../lib/investments/expense-presets.ts';
 
 // Execute the real server-action module with an isolated in-memory query double.
@@ -12,7 +13,7 @@ const vehicle='11111111-1111-4111-8111-111111111111';
 const record='abcdefab-2222-4222-8222-222222222222';
 const source=readFileSync(new URL('../app/mi-cuenta/inversiones/actions.ts',import.meta.url),'utf8');
 const code=ts.transpileModule(source,{compilerOptions:{module:ts.ModuleKind.CommonJS,target:ts.ScriptTarget.ES2022}}).outputText;
-function harness(options:{admin?:boolean;data?:{id:string}[]|null;error?:unknown;repeat?:boolean}={}) {
+function harness(options:{admin?:boolean;data?:{id:string}[]|null;error?:unknown;repeat?:boolean; previous?:{status:string;sold_on:string|null;version:number}|null}={}) {
  const calls:unknown[][]=[];let updated=false;
  const db={from(table:string){calls.push(['from',table]);const query={
   async insert(values:unknown){calls.push(['insert',values]);return{error:options.error??null};},
@@ -26,9 +27,10 @@ function harness(options:{admin?:boolean;data?:{id:string}[]|null;error?:unknown
   'next/navigation':{redirect:(url:string)=>{calls.push(['redirect',url]);throw new Error('TEST_REDIRECT');}},
   '@/lib/investments/server':{investmentIdentity:async()=>{calls.push(['identity']);return{db,admin:options.admin??true};}},
   '@/lib/investments/money':money,
+  '@/lib/investments/sales':{...sales,businessDate:()=> '2026-10-31'},
   '@/lib/investments/validation':validation,
   '@/lib/investments/expense-presets':expensePresets,
-  '@/lib/academy/server':{checked:<T extends {error:unknown}>(r:T)=>{if(r.error)throw r.error;return r;}},
+  '@/lib/academy/server':{database:()=>{calls.push(['private-read']);const query={select:(columns:string)=>{calls.push(['private-select',columns]);return query;},eq:(key:string,value:unknown)=>{calls.push(['private-eq',key,value]);return query;},maybeSingle:async()=>({data:'previous' in options?options.previous:{status:'listed',sold_on:null,version:1},error:options.error??null})};return {from:()=>query};},checked:<T extends {error:unknown}>(r:T)=>{if(r.error)throw r.error;return r;}},
  };
  const module={exports:{} as {saveInvestment:(form:FormData)=>Promise<{error:string}|undefined>}};
  new Function('require','module','exports',code)((id:string)=>{assert.ok(id in imports,'Unexpected server import '+id);return imports[id];},module,module.exports);
@@ -77,4 +79,23 @@ test('invalid preset, missing custom concept, invalid amount or date never inser
 test('expense legacy forms retain category and description; blank is not assumed zero',async()=>{
  const h=harness();const f=h.form('expense');f.set('category','repair');f.set('description','Existing broad repair description');f.set('amount_cents','0');f.set('incurred_on','2026-10-29');
  await assert.rejects(h.save(f),/TEST_REDIRECT/);assert.deepEqual(h.calls.find(x=>x[0]==='insert'),['insert',{vehicle_id:vehicle,category:'repair',description:'Existing broad repair description',amount_cents:0,incurred_on:'2026-10-29'}]);
+});
+
+function closingForm(h:ReturnType<typeof harness>,status='sold',date='2026-10-30') {const f=h.form('vehicle');f.set('version','1');f.set('title','Synthetic only');f.set('status',status);f.set('purchase_cents','100.25');f.set('purchased_on','2026-10-29');f.set('sale_cents',status==='sold'?'200.50':'');f.set('sold_on',date);return f;}
+test('new sale writes confirmed date and cents with optimistic version, never created_at',async()=>{
+ const h=harness();await assert.rejects(h.save(closingForm(h)),/TEST_REDIRECT/);const data=h.calls.find(x=>x[0]==='update')?.[1] as Record<string,unknown>;
+ assert.equal(data.sold_on,'2026-10-30');assert.equal(data.sale_cents,20050);assert.equal(data.purchase_cents,10025);assert.equal(data.version,2);assert.equal('created_at' in data,false);
+ assert.ok(h.calls.some(x=>x[0]==='eq'&&x[1]==='version'&&x[2]===1));assert.ok(h.calls.some(x=>x[0]==='private-select'&&x[1]==='status,sold_on,version'));
+});
+test('new close cannot omit date or use future, invalid or pre-purchase date',async()=>{
+ for(const date of ['', '2026-11-01','2026-02-30','2026-10-28']){const h=harness();const result=await h.save(closingForm(h,'sold',date));assert.ok(result?.error);assert.equal(h.calls.some(x=>x[0]==='update'||x[0]==='redirect'),false);}
+});
+test('legacy undated sold remains editable without fabricating a date; dated close cannot erase date',async()=>{
+ const h=harness({previous:{status:'sold',sold_on:null,version:1}});await assert.rejects(h.save(closingForm(h,'sold','')),/TEST_REDIRECT/);assert.equal((h.calls.find(x=>x[0]==='update')?.[1] as any).sold_on,null);
+ const dated=harness({previous:{status:'sold',sold_on:'2026-10-30',version:1}});assert.ok((await dated.save(closingForm(dated,'sold','')))?.error);assert.equal(dated.calls.some(x=>x[0]==='update'),false);
+});
+test('reopening requires both close fields cleared and preserves optimistic lock',async()=>{
+ const h=harness({previous:{status:'sold',sold_on:'2026-10-30',version:1}});assert.ok((await h.save(closingForm(h,'listed','2026-10-30')))?.error);
+ await assert.rejects(h.save(closingForm(h,'listed','')),/TEST_REDIRECT/);const data=h.calls.find(x=>x[0]==='update')?.[1] as any;assert.equal(data.sold_on,null);assert.equal(data.sale_cents,null);
+ for(const previous of [null,{status:'listed',sold_on:null,version:2}]) {const stale=harness({previous});assert.ok((await stale.save(closingForm(stale)))?.error);assert.equal(stale.calls.some(x=>x[0]==='update'),false);}
 });

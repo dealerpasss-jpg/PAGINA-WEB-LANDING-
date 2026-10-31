@@ -1,3 +1,4 @@
+import VehicleStatus from '@/components/investments/VehicleStatus';
 import ArrowIcon from "@/components/ArrowIcon";
 import Link from 'next/link';
 import Image from 'next/image';
@@ -9,7 +10,7 @@ import PhotoUpload from '@/components/investments/PhotoUpload';
 import { investmentIdentity, allRows } from '@/lib/investments/server';
 import { vehicleCatalogue } from '@/data/vehicle-catalogue';
 import { checked, database } from '@/lib/academy/server';
-import { usd, totals, statuses, categories } from '@/lib/investments/money';
+import { usd, totals, categories } from '@/lib/investments/money';
 import InvestmentForm from '@/components/investments/InvestmentForm';
 import ExpenseForm from '@/components/investments/ExpenseForm';
 export const dynamic='force-dynamic';
@@ -27,11 +28,11 @@ export default async function Page({params,searchParams}:{params:Promise<{id:str
  const summary=totals(admin?vehicle.purchase_cents:null,expenses.filter(e=>!e.voided_at).map(e=>e.amount_cents),vehicle.asking_cents,vehicle.sale_cents);const {message}=await searchParams;
  const margin=vehicle.status==='sold'?summary.margin:summary.estimatedMargin;
  return <AccountShell team={admin} kicker="DEALERPASS / VEHÍCULOS E INVERSIONES" title={vehicle.title}>
- <div className="investment-actions"><Link href="/mi-cuenta/inversiones"><ArrowIcon direction="left" /> Todos mis vehículos</Link></div><p className="investment-status">{statuses[vehicle.status]} · {vehicle.purchased_on || 'Fecha de compra pendiente'}</p><p>{vehicle.vin&&'VIN: '+vehicle.vin} {vehicle.auction&&' · '+vehicle.auction}</p>
+ <div className="investment-actions"><Link href="/mi-cuenta/inversiones"><ArrowIcon direction="left" /> Todos mis vehículos</Link></div><p className="investment-status"><VehicleStatus status={vehicle.status}/> · {vehicle.purchased_on || 'Fecha de compra pendiente'}</p><p>{vehicle.vin&&'VIN: '+vehicle.vin} {vehicle.auction&&' · '+vehicle.auction}</p>
  {message&&<p className="account-notice" role="status">{message}</p>}
  {admin&&<><div className="investment-stats"><article><span>INVERSIÓN REGISTRADA</span><strong>{usd(summary.cost)}</strong></article><article><span>{vehicle.status==='sold'?'RESULTADO REALIZADO¹':'GANANCIA ESTIMADA¹'}</span><strong>{usd(vehicle.status==='sold'?summary.realized:summary.estimated)}</strong></article><article><span>{vehicle.status==='sold'?'MARGEN SOBRE VENTA':'MARGEN ESTIMADO SOBRE VENTA'}</span><strong>{margin===null?'Sin definir':margin.toFixed(1)+'%'}</strong></article></div>
  <p className="investment-note">Compra {usd(vehicle.purchase_cents)} + gastos vigentes {usd(summary.expensesTotal)}. Precio publicado: {usd(vehicle.asking_cents)}. Venta registrada: {usd(vehicle.sale_cents)}. ¹ Venta o precio publicado menos compra y gastos registrados. No confirma cobros recibidos ni dinero repartido.</p>
- {vehicle.purchase_cents===null&&<p className="investment-pending">Completa el precio de compra para calcular la inversión total y la ganancia. No se supone un costo de cero.</p>}{vehicle.notes&&<p>{vehicle.notes}</p>}</>}
+ {vehicle.purchase_cents===null&&<p className="investment-pending">Completa el precio de compra para calcular la inversión total y la ganancia. No se supone un costo de cero.</p>}{vehicle.status==='sold'&&<p className="investment-note">Fecha de venta: {vehicle.sold_on||'Pendiente · excluida de reportes semanales y mensuales'}.</p>}{vehicle.notes&&<p>{vehicle.notes}</p>}</>}
  {admin&&<ol className="investment-workflow" aria-label="Compra, gastos y cierre"><li><span>01 / COMPRA</span><strong>{vehicle.purchase_cents===null?'Completa el martillo':usd(vehicle.purchase_cents)}</strong><p>El precio del carro, sin repetir cargos de subasta.</p></li><li><span>02 / GASTOS</span><strong>{usd(summary.expensesTotal)}</strong><p>Reparaciones, transporte y otros gastos vigentes.</p></li><li><span>03 / CIERRE</span><strong>{vehicle.status==='sold'?usd(vehicle.sale_cents):'Aún sin vender'}</strong><p>{vehicle.status==='sold'?'Precio de venta registrado, no cobro confirmado.':'Registra la venta cuando cierres el negocio.'}</p></li></ol>}
  {admin&&<details className="account-card" id="editar-compra" open={vehicle.purchase_cents===null}><summary>Compra y cierre · editar ficha</summary><p>Datos privados de administración. El precio de venta aquí es una referencia interna; el catálogo público mantiene su publicación actual.</p><VehicleForm vehicle={vehicle}/></details>}
  <details className="account-card"><summary>Fotos del vehículo · {(catalogue?.photos.length||0)+photos.length}</summary>{!photos.length&&!catalogue&&<p>Aún no hay fotos.</p>}<div className="investment-photos">{catalogue?.photos.map(p=><a key={p.src} href={p.src} target="_blank" rel="noreferrer"><Image src={p.src} width={640} height={480} alt={vehicle.title+": "+p.caption}/></a>)}{photos.map(p=><a key={p.id} href={'/api/investments/photo?id='+p.id} target="_blank" rel="noreferrer"><Image unoptimized width={640} height={480} src={'/api/investments/photo?id='+p.id} alt={'Foto de '+vehicle.title} loading="lazy"/></a>)}</div>{admin&&<PhotoUpload vehicleId={id}/>}</details>

@@ -32,7 +32,7 @@ function serverHarness(fail=false,vehicles:DashboardVehicle[]=[car('a')]) {
 test('only exact verified admin role reaches private queries; reading has no membership/auth mutation',async()=>{
  const h=serverHarness();for(const role of ['student','staff','team','Admin',''])assert.deepEqual(await h.load(role),{state:'hidden'});assert.deepEqual(h.calls,[]);
  const result=await h.load('admin');assert.equal(result.state,'ready');assert.ok(h.calls.some(c=>JSON.stringify(c)===JSON.stringify(['is','voided_at',null])));
- assert.deepEqual(h.calls.filter(c=>c[0]==='select'),[['select','investment_vehicles','id,title,status,purchase_cents,asking_cents,sale_cents,created_at'],['select','investment_expenses','vehicle_id,amount_cents,category']]);
+ assert.deepEqual(h.calls.filter(c=>c[0]==='select'),[['select','investment_vehicles','id,title,status,purchase_cents,asking_cents,sale_cents,sold_on,created_at'],['select','investment_expenses','vehicle_id,amount_cents,category']]);
 });
 test('database failure stays unavailable, not an empty/zero portfolio; successful empty is distinct',async()=>{
  assert.deepEqual(await serverHarness(true).load('admin'),{state:'unavailable'});const empty=await serverHarness(false,[]).load('admin');assert.equal(empty.state,'ready');assert.equal(empty.snapshot.count,0);
@@ -40,7 +40,7 @@ test('database failure stays unavailable, not an empty/zero portfolio; successfu
 test('server pagination reaches beyond first 500 vehicles with stable order',async()=>{
  const h=serverHarness(false,Array.from({length:501},(_,i)=>car('local'+i)));const result=await h.load('admin');assert.equal(result.snapshot.count,501);assert.ok(h.calls.some(c=>JSON.stringify(c)===JSON.stringify(['range','investment_vehicles',500,999])));
 });
-const Dashboard=moduleAt('components/investments/InvestmentDashboard.tsx',{'next/link':({children,...props}:any)=>React.createElement('a',props,children),'@/components/ArrowIcon':()=>React.createElement('span',{'aria-hidden':true},'→'),'@/lib/investments/money':money,'@/lib/investments/dashboard-summary':{comparisonWidths},'./InvestmentDashboard.module.css':new Proxy({},{get:(_,key)=>String(key)})}).default;
+const Dashboard=moduleAt('components/investments/InvestmentDashboard.tsx',{'next/link':({children,...props}:any)=>React.createElement('a',props,children),'@/components/ArrowIcon':()=>React.createElement('span',{'aria-hidden':true},'→'),'@/lib/investments/money':money,'@/lib/investments/dashboard-summary':{comparisonWidths},'./SalesPerformance':()=>null,'./VehicleStatus':({status}:any)=>React.createElement('span',null,money.statuses[status as keyof typeof money.statuses]),'./InvestmentDashboard.module.css':new Proxy({},{get:(_,key)=>String(key)})}).default;
 test('real main component hides nonadmin data and clearly distinguishes unavailable/empty/registered figures',()=>{
  assert.equal(renderToStaticMarkup(React.createElement(Dashboard,{data:{state:'hidden'}})),'');
  const error=renderToStaticMarkup(React.createElement(Dashboard,{data:{state:'unavailable'}}));assert.match(error,/No pudimos cargar/);assert.doesNotMatch(error,/\$0|CARROS ACTIVOS/);

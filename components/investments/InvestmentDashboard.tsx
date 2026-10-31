@@ -1,4 +1,6 @@
 import Link from 'next/link';
+import VehicleStatus from './VehicleStatus';
+import SalesPerformance from './SalesPerformance';
 import ArrowIcon from '@/components/ArrowIcon';
 import { usd, statuses } from '@/lib/investments/money';
 import { comparisonWidths } from '@/lib/investments/dashboard-summary';
@@ -28,7 +30,7 @@ function FinancialCharts({ snapshot:s }: { snapshot:Snapshot }) {
       <figcaption><span className={styles.eyebrow}>INVENTARIO PRIVADO</span><h3 id="status-chart-title">De compra a venta.</h3></figcaption>
       <div className={styles.inventoryTotal}><strong>{s.count}</strong><span>carros registrados<br />{s.portfolio.activeCount} activos · {s.portfolio.soldCount} vendidos</span></div>
       <div className={styles.statusTrack} aria-hidden="true">{s.stages.filter(stage=>stage.count>0).map(stage=><i key={stage.key} data-stage={stage.key} style={{width:`${stage.count/s.count*100}%`}} />)}</div>
-      <dl className={styles.stageList}>{s.stages.map(stage=><div key={stage.key}><dt><i data-stage={stage.key} aria-hidden="true" />{stage.label}</dt><dd>{stage.count}</dd></div>)}</dl>
+      <dl className={styles.stageList}>{s.stages.map(stage=><div key={stage.key}><dt><VehicleStatus status={stage.key as keyof typeof statuses} dark/></dt><dd>{stage.count}</dd></div>)}</dl>
       <p className={styles.chartNote}>Distribución actual por estado. No es una gráfica de crecimiento ni de cobros.</p>
     </figure>
   </div>;
@@ -46,13 +48,14 @@ function VehicleComparison({ vehicle }: { vehicle:Snapshot['recent'][number] }) 
   </>;
 }
 
-export default function InvestmentDashboard({ data }: { data:InvestmentDashboardState }) {
+export default function InvestmentDashboard({ data, today, period, anchor }: { data:InvestmentDashboardState; today?:string; period?:string; anchor?:string }) {
   if(data.state==='hidden') return null;
   const s=data.state==='ready'?data.snapshot:null;
   const p=s?.portfolio;
   return <section className={styles.section} aria-labelledby="vehicle-dashboard-title">
     <div className={styles.heading}><div><span className={styles.eyebrow}>CONTROL FINANCIERO · PRIVADO</span><h2 id="vehicle-dashboard-title">Tus inversiones.</h2></div><Link className={styles.manageLink} href="/mi-cuenta/inversiones">Ver fichas <ArrowIcon direction="right" /></Link></div>
     {data.state==='unavailable' ? <div className={styles.empty} role="alert"><h3>No pudimos cargar tus inversiones.</h3><p>No se muestran ceros ni totales parciales ante un error. Vuelve a cargar el panel o entra a tus fichas.</p><Link href="/mi-cuenta/inversiones">Abrir inversiones <ArrowIcon /></Link></div> : s&&p ? <>
+      {today&&<SalesPerformance sales={s.sales} today={today} period={period} anchor={anchor}/>}
       <dl className={styles.metrics} aria-label="Resumen financiero administrativo">
         <div className={styles.capitalMetric}><dt>{p.activeMissingPurchase?'Inversión parcial':'Inversión registrada'}</dt><dd>{usd(p.activeRecordedCost)}</dd><small>Compra + gastos · activos</small></div>
         <div><dt>Gastos registrados</dt><dd>{usd(s.activeExpenses)}</dd><small>Incluidos en inversión · activos</small></div>
@@ -63,7 +66,7 @@ export default function InvestmentDashboard({ data }: { data:InvestmentDashboard
       {s.count>0 ? <FinancialCharts snapshot={s} /> : <div className={styles.empty}><h3>Aún no has registrado compras.</h3><p>Tu primer carro y sus gastos aparecerán aquí cuando los guardes.</p><Link className="dashboard-cta" href="/mi-cuenta/inversiones#nuevo-vehiculo">Registrar una compra <ArrowIcon /></Link></div>}
       <div className={styles.closing}><div><span>Ventas registradas</span><strong>{p.soldCount?p.soldMissingSale===p.soldCount?'Pendiente':usd(p.registeredSales):'Sin ventas'}</strong>{p.soldMissingSale>0&&<small>{p.soldMissingSale} precios de cierre pendientes</small>}</div><div><span>{p.realizedPendingCount?'Resultado parcial · vendidos':'Resultado realizado · vendidos'}</span><strong>{p.realizedKnownCount?usd(p.realizedRecorded):p.soldCount?'Pendiente':'Sin ventas'}</strong>{p.realizedPendingCount>0&&<small>{p.realizedPendingCount} cierres sin compra o venta completas</small>}</div></div>
       <p className={styles.disclaimer}>USD · Las ventas registradas no confirman cobros recibidos. No es saldo de caja. Solo costos registrados; los aportes de socios no son ventas ni ganancias.</p>
-      {s.count>0&&<div className={styles.recent}><div className={styles.recentHeading}><h3>Inversión por carro</h3><span>Últimos {s.recent.length} de {s.count}</span></div><div className={styles.cards}>{s.recent.map(vehicle=><article key={vehicle.id}><div className={styles.cardHeading}><span>{statuses[vehicle.status]}</span><h4>{vehicle.title}</h4></div><VehicleComparison vehicle={vehicle} /><Link className={styles.cardLink} href={'/mi-cuenta/inversiones/'+vehicle.id}>Abrir ficha <ArrowIcon /></Link></article>)}</div><p className={styles.disclaimer}>¹ Según compra y gastos registrados. La ganancia estimada depende del precio de venta de referencia registrado; no es una venta realizada ni dinero cobrado. Puede cambiar con nuevos gastos.</p></div>}
+      {s.count>0&&<div className={styles.recent}><div className={styles.recentHeading}><h3>Inversión por carro</h3><span>Últimos {s.recent.length} de {s.count}</span></div><div className={styles.cards}>{s.recent.map(vehicle=><article key={vehicle.id}><div className={styles.cardHeading}><VehicleStatus status={vehicle.status}/><h4>{vehicle.title}</h4></div><VehicleComparison vehicle={vehicle} /><Link className={styles.cardLink} href={'/mi-cuenta/inversiones/'+vehicle.id}>Abrir ficha <ArrowIcon /></Link></article>)}</div><p className={styles.disclaimer}>¹ Según compra y gastos registrados. La ganancia estimada depende del precio de venta de referencia registrado; no es una venta realizada ni dinero cobrado. Puede cambiar con nuevos gastos.</p></div>}
     </> : null}
   </section>;
 }
