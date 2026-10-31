@@ -1,0 +1,74 @@
+[
+  {
+    "original": "A7B8167B-0069-4CAD-97F6-36FD7573D7E0.jpeg",
+    "file": "portada.webp",
+    "sourceSha256": "e2dc16dccd685fbee4f303f104f788b249fdab7cc19088a191fb487b795abe12",
+    "sha256": "d4c44e9b226e7e58afb8c0ce2376cb4a2c3bd5e689ec46ba2a53cf56bab6e868",
+    "width": 1448,
+    "height": 1086,
+    "bytes": 477376
+  },
+  {
+    "original": "782B686E-71AF-4D95-A523-4239C79CCA52.jpeg",
+    "file": "frente.webp",
+    "sourceSha256": "47096c0a9aa80591b61dd37f89af3635cbdb62c6fd1d6a3b763f970a9a661e05",
+    "sha256": "7a4be4d8584c9e0cd2cb587aab6724c47f64592645201502bfe177810c1e31aa",
+    "width": 1448,
+    "height": 1086,
+    "bytes": 417878
+  },
+  {
+    "original": "B257EEB5-1284-4FDC-90DF-F6F339E3942A.jpeg",
+    "file": "diagonal-opuesta.webp",
+    "sourceSha256": "b2fa016efd2d40e67ed3de5122377e0ff07c771c3ce1986c509813967c05fe51",
+    "sha256": "8a2898c6ddd57898c054011d935356fe760751ebefc941a488ab611a3f1f82dd",
+    "width": 1448,
+    "height": 1086,
+    "bytes": 439864
+  },
+  {
+    "original": "06584477-7715-4C4C-A1D0-399E3D7E999A.jpeg",
+    "file": "trasera.webp",
+    "sourceSha256": "6a9875982c54159bc9e46f0a6a967c637d325993e0220358c45c88f025cf1f6a",
+    "sha256": "be429581ed0bea3054133cc6b8034b911438377bc84c2e4030388b7f6418bf01",
+    "width": 1448,
+    "height": 1086,
+    "bytes": 395948
+  },
+  {
+    "original": "01255094-235D-4241-869C-B06C688C4CCB.jpeg",
+    "file": "conductor.webp",
+    "sourceSha256": "65959179714fcbcb7d374d74fb369616c07b7fee77c373eaca2f88d3669b831f",
+    "sha256": "2e07863de747ee644cb807fbe6e1184e24d410878db6c4f71f11a4751e535449",
+    "width": 1448,
+    "height": 1086,
+    "bytes": 248404
+  },
+  {
+    "original": "FD135A62-E6B5-4CC1-824B-CF25C1F05BE2.jpeg",
+    "file": "asientos.webp",
+    "sourceSha256": "7fce7cbc586f523e3937335a1dc9708d5ca450714e89eb722588a197d8178875",
+    "sha256": "f2753d7d7d9b136c644f4e462b40e6df41bacf8f56b28c7afad111353e6de8b6",
+    "width": 1448,
+    "height": 1086,
+    "bytes": 282486
+  },
+  {
+    "original": "BA76C93A-BAF6-48E9-AC8B-E827CA8D6596.jpeg",
+    "file": "consola.webp",
+    "sourceSha256": "d69b4e02d8ba48234b1aa5c22ec0879963ae7772d4698c58f3a6bb1dbfedda8c",
+    "sha256": "e22713369743d63fc11c1fb8955ea39b43093101f44bd2e3608f6571bfe4f35d",
+    "width": 1448,
+    "height": 1086,
+    "bytes": 243008
+  },
+  {
+    "original": "13808BF6-2A91-4F45-ABA1-D25C234841E2.jpeg",
+    "file": "techo-interior.webp",
+    "sourceSha256": "8bf06076aff389d9bf548b29f15171ef89f2e58bae849ceadb50b40a261b8631",
+    "sha256": "995558177e671874993309598edf425f696078819960be3a59e7b9f8b7c48ea6",
+    "width": 1448,
+    "height": 1086,
+    "bytes": 223944
+  }
+]

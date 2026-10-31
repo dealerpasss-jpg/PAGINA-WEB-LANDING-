@@ -1,30 +1,27 @@
+import ArrowIcon from "@/components/ArrowIcon";
 import type { Metadata } from "next";
+import Link from "next/link";
+import AcademyPresentation from "@/components/AcademyPresentation";
+import PlanComparison from "@/components/PlanComparison";
 import PricingCards from "@/components/PricingCards";
-import ComparisonTable from "@/components/ComparisonTable";
 import FAQ from "@/components/FAQ";
-import FinalCTA from "@/components/FinalCTA";
-import Reveal from "@/components/Reveal";
-
-export const metadata: Metadata = {
-  title: "Planes | DealerPass",
-  description: "Compara los planes Starter, Academy, Pro y Elite de DealerPass y elige tu ruta hacia la subasta.",
-};
-
+import { PurchaseGuide, SalesClose, LearningPreview } from "@/components/SalesJourney";
+export const metadata: Metadata = { title: "Planes | DealerPass", description: "Compara formación, acceso y acompañamiento. Elige tu siguiente paso con condiciones claras." };
 export default function PlanesPage() {
-  return (
-    <>
-      <div className="bg-texture-cream pt-16 md:pt-24">
-        <div className="container-content">
-          <span className="eyebrow-light"><span className="dot" />Planes DealerPass</span>
-          <h1 className="mt-4 max-w-2xl text-4xl md:text-5xl">
-            Elige la ruta que mejor se adapta a tu experiencia y objetivos.
-          </h1>
-        </div>
-      </div>
-      <Reveal><PricingCards /></Reveal>
-      <Reveal><ComparisonTable /></Reveal>
-      <Reveal><FAQ /></Reveal>
-      <FinalCTA />
-    </>
-  );
+  return <>
+    <section className="page-intro wrap">
+      <span className="kicker"><i /> ELIGE TU SIGUIENTE PASO</span>
+      <h1>Un plan para cada etapa de tu camino.</h1>
+      <p>Aprende a analizar una subasta con Academy, explora el acceso inicial con Starter o combina formación y acompañamiento con Pro.</p>
+      <p className="launch-note"><strong>Apertura en preparación.</strong> Puedes comparar las opciones y crear tu cuenta. Los precios son de referencia y todavía no se reciben pagos.</p>
+      <div className="plans-actions"><a className="button" href="#comparar">Comparar planes <ArrowIcon direction="down" /></a><Link className="text-link" href="/academy">Conocer la academia <ArrowIcon direction="up-right" /></Link></div>
+    </section>
+    <section className="wrap sales-comparison" id="planes"><div id="comparar" /><PlanComparison /></section>
+    <AcademyPresentation plansPage />
+    <LearningPreview />
+    <PricingCards comparison={false} />
+    <PurchaseGuide />
+    <FAQ />
+    <SalesClose />
+  </>;
 }

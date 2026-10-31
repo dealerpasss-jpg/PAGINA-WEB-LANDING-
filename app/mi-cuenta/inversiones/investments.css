@@ -1,0 +1,70 @@
+.investments .account-shell{max-width:1240px}.investment-stats{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:16px;margin:24px 0}.investment-stats article{background:#f2eee7;border:1px solid #dedbd4;padding:22px;border-radius:16px}.investment-stats span,.investment-stats strong{display:block}.investment-stats strong{font-size:26px;margin-top:10px}.investment-grid{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:24px;margin:24px 0}.investments .account-card{min-width:0}.investments h2{font-size:28px;margin:20px 0}.investments h3{font-size:20px}.investment-form{display:grid;gap:16px}.investment-form label{display:grid;gap:8px;font-size:15px}.investment-form input,.investment-form select,.investment-form textarea{width:100%;min-width:0;padding:12px;border:1px solid #bdb9b1;background:white;color:#111;border-radius:8px;font:inherit}.investment-form textarea{min-height:90px}.investment-form button{min-height:48px}.investment-list{list-style:none;padding:0}.investment-list li{padding:16px 0;border-bottom:1px solid #dedbd4}.investment-list small{display:block;color:#555}.investment-list form{margin-top:10px}.investment-photos{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:12px}.investment-photos img{width:100%;aspect-ratio:4/3;object-fit:cover;border-radius:10px}.investment-note{line-height:1.6;color:#56534e}.investment-form details summary,.investments summary{cursor:pointer;padding:16px 0;font-weight:600}.investment-status{font-size:13px;font-weight:600;color:#9c3300}.investment-actions{display:flex;gap:16px;flex-wrap:wrap;margin:20px 0}.investment-actions a{text-decoration:underline;text-underline-offset:4px}.investment-empty{padding:32px;border:1px dashed #bdb9b1;border-radius:16px}.investments button:disabled{opacity:.6}.investment-finance{display:grid;gap:10px}.investment-finance div{display:flex;justify-content:space-between;gap:20px}.investment-finance dt,.investment-finance dd{margin:0}.investments a:focus-visible,.investments button:focus-visible{outline:3px solid #ff4d00;outline-offset:3px}@media(max-width:700px){.investment-grid,.investment-stats{grid-template-columns:1fr}.investment-photos{grid-template-columns:repeat(2,minmax(0,1fr))}.investment-stats strong{font-size:24px}}
+
+/* Recorded economics: compact hierarchy, never a cash/collections dashboard. */
+.workspace-shell .investment-stats.investment-portfolio-stats { grid-template-columns:repeat(2,minmax(0,1fr)); }
+.workspace-shell .investment-stats.investment-portfolio-stats article small { color:#51565a; font-size:12px; line-height:1.6; overflow-wrap:anywhere; }
+.workspace-shell .investment-stats.investment-portfolio-stats article strong { margin-top:0; }
+.investment-workflow { display:grid; grid-template-columns:repeat(3,minmax(0,1fr)); gap:12px; padding:0; margin:22px 0; list-style:none; }
+.investment-workflow li { min-width:0; padding:18px; border:1px solid #d8d9d7; border-radius:12px; background:#fffffff0; }
+.investment-workflow span { display:block; color:#8c330b; font-size:10px; letter-spacing:.08em; }
+.investment-workflow strong { display:block; margin-top:10px; color:#202528; font-size:19px; overflow-wrap:anywhere; font-variant-numeric:tabular-nums; }
+.investment-workflow p { margin:10px 0 0; font-size:12px; line-height:1.6; color:#555d61; }
+.investment-vehicle-form { grid-template-columns:repeat(2,minmax(0,1fr)); align-items:start; }
+.investment-field-group { display:grid; gap:16px; min-width:0; margin:0; padding:18px; border:1px solid #d4d7d7; border-radius:10px; background:#ffffffd9; }
+.investment-field-group:first-of-type,.investment-form-footer { grid-column:1/-1; }
+.investment-field-group:first-of-type { grid-template-columns:repeat(2,minmax(0,1fr)); }
+.investment-field-group legend { padding:0 8px; font-size:13px; font-weight:600; }
+.investment-field-group label small { color:#555d61; font-size:12px; font-weight:400; line-height:1.5; }
+.investment-form-footer { display:grid; gap:16px; }
+.investment-form-footer button { justify-self:start; }
+.investment-category-totals { margin:12px 0 20px; padding:12px; background:#f5f6f5; border:1px solid #dedfdd; border-radius:10px; }
+.investment-category-totals>div { display:flex; justify-content:space-between; gap:16px; padding:7px 0; min-width:0; font-size:12px; }
+.investment-category-totals dt { color:#4f565b; min-width:0; }
+.investment-category-totals dd { margin:0; color:#202528; font-variant-numeric:tabular-nums; overflow-wrap:anywhere; text-align:right; }
+#editar-compra,#gastos-vehiculo { scroll-margin-top:110px; }
+@media(max-width:700px) {
+ .investment-workflow,.investment-vehicle-form,.investment-field-group:first-of-type { grid-template-columns:1fr; }
+ .investment-field-group { padding:14px; }
+ .workspace-shell .investment-stats.investment-portfolio-stats { grid-template-columns:1fr; }
+ .workspace-shell .investment-stats.investment-portfolio-stats article:first-child { display:flex; flex-direction:column; align-items:flex-start; gap:12px; }
+ .workspace-shell .investment-stats.investment-portfolio-stats article:first-child>strong { text-align:left; }
+ .investment-form-footer button { width:100%; }
+}
+@media(prefers-reduced-transparency:reduce) { .investment-workflow li,.investment-field-group { background:#fff; } }
+@media(forced-colors:active) { .investment-workflow li,.investment-field-group,.investment-category-totals { background:Canvas; border-color:CanvasText; color:CanvasText; } }
+
+/* Expense shortcuts are native radios: keyboard arrows and labels stay native. */
+.investment-expense-form { margin-top:12px; gap:22px; }
+.expense-picker,.expense-entry { min-width:0; margin:0; padding:0; border:0; }
+.expense-picker legend,.expense-entry legend { padding:0; font-size:12px; font-weight:650; letter-spacing:.03em; }
+.workspace-shell .account-card .expense-picker-hint { margin:8px 0 14px; color:#535b60; font-size:12px; line-height:1.6; }
+.expense-options { display:grid; grid-template-columns:repeat(2,minmax(0,1fr)); gap:8px; }
+.investment-form .expense-option { position:relative; display:block; min-width:0; cursor:pointer; }
+.investment-form .expense-option input[type=radio] { position:absolute; width:1px; height:1px; min-height:0; margin:0; padding:0; border:0; clip-path:inset(50%); overflow:hidden; }
+.expense-option-surface { display:grid; grid-template-columns:24px minmax(0,1fr) 16px; align-items:center; gap:9px; min-height:76px; height:100%; padding:12px; border:1px solid #c7cdce; border-radius:12px; background:linear-gradient(160deg,#fff,#f1f3f2); box-shadow:inset 0 1px 0 #fff,0 2px 5px #18212808; color:#262d31; font-size:12px; line-height:1.4; font-weight:600; transition:border-color .15s,background-color .15s; }
+.expense-option-surface>svg { color:#a4390a; flex:none; }
+.expense-option-surface>span:not(.expense-option-check) { min-width:0; overflow-wrap:anywhere; }
+.expense-option-check { display:grid; place-items:center; width:16px; height:16px; border:1px solid #9ba4a8; border-radius:50%; }
+.expense-option-check svg { visibility:hidden; }
+.expense-option input:checked+.expense-option-surface { color:#fff; background:linear-gradient(160deg,#333c40,#1b2226); border-color:#1b2226; box-shadow:inset 0 1px 0 #ffffff35,0 2px 7px #17202618; }
+.expense-option input:checked+.expense-option-surface>svg { color:#ff9a70; }
+.expense-option input:checked+.expense-option-surface .expense-option-check { color:#171b1d; background:#ff8c5b; border-color:#ff8c5b; }
+.expense-option input:checked+.expense-option-surface .expense-option-check svg { visibility:visible; }
+.expense-option input:focus-visible+.expense-option-surface { outline:3px solid #a63607; outline-offset:3px; }
+.expense-option input:disabled+.expense-option-surface { opacity:.6; cursor:wait; }
+.expense-option-other { grid-column:1/-1; }
+.expense-option-other .expense-option-surface { min-height:54px; }
+.expense-concept { display:grid; gap:12px; padding:14px; border:1px solid #d6dbd9; border-radius:12px; background:#ffffffda; }
+.workspace-shell .account-card .expense-group-note { margin:0; font-size:12px; line-height:1.6; color:#535b60; }
+.expense-entry-grid { display:grid; grid-template-columns:repeat(2,minmax(0,1fr)); gap:12px; margin-top:14px; }
+.expense-entry-grid>* { min-width:0; }
+.investment-form .expense-date { display:grid; align-content:start; gap:4px; }
+.investment-form .expense-today { justify-self:end; min-height:44px; padding:8px 4px; border:0; background:transparent; color:#96360e; font:inherit; font-size:12px; font-weight:600; text-decoration:underline; text-underline-offset:4px; cursor:pointer; }
+.expense-save { display:grid; gap:12px; padding-top:16px; border-top:1px solid #d9dddb; }
+.workspace-shell .account-card .expense-save p { margin:0; font-size:12px; line-height:1.6; color:#535b60; }
+.expense-save button { width:100%; }
+@media(hover:hover) { .expense-option input:not(:checked):not(:disabled)+.expense-option-surface:hover { border-color:#a84c24; background:#fff; } }
+@media(max-width:420px) { .expense-option-surface { grid-template-columns:22px minmax(0,1fr); padding:10px; gap:8px; min-height:82px; }.expense-option-check { grid-column:1; grid-row:2; }.expense-option-surface>svg { grid-column:1; grid-row:1; }.expense-option-surface>span:not(.expense-option-check) { grid-column:2; grid-row:1/3; }.expense-option input:checked+.expense-option-surface { border-color:#ff9566; }.expense-entry-grid { grid-template-columns:1fr; } }
+@media(prefers-reduced-motion:reduce) { .expense-option-surface { transition:none; } }
+@media(prefers-reduced-transparency:reduce) { .expense-option-surface,.expense-concept { background:#fff; box-shadow:none; }.expense-option input:checked+.expense-option-surface { background:#20282c; box-shadow:none; } }
+@media(forced-colors:active) { .expense-option-surface,.expense-concept { background:Canvas; color:CanvasText; box-shadow:none; border-color:CanvasText; }.expense-option input:checked+.expense-option-surface { background:Highlight; color:HighlightText; border-color:Highlight; box-shadow:none; }.expense-option-surface>svg,.expense-option input:checked+.expense-option-surface>svg { color:inherit; }.expense-option input:focus-visible+.expense-option-surface { outline-color:Highlight; }.expense-option input:checked+.expense-option-surface .expense-option-check { background:HighlightText; color:Highlight; border-color:HighlightText; }.investment-form .expense-today { color:LinkText; } }

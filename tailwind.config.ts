@@ -8,16 +8,16 @@ const config: Config = {
   theme: {
     extend: {
       colors: {
-        neon: "#DFFF00",
-        neonHover: "#CBEA00",
-        black: "#101010",
-        charcoal: "#1A1A1A",
-        cream: "#F5F0E6",
-        muted: "#A6A6A0",
+        neon: "#FF4D00",
+        neonHover: "#E64700",
+        black: "#111315",
+        charcoal: "#202326",
+        cream: "#F2EEE7",
+        muted: "#99968F",
         edge: "#343434",
       },
       fontFamily: {
-        display: ["var(--font-display)", "sans-serif"],
+        display: ["var(--font-body)", "sans-serif"],
         body: ["var(--font-body)", "sans-serif"],
       },
       borderRadius: {

@@ -1,74 +1,57 @@
-# DealerPass — Sitio web
+# DealerPass
 
-Sitio de conversión para DealerPass (Access. Learn. Trade.), construido con Next.js 14 (App Router), TypeScript y Tailwind CSS.
+Sitio público, formación y espacio privado de DealerPass, construidos con **Next.js 16**, React, TypeScript y Tailwind CSS.
 
-## Requisitos
+## Desarrollo
 
-- Node.js 18.18+ (recomendado 20 LTS)
-- npm
+- Node.js **22.13 o superior**; producción utiliza Node.js 24.
+- Instala las versiones del lockfile con `npm ci`.
+- Copia `.env.example` a `.env.local` y configura únicamente las variables necesarias. Nunca guardes credenciales en Git.
+- `npm run dev` inicia el entorno de desarrollo.
+- Antes de modificar convenciones de Next.js, consulta `AGENTS.md` y los documentos de la versión instalada en `node_modules/next/dist/docs/`.
 
-## Instalación
-
-```bash
-npm install
-cp .env.example .env.local
-npm run dev
-```
-
-Abre http://localhost:3000
-
-## Estructura
-
-```
-app/
-  page.tsx              → Home
-  planes/                → Página de planes
-  academy/                → Página de DealerPass Academy
-  metodo-margen/          → Página del Método MARGEN
-  contacto/               → Formulario de contacto
-  legal/                  → 5 páginas legales (borradores)
-  api/lead/route.ts       → Recibe el formulario y reenvía al webhook configurado
-components/               → 20 componentes reutilizables (ver lista abajo)
-data/
-  plans.ts                → Precios, beneficios y tabla comparativa — edítalo aquí
-  margen.ts                → Las 6 variables del Método MARGEN
-  faq.ts                    → Preguntas frecuentes
-lib/analytics.ts            → Wrapper de tracking (GA4 / Meta Pixel / GTM) y helper de WhatsApp
-```
-
-## Editar precios y planes
-
-Todo el contenido de precios vive en un solo archivo: `data/plans.ts`. No hay precios hardcodeados en los componentes.
-
-## Variables de entorno
-
-Copia `.env.example` a `.env.local` y completa:
-
-- `NEXT_PUBLIC_GA4_ID`, `NEXT_PUBLIC_META_PIXEL_ID`, `NEXT_PUBLIC_GTM_ID` — analítica (agrega los scripts correspondientes en `app/layout.tsx` cuando tengas los IDs reales; no se generan snippets con IDs falsos).
-- `NEXT_PUBLIC_WHATSAPP_NUMBER` — número en formato internacional sin signos (ej. 573001234567).
-- `LEAD_FORM_WEBHOOK_URL` — endpoint de GoHighLevel, HubSpot o webhook genérico que recibirá cada lead del formulario de contacto.
-- `NEXT_PUBLIC_STRIPE_LINK_*` — enlaces de pago de Stripe por plan. Mientras estén vacíos, los botones de planes llevan al formulario de contacto en lugar de a checkout.
-
-## Eventos de analítica ya instrumentados
-
-`view_pricing`, `click_whatsapp`, `start_lead_form`, `submit_lead`, `click_academy`, `click_plan_starter`, `click_plan_academy`, `click_plan_pro`, `click_plan_elite`, `use_calculator`.
-
-## Build de producción
+## Verificación
 
 ```bash
-npm run build
-npm run start
+npm run verify
 ```
 
-## Componentes reutilizables incluidos
+Ejecuta lint, pruebas unitarias, comprobación de tipos, build de producción y revisión estructural del HTML generado.
 
-Header, MobileMenu, Logo, Hero, TrustBar, BenefitCards, HowItWorks, MarginMethod, CalculatorPreview, AcademySection, PricingCards, ComparisonTable, FounderAuthority, CaseStudies, AudienceFit, Testimonials, FAQ, LeadForm, FinalCTA, Footer, LegalLayout.
+También están disponibles por separado:
 
-## Notas de diseño
+- `npm run test`: políticas existentes, cálculos, validación de entradas, catálogo, filtros de inventario y recuperación de valores de la calculadora.
+- `npm run typecheck`: TypeScript sin emitir archivos.
+- `npm run build`: compilación de producción. La fuente Inter utiliza `next/font/google`; la primera compilación necesita acceso a la fuente.
+- `npm run check:build`: después del build, comprueba enlaces internos, anclas estáticas, imágenes locales, títulos principales e IDs duplicados.
+- `npm run start`: sirve el build de producción.
 
-- Paleta: azul eléctrico #1463FF, negro carbón #111318, gris acero #A7ADB7, blanco frío #F7F9FC, verde de validación #24C875 (solo para estados aprobados/checkmarks).
-- Tipografía: Space Grotesk (títulos) + Inter (cuerpo), vía `next/font/google` — se descargan en build time, por lo que `npm run build` requiere conexión a internet la primera vez.
-- Elemento de firma visual: el selector interactivo del Método MARGEN (M-A-R-G-E-N), reutilizado en el hero, en la página dedicada y como ancla de la propuesta de valor.
-- Ningún dato, testimonio, cifra de ahorro o nombre fue inventado. Todo lo que falta está marcado explícitamente como placeholder (ver PENDING_ASSETS.md).
+**Un build correcto no sustituye las pruebas de navegador.** Verifica filtros, historial Atrás/Adelante, apertura/cierre de la galería, teclado, menú móvil, anclas, movimiento reducido y formularios. Las rutas privadas requieren además una cuenta con el rol apropiado y pruebas de datos reales. La revisión estructural no valida autenticación, entrega de formularios, pagos ni dispositivos físicos.
 
-Ver `PENDING_ASSETS.md` para la lista completa de información y activos reales que faltan por proporcionar.
+## Estructura activa
+
+| Ruta | Propósito |
+| --- | --- |
+| `app/` | Rutas y estilos del App Router |
+| `components/` | Interfaz pública y privada reutilizable |
+| `data/vehicle-catalogue.ts` | Datos y fotografías del catálogo público |
+| `data/plans.ts` | Planes, importes de referencia y comparación |
+| `lib/academy/` | Políticas, datos de formación y calculadora |
+| `lib/investments/` | Validación y cálculos de inversiones |
+| `tests/` | Pruebas unitarias y comprobaciones SQL documentadas |
+| `scripts/check-build.mjs` | Revisión del HTML estático generado |
+| `docs/` | Documentación del proyecto y auditorías |
+
+Los archivos históricos en la raíz no son las rutas activas. Para modificar la interfaz, empieza por `app/` y `components/`.
+
+## Identidad y contenido
+
+Blanco y marfil, negro y naranja **#FF4D00**. Conserva la animación de la mano y el carro naranja del inicio. El catálogo utiliza vehículos reales; las portadas con fondo editado se identifican y las fichas incluyen las fotografías originales. No inventes testimonios, resultados, disponibilidad, lecciones o sesiones.
+
+El catálogo público y el inventario privado son fuentes distintas. Registrar una compra en el espacio privado **no publica automáticamente** un vehículo ni modifica su precio público. Los filtros de búsqueda solo cambian la vista; no alteran registros, totales o permisos.
+
+## Preparación de apertura
+
+Consulta `docs/ACADEMY_PAYMENTS.md` antes de trabajar con membresías o cobros. `PAYMENTS_ENABLED` debe permanecer desactivado hasta que precios, contenido, condiciones y pruebas estén aprobados. Crear una cuenta no activa una membresía.
+
+Las presentaciones, lecciones, sesiones y recursos deben publicarse solo cuando estén confirmados. El formulario de contacto depende de `LEAD_FORM_WEBHOOK_URL`; WhatsApp depende de `NEXT_PUBLIC_WHATSAPP_NUMBER`. Sin configuración, la interfaz debe explicar que la atención está en preparación, no prometer envíos o mostrar un canal ficticio.
