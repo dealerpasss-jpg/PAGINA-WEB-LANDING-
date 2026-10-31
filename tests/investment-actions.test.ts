@@ -5,6 +5,7 @@ import ts from 'typescript';
 import * as money from '../lib/investments/money.ts';
 import * as validation from '../lib/investments/validation.ts';
 import * as sales from '../lib/investments/sales.ts';
+import * as view from '../lib/investments/view.ts';
 import * as expensePresets from '../lib/investments/expense-presets.ts';
 
 // Execute the real server-action module with an isolated in-memory query double.
@@ -27,6 +28,7 @@ function harness(options:{admin?:boolean;data?:{id:string}[]|null;error?:unknown
   'next/navigation':{redirect:(url:string)=>{calls.push(['redirect',url]);throw new Error('TEST_REDIRECT');}},
   '@/lib/investments/server':{investmentIdentity:async()=>{calls.push(['identity']);return{db,admin:options.admin??true};}},
   '@/lib/investments/money':money,
+  '@/lib/investments/view':view,
   '@/lib/investments/sales':{...sales,businessDate:()=> '2026-10-31'},
   '@/lib/investments/validation':validation,
   '@/lib/investments/expense-presets':expensePresets,
@@ -98,4 +100,24 @@ test('reopening requires both close fields cleared and preserves optimistic lock
  const h=harness({previous:{status:'sold',sold_on:'2026-10-30',version:1}});assert.ok((await h.save(closingForm(h,'listed','2026-10-30')))?.error);
  await assert.rejects(h.save(closingForm(h,'listed','')),/TEST_REDIRECT/);const data=h.calls.find(x=>x[0]==='update')?.[1] as any;assert.equal(data.sold_on,null);assert.equal(data.sale_cents,null);
  for(const previous of [null,{status:'listed',sold_on:null,version:2}]) {const stale=harness({previous});assert.ok((await stale.save(closingForm(stale)))?.error);assert.equal(stale.calls.some(x=>x[0]==='update'),false);}
+});
+
+test('successful save retains only bounded inventory context with fixed local destination',async()=>{
+ const h=harness();const f=closingForm(h);f.set('inventory_query','buscar=Ford+%26+blanco&estado=listed&pendientes=purchase&orden=result-desc&next=https://evil.test&message=forged');
+ await assert.rejects(h.save(f),/TEST_REDIRECT/);
+ const destination=new URL(String(h.calls.find(x=>x[0]==='redirect')?.[1]),'https://dealerpasss.com');
+ assert.equal(destination.origin,'https://dealerpasss.com');assert.equal(destination.pathname,'/mi-cuenta/inversiones/'+vehicle);
+ assert.deepEqual(Object.fromEntries(destination.searchParams),{buscar:'Ford & blanco',estado:'listed',pendientes:'purchase',orden:'result-desc',message:'Cambios guardados.'});
+ const data=h.calls.find(x=>x[0]==='update')?.[1] as Record<string,unknown>;assert.equal('inventory_query' in data,false);assert.equal(data.sale_cents,20050);assert.equal(data.version,2);
+});
+test('return-context tampering cannot redirect off-site or bypass save validation',async()=>{
+ for(const query of ['//evil.test','https://evil.test/path','next=//evil.test&estado=constructor&orden=constructor','buscar=%2F%2Fevil.test%3Fnext%3Dhttps%3A%2F%2Fevil.test']) {
+  const h=harness();const f=closingForm(h);f.set('inventory_query',query);await assert.rejects(h.save(f),/TEST_REDIRECT/);
+  const destination=new URL(String(h.calls.find(x=>x[0]==='redirect')?.[1]),'https://dealerpasss.com');assert.equal(destination.origin,'https://dealerpasss.com');assert.equal(destination.pathname,'/mi-cuenta/inversiones/'+vehicle);assert.equal(destination.searchParams.has('next'),false);assert.equal(destination.searchParams.get('message'),'Cambios guardados.');
+ }
+ for(const query of ['x'.repeat(1501)]) {const h=harness();const f=closingForm(h);f.set('inventory_query',query);assert.ok((await h.save(f))?.error);assert.equal(h.calls.some(x=>['from','private-read','revalidate','redirect'].includes(String(x[0]))),false);}
+ const failed=harness({data:[]});const f=closingForm(failed);f.set('inventory_query','estado=listed');assert.ok((await failed.save(f))?.error);assert.equal(failed.calls.some(x=>x[0]==='redirect'),false);
+});
+test('legacy submissions without inventory context retain their previous success destination',async()=>{
+ const h=harness();await assert.rejects(h.save(closingForm(h)),/TEST_REDIRECT/);assert.deepEqual(h.calls.find(x=>x[0]==='redirect'),['redirect','/mi-cuenta/inversiones/'+vehicle+'?message=Cambios%20guardados.']);
 });

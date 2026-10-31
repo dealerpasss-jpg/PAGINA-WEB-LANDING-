@@ -4,6 +4,7 @@ import SalesPerformance from './SalesPerformance';
 import ArrowIcon from '@/components/ArrowIcon';
 import { usd, statuses } from '@/lib/investments/money';
 import { comparisonWidths } from '@/lib/investments/dashboard-summary';
+import { missingFields } from '@/lib/investments/pending';
 import type { InvestmentDashboardState } from '@/lib/investments/dashboard-server';
 import styles from './InvestmentDashboard.module.css';
 
@@ -30,7 +31,7 @@ function FinancialCharts({ snapshot:s }: { snapshot:Snapshot }) {
       <figcaption><span className={styles.eyebrow}>INVENTARIO PRIVADO</span><h3 id="status-chart-title">De compra a venta.</h3></figcaption>
       <div className={styles.inventoryTotal}><strong>{s.count}</strong><span>carros registrados<br />{s.portfolio.activeCount} activos · {s.portfolio.soldCount} vendidos</span></div>
       <div className={styles.statusTrack} aria-hidden="true">{s.stages.filter(stage=>stage.count>0).map(stage=><i key={stage.key} data-stage={stage.key} style={{width:`${stage.count/s.count*100}%`}} />)}</div>
-      <dl className={styles.stageList}>{s.stages.map(stage=><div key={stage.key}><dt><VehicleStatus status={stage.key as keyof typeof statuses} dark/></dt><dd>{stage.count}</dd></div>)}</dl>
+      <dl className={styles.stageList}>{s.stages.map(stage=><div key={stage.key}><dt><Link prefetch={false} href={`/mi-cuenta/inversiones?estado=${stage.key}#inventario`}><VehicleStatus status={stage.key as keyof typeof statuses} dark/></Link></dt><dd>{stage.count}</dd></div>)}</dl>
       <p className={styles.chartNote}>Distribución actual por estado. No es una gráfica de crecimiento ni de cobros.</p>
     </figure>
   </div>;
@@ -62,7 +63,12 @@ export default function InvestmentDashboard({ data, today, period, anchor, expan
         <div><dt>Carros activos</dt><dd>{p.activeCount}</dd><small>{p.soldCount} vendidos · {s.count} registrados</small></div>
       </dl>
       <p className={styles.estimateNote}>¹ Referencia de venta menos compra y gastos registrados de carros aún activos. <strong>No es ganancia realizada ni dinero cobrado.</strong>{s.estimated.pendingCount>0&&` Faltan datos de compra o precio de referencia en ${s.estimated.pendingCount} carros; no se cuentan como ganancia cero.`}</p>
-      {p.activeMissingPurchase>0&&<p className={styles.coverage}><span aria-hidden="true">!</span><span><strong>{p.activeMissingPurchase} {p.activeMissingPurchase===1?'compra pendiente':'compras pendientes'} de completar.</strong> El subtotal incluye sus gastos, no compras en cero.</span></p>}
+      {s.pending.length>0&&<details className={styles.pendingQueue}>
+        <summary><span><strong>Por completar</strong><span>{s.pending.length} vehículos con datos pendientes</span></span><span>Revisar <ArrowIcon direction="down"/></span></summary>
+        <p>Completa solo los datos que puedas confirmar. {p.activeMissingPurchase>0&&`${p.activeMissingPurchase} ${p.activeMissingPurchase===1?'compra pendiente':'compras pendientes'}: el subtotal incluye sus gastos, no compras en cero.`} No se presupone que falten gastos por no tenerlos registrados.</p>
+        <ul>{s.pending.map(vehicle=><li key={vehicle.id}><strong>{vehicle.title}</strong><div>{vehicle.fields.map(key=><Link prefetch={false} key={key} href={`/mi-cuenta/inversiones/${vehicle.id}?pendientes=all#${missingFields[key].target}`}>{missingFields[key].label} <ArrowIcon direction="right"/></Link>)}</div></li>)}</ul>
+        <Link prefetch={false} className={styles.manageLink} href="/mi-cuenta/inversiones?pendientes=all#inventario">Ver lista de pendientes <ArrowIcon direction="right"/></Link>
+      </details>}
       {today&&<SalesPerformance sales={s.sales} today={today} period={period} anchor={anchor} expanded={expanded}/>}
       {s.count>0 ? <FinancialCharts snapshot={s} /> : <div className={styles.empty}><h3>Aún no has registrado compras.</h3><p>Tu primer carro y sus gastos aparecerán aquí cuando los guardes.</p><Link className="dashboard-cta" href="/mi-cuenta/inversiones#nuevo-vehiculo">Registrar una compra <ArrowIcon /></Link></div>}
       <div className={styles.closing}><div><span>Ventas registradas</span><strong>{p.soldCount?p.soldMissingSale===p.soldCount?'Pendiente':usd(p.registeredSales):'Sin ventas'}</strong>{p.soldMissingSale>0&&<small>{p.soldMissingSale} precios de cierre pendientes</small>}</div><div><span>{p.realizedPendingCount?'Resultado parcial · vendidos':'Resultado realizado · vendidos'}</span><strong>{p.realizedKnownCount?usd(p.realizedRecorded):p.soldCount?'Pendiente':'Sin ventas'}</strong>{p.realizedPendingCount>0&&<small>{p.realizedPendingCount} cierres sin compra o venta completas</small>}</div></div>

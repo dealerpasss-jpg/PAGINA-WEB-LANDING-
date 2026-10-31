@@ -14,7 +14,7 @@ export default function VehicleForm({vehicle}:{vehicle?:Vehicle}) {
  <fieldset className="investment-field-group"><legend>02 / Registra la compra</legend>
  <label>Subasta o proveedor<input name="auction" maxLength={100} defaultValue={vehicle?.auction}/></label>
  <label>Fecha de compra (si la conoces)<input type="date" name="purchased_on" defaultValue={vehicle?.purchased_on || ""}/></label>
- <label>Precio de compra / martillo (USD)<input type="number" inputMode="decimal" name="purchase_cents" min="0" max="999999999" step="0.01" defaultValue={amount(vehicle?.purchase_cents)}/><small>Déjalo vacío si está pendiente; cero significa una compra de $0.</small></label>
+ <label>Precio de compra / martillo (USD)<input id="compra-precio" type="number" inputMode="decimal" name="purchase_cents" min="0" max="999999999" step="0.01" defaultValue={amount(vehicle?.purchase_cents)}/><small>Déjalo vacío si está pendiente; cero significa una compra de $0.</small></label>
  <p className="investment-note">Añade cargos de subasta, reparaciones y otros gastos por separado en la ficha, sin repetirlos en el martillo.</p>
  </fieldset>
  <SaleFields status={vehicle?.status} asking={amount(vehicle?.asking_cents)} sale={amount(vehicle?.sale_cents)} soldOn={vehicle?.sold_on??null} today={businessDate()}/>

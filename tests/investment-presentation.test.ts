@@ -5,14 +5,15 @@ import { createRequire } from 'node:module';
 import ts from 'typescript';
 import React from 'react';
 import { renderToStaticMarkup } from 'react-dom/server';
+import * as view from '../lib/investments/view.ts';
 import * as money from '../lib/investments/money.ts';
 import { portfolioSummary } from '../lib/investments/portfolio.ts';
 const require=createRequire(import.meta.url);
 function load(path:string,overrides:Record<string,unknown>={}) {
  const code=ts.transpileModule(readFileSync(new URL('../'+path,import.meta.url),'utf8'),{compilerOptions:{module:ts.ModuleKind.CommonJS,target:ts.ScriptTarget.ES2022,jsx:ts.JsxEmit.ReactJSX,esModuleInterop:true}}).outputText;
- const imports:Record<string,unknown>={'react':React,'react/jsx-runtime':require('react/jsx-runtime'),'@/lib/investments/money':money,'@/lib/investments/portfolio':{portfolioSummary},...overrides};
+ const imports:Record<string,unknown>={'react':React,'react/jsx-runtime':require('react/jsx-runtime'),'@/lib/investments/money':money,'@/lib/investments/view':view,'@/lib/investments/portfolio':{portfolioSummary},...overrides};
  const module={exports:{} as Record<string,unknown>};
- new Function('require','module','exports','window',code)((id:string)=>{assert.ok(id in imports,'Unexpected import '+id);return imports[id];},module,module.exports,overrides.window);
+ new Function('require','module','exports','window','FormData',code)((id:string)=>{assert.ok(id in imports,'Unexpected import '+id);return imports[id];},module,module.exports,overrides.window,overrides.FormData??FormData);
  return module.exports.default as React.ComponentType<any>;
 }
 const Overview=load('components/investments/PortfolioOverview.tsx');
@@ -80,4 +81,17 @@ test('new close requires date while legacy undated stays editable and active-onl
   const html=renderToStaticMarkup(React.createElement(SaleFields,{status,asking:'',sale:'',soldOn,today:'2026-10-31'}));const input=html.match(/<input[^>]*name="sold_on"[^>]*>/)?.[0]??'';
   assert.equal(input.includes('required='),required);assert.equal(input.includes('disabled='),status==='purchased');
  }
+});
+
+test('submit captures current allowlisted filters without losing typed cents or version',async()=>{
+ let saved:FormData|undefined;let run:Promise<void>|undefined;const values=new FormData();values.set('amount_cents','150,25');values.set('version','7');values.set('inventory_query','next=https://evil.test');
+ const location={search:'?buscar=Ford&estado=listed&orden=cost-desc&message=old'};
+ const Form=load('components/investments/InvestmentForm.tsx',{
+  react:{...React,useTransition:()=>[false,(callback:()=>Promise<void>)=>{run=callback();}],useState:()=>['',()=>{}]},
+  'next/navigation':{unstable_rethrow:()=>{}},'@/app/mi-cuenta/inversiones/actions':{saveInvestment:async(data:FormData)=>{saved=data;}},
+  window:{location},FormData:function(){return values;},
+ }) as (props:unknown)=>React.ReactElement<any>;
+ const tree=Form({children:null});location.search='?buscar=Mazda+%26+blanco&estado=repairing&pendientes=all&orden=result-desc&next=https://evil.test&message=old';
+ tree.props.children.props.onSubmit({preventDefault:()=>{},currentTarget:{}});await run;
+ assert.equal(saved?.get('amount_cents'),'150,25');assert.equal(saved?.get('version'),'7');assert.equal(saved?.get('inventory_query'),'buscar=Mazda+%26+blanco&estado=repairing&pendientes=all&orden=result-desc');
 });

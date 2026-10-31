@@ -1,5 +1,5 @@
+import { missingInvestmentFields } from '@/lib/investments/pending';
 import VehicleStatus from '@/components/investments/VehicleStatus';
-import Image from 'next/image';
 import PortfolioOverview from '@/components/investments/PortfolioOverview';
 import { portfolioSummary } from '@/lib/investments/portfolio';
 import InventoryCollection from '@/components/investments/InventoryCollection';
@@ -9,7 +9,7 @@ import AccountShell from '@/components/AccountShell';
 import VehicleForm, {type Vehicle} from '@/components/investments/VehicleForm';
 import { investmentIdentity, allRows } from '@/lib/investments/server';
 import { database } from '@/lib/academy/server';
-import { usd, totals, statuses } from '@/lib/investments/money';
+import { totals, statuses } from '@/lib/investments/money';
 import { vehicleCatalogue } from '@/data/vehicle-catalogue';
 export const dynamic='force-dynamic';
 export default async function Page({searchParams}:{searchParams:Promise<{message?:string}>}) {
@@ -31,7 +31,7 @@ export default async function Page({searchParams}:{searchParams:Promise<{message
  {portfolio&&<PortfolioOverview summary={portfolio}/>}</>}
  <section className="dashboard-panel workspace-pipeline" aria-labelledby="pipeline-title"><div className="dashboard-section-title"><h2 id="pipeline-title">Estado del inventario</h2><span>{rows.length} vehículos</span></div><div className="workspace-pipeline-grid">{Object.entries(statuses).map(([key])=>{const count=rows.filter(v=>v.status===key).length;return <div key={key}><div><VehicleStatus status={key as keyof typeof statuses}/><strong>{count}</strong></div><progress aria-label={statuses[key as keyof typeof statuses]} value={count} max={Math.max(rows.length,1)}/></div>})}</div></section>
  {!rows.length&&<div className="investment-empty"><h2>{admin?'Registra tu primer carro.':'Todavía no tienes vehículos asignados.'}</h2><p>{admin?'Añade una compra y después carga sus fotos y reparaciones.':'El administrador puede asignar vehículos a tu correo confirmado.'}</p></div>}
- <InventoryCollection items={rows.map(v=>{const catalogue=vehicleCatalogue.find(c=>c.slug===v.catalogue_slug);const photo=photos.find(p=>p.vehicle_id===v.id);const src=catalogue?.photos[0]?.src || (photo?'/api/investments/photo?id='+photo.id:null);return {id:v.id,title:v.title,status:v.status,card:<article className="account-card" key={v.id}><Link className="investment-cover" href={'/mi-cuenta/inversiones/'+v.id}>{src?<Image unoptimized={!!photo&&!catalogue} src={src} alt={v.title} width={800} height={600}/>:<span className="investment-cover-empty">{admin ? "Añadir fotos" : "Sin fotos disponibles"}</span>}</Link><VehicleStatus status={v.status}/><h2>{v.title}</h2>{admin&&v.summary&&<dl className="investment-finance"><div><dt>Compra</dt><dd>{v.purchase_cents===null?'Pendiente':usd(v.purchase_cents)}</dd></div><div><dt>Arreglos y otros gastos</dt><dd>{usd(v.summary.expensesTotal)}</dd></div><div><dt>Inversión registrada</dt><dd>{v.summary.cost===null?'Pendiente':usd(v.summary.cost)}</dd></div><div><dt>{v.status==='sold'?'Resultado realizado¹':'Ganancia estimada¹'}</dt><dd>{usd(v.status==='sold'?v.summary.realized:v.summary.estimated)}</dd></div></dl>}{admin&&<p className="investment-note">¹ Según los gastos registrados. No confirma cobros ni garantiza el precio de venta.</p>}<div className="investment-actions"><Link href={'/mi-cuenta/inversiones/'+v.id}>{admin?'Abrir ficha y registrar costos':'Ver fotos y estado'} <ArrowIcon direction="right"/></Link></div></article>};})} />
+ <InventoryCollection admin={admin} items={rows.map(v=>{const catalogue=vehicleCatalogue.find(c=>c.slug===v.catalogue_slug);const photo=photos.find(p=>p.vehicle_id===v.id);const src=catalogue?.photos[0]?.src || (photo?'/api/investments/photo?id='+photo.id:null);return {id:v.id,title:v.title,status:v.status,photo:src?{src,unoptimized:!!photo&&!catalogue}:null,...(admin&&v.summary?{financial:{purchase:v.purchase_cents,expenses:v.summary.expensesTotal,cost:v.summary.cost,reference:v.status==='sold'?v.sale_cents:v.asking_cents,result:v.status==='sold'?v.summary.realized:v.summary.estimated,purchasedOn:v.purchased_on,missing:missingInvestmentFields(v)}}:{})};})} />
  {admin&&<section id="nuevo-vehiculo" className="account-card"><h2>Registrar nueva compra</h2><p>Crea la ficha administrativa. En el siguiente paso podrás añadir fotos y gastos. Esta ficha es privada; no publica el carro automáticamente en el catálogo de venta.</p><VehicleForm/></section>}
  </AccountShell>;
 }

@@ -1,6 +1,7 @@
 'use client';
 import { createContext, useContext, useState, useTransition } from 'react';
 import { unstable_rethrow } from 'next/navigation';
+import { investmentQuery } from '@/lib/investments/view';
 import { saveInvestment } from '@/app/mi-cuenta/inversiones/actions';
 const PendingContext = createContext(false);
 export function useInvestmentPending() { return useContext(PendingContext); }
@@ -13,6 +14,9 @@ export default function InvestmentForm({ children, className, confirmMessage }: 
     if (confirmMessage && !window.confirm(confirmMessage)) return;
     // Capture before disabling controls; a failed save keeps every entered value.
     const data = new FormData(event.currentTarget);
+    // Read at submit time so Back/Forward and freshly changed filters are retained.
+    // Carry only inventory context, never an arbitrary return URL or form values.
+    data.set('inventory_query', investmentQuery(new URLSearchParams(window.location.search)));
     setError('');
     startTransition(async () => {
       try {

@@ -1,5 +1,6 @@
 import { totals, statuses, categories } from './money.ts';
 import { portfolioSummary } from './portfolio.ts';
+import { missingInvestmentFields } from './pending.ts';
 
 export type DashboardVehicle = { id:string; title:string; status:keyof typeof statuses; purchase_cents:number|null; asking_cents:number|null; sale_cents:number|null; sold_on?:string|null; created_at:string };
 export type DashboardExpense = { vehicle_id:string; amount_cents:number; category?:string };
@@ -20,6 +21,7 @@ export function dashboardInvestmentSummary(vehicles:DashboardVehicle[], activeEx
     byCategory.set(category,(byCategory.get(category)??0)+expense.amount_cents);
   }
   return {
+    pending:rows.map(row=>({id:row.id,title:row.title,fields:missingInvestmentFields(row)})).filter(row=>row.fields.length>0),
     estimated:{amount:activeRows.reduce((sum,row)=>sum+(row.summary.estimated??0),0),knownCount:activeRows.filter(row=>row.summary.estimated!==null).length,pendingCount:activeRows.filter(row=>row.summary.estimated===null).length},
     sales:rows.filter(row=>row.status==='sold').map(row=>({sold_on:row.sold_on??null,sale_cents:row.sale_cents,realized:row.summary.realized})),
     activePurchase:activeRows.reduce((sum,row)=>sum+(row.purchase_cents??0),0),

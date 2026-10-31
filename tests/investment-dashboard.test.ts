@@ -8,6 +8,7 @@ import { renderToStaticMarkup } from 'react-dom/server';
 import { dashboardInvestmentSummary, comparisonWidths, type DashboardVehicle } from '../lib/investments/dashboard-summary.ts';
 import * as sales from '../lib/investments/sales.ts';
 import * as money from '../lib/investments/money.ts';
+import * as pending from '../lib/investments/pending.ts';
 const require=createRequire(import.meta.url);
 function moduleAt(path:string,overrides:Record<string,unknown>={}) {
  const code=ts.transpileModule(readFileSync(new URL('../'+path,import.meta.url),'utf8'),{compilerOptions:{module:ts.ModuleKind.CommonJS,target:ts.ScriptTarget.ES2022,jsx:ts.JsxEmit.ReactJSX,esModuleInterop:true}}).outputText;
@@ -42,7 +43,7 @@ test('server pagination reaches beyond first 500 vehicles with stable order',asy
  const h=serverHarness(false,Array.from({length:501},(_,i)=>car('local'+i)));const result=await h.load('admin');assert.equal(result.snapshot.count,501);assert.ok(h.calls.some(c=>JSON.stringify(c)===JSON.stringify(['range','investment_vehicles',500,999])));
 });
 const Sales=moduleAt('components/investments/SalesPerformance.tsx',{'next/link':({children,...props}:any)=>React.createElement('a',props,children),'@/lib/investments/sales':sales,'@/lib/investments/money':money,'./SalesPerformance.module.css':{__esModule:true,default:new Proxy({},{get:(_,key)=>String(key)})}}).default;
-const Dashboard=moduleAt('components/investments/InvestmentDashboard.tsx',{'next/link':({children,...props}:any)=>React.createElement('a',props,children),'@/components/ArrowIcon':()=>React.createElement('span',{'aria-hidden':true},'→'),'@/lib/investments/money':money,'@/lib/investments/dashboard-summary':{comparisonWidths},'./SalesPerformance':Sales,'./VehicleStatus':({status}:any)=>React.createElement('span',null,money.statuses[status as keyof typeof money.statuses]),'./InvestmentDashboard.module.css':{__esModule:true,default:new Proxy({},{get:(_,key)=>String(key)})}}).default;
+const Dashboard=moduleAt('components/investments/InvestmentDashboard.tsx',{'next/link':({children,...props}:any)=>React.createElement('a',props,children),'@/components/ArrowIcon':()=>React.createElement('span',{'aria-hidden':true},'→'),'@/lib/investments/money':money,'@/lib/investments/pending':pending,'@/lib/investments/dashboard-summary':{comparisonWidths},'./SalesPerformance':Sales,'./VehicleStatus':({status}:any)=>React.createElement('span',null,money.statuses[status as keyof typeof money.statuses]),'./InvestmentDashboard.module.css':{__esModule:true,default:new Proxy({},{get:(_,key)=>String(key)})}}).default;
 test('real main component hides nonadmin data and clearly distinguishes unavailable/empty/registered figures',()=>{
  assert.equal(renderToStaticMarkup(React.createElement(Dashboard,{data:{state:'hidden'}})),'');
  const error=renderToStaticMarkup(React.createElement(Dashboard,{data:{state:'unavailable'}}));assert.match(error,/No pudimos cargar/);assert.doesNotMatch(error,/\$0|CARROS ACTIVOS/);

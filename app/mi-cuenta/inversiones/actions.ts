@@ -3,6 +3,7 @@ import { revalidatePath } from 'next/cache';
 import { redirect } from 'next/navigation';
 import { investmentIdentity } from '@/lib/investments/server';
 import { cents, statuses } from '@/lib/investments/money';
+import { investmentQuery } from '@/lib/investments/view';
 import { expenseConcept } from '@/lib/investments/expense-presets';
 import { investmentDate, investmentVersion, ownKey } from '@/lib/investments/validation';
 import { businessDate, closingDate } from '@/lib/investments/sales';
@@ -11,8 +12,9 @@ const uuid = /^[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12}$/i;
 function text(f:FormData,key:string,max=500,required=false) {const v=String(f.get(key)||'').trim();if(v.length>max||required&&!v)throw new Error('Revisa los campos obligatorios y su longitud.');return v;}
 export async function saveInvestment(f:FormData) {
  const {db,admin}=await investmentIdentity(); if(!admin)throw new Error('Acceso de consulta. Solo el administrador puede editar.');
- const action=text(f,'action',30);const id=text(f,'vehicle_id',36);let next='/mi-cuenta/inversiones'+(uuid.test(id)?'/'+id:'');const message='Cambios guardados.';
+ const action=text(f,'action',30);const id=text(f,'vehicle_id',36);let next='/mi-cuenta/inversiones'+(uuid.test(id)?'/'+id:'');const message='Cambios guardados.';let context='';
  try {
+ context=investmentQuery(new URLSearchParams(text(f,'inventory_query',1500)));
  if(action!=='create'&&!uuid.test(id))throw new Error('Vehículo inválido.');
  if(action==='create'||action==='vehicle') {
  const status=text(f,'status',20)||'purchased';if(!ownKey(statuses,status))throw new Error('Estado inválido.');
@@ -36,5 +38,5 @@ export async function saveInvestment(f:FormData) {
  } else if(action==='revoke') {const member=text(f,'member_id',36).toLowerCase();if(!uuid.test(member))throw new Error('Participante inválido.');const result=checked(await db.from('investment_members').update({revoked_at:new Date().toISOString()}).eq('id',member).eq('vehicle_id',id).is('revoked_at',null).select('id'));if(result.data?.length!==1||result.data[0].id!==member)throw new Error('No se retiró el acceso. Puede estar ya retirado o no estar disponible en este vehículo. Recarga la ficha para comprobarlo.');
  } else throw new Error('Acción inválida.');
  } catch(e) {return {error:e instanceof Error && !('code' in e) ? e.message : 'No se pudo guardar. Tus datos siguen en el formulario. Revisa los datos e inténtalo de nuevo.'};}
- revalidatePath('/mi-cuenta/inversiones','layout');revalidatePath('/mi-cuenta');redirect(next+'?message='+encodeURIComponent(message));
+ revalidatePath('/mi-cuenta/inversiones','layout');revalidatePath('/mi-cuenta');redirect(next+'?'+(context?context+'&':'')+'message='+encodeURIComponent(message));
 }
