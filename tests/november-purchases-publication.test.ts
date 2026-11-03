@@ -38,7 +38,7 @@ test('new purchased cars remain previews until the existing inventory state perm
 });
 test('routes, neutral non-sale copy and private image reuse are wired without financial mutations',()=>{
  for(const slug of slugs){const route=readFileSync(new URL('../app/vehiculos/'+slug+'/page.tsx',import.meta.url),'utf8');assert.match(route,/generateMetadata/);assert.ok(route.includes('VehicleDetail slug="'+slug+'"'));}
- const detail=readFileSync(new URL('../components/VehicleDetailView.tsx',import.meta.url),'utf8');assert.doesNotMatch(detail,/VEHÍCULO DEL EQUIPO|uso del equipo/i);assert.match(detail,/vehicle.availability==='available'\?<><Link href="\/contacto"/);
+ const detail=readFileSync(new URL('../components/VehicleDetailView.tsx',import.meta.url),'utf8');assert.doesNotMatch(detail,/VEHÍCULO DEL EQUIPO|uso del equipo/i);assert.match(detail,/vehicle.availability==='available'\?<><Link href=\{`\/contacto\?vehiculo=\$\{encodeURIComponent\(vehicle.slug\)\}/);
  for(const file of ['page.tsx','[id]/page.tsx']){const page=readFileSync(new URL('../app/mi-cuenta/inversiones/'+file,import.meta.url),'utf8');assert.match(page,/publishedVehicleForInvestment/);assert.doesNotMatch(page,/\.insert\(|\.update\(/);}
  const card=readFileSync(new URL('../components/VehicleCards.tsx',import.meta.url),'utf8');assert.match(card,/referenceBadge}>Imagen de referencia/);
 });

@@ -42,7 +42,7 @@ test('destructive confirmation cancellation and pending guard never call the ser
  for(const pending of [false,true]) {
   let confirms=0,transitions=0,saves=0,prevented=false;
   const Form=load('components/investments/InvestmentForm.tsx',{
-   react:{...React,useTransition:()=>[pending,()=>{transitions++;}],useState:()=>['',()=>{}]},
+   react:{...React,useRef:(value:unknown)=>({current:value}),useEffect:()=>{},useTransition:()=>[pending,()=>{transitions++;}],useState:()=>['',()=>{}]},
    'next/navigation':{unstable_rethrow:()=>{}},
    '@/app/mi-cuenta/inversiones/actions':{saveInvestment:()=>{saves++;}},
    window:{confirm:()=>{confirms++;return false;}},
@@ -87,11 +87,34 @@ test('submit captures current allowlisted filters without losing typed cents or 
  let saved:FormData|undefined;let run:Promise<void>|undefined;const values=new FormData();values.set('amount_cents','150,25');values.set('version','7');values.set('inventory_query','next=https://evil.test');
  const location={search:'?buscar=Ford&estado=listed&orden=cost-desc&message=old'};
  const Form=load('components/investments/InvestmentForm.tsx',{
-  react:{...React,useTransition:()=>[false,(callback:()=>Promise<void>)=>{run=callback();}],useState:()=>['',()=>{}]},
+  react:{...React,useRef:(value:unknown)=>({current:value}),useEffect:()=>{},useTransition:()=>[false,(callback:()=>Promise<void>)=>{run=callback();}],useState:()=>['',()=>{}]},
   'next/navigation':{unstable_rethrow:()=>{}},'@/app/mi-cuenta/inversiones/actions':{saveInvestment:async(data:FormData)=>{saved=data;}},
   window:{location},FormData:function(){return values;},
  }) as (props:unknown)=>React.ReactElement<any>;
  const tree=Form({children:null});location.search='?buscar=Mazda+%26+blanco&estado=repairing&pendientes=all&orden=result-desc&next=https://evil.test&message=old';
  tree.props.children.props.onSubmit({preventDefault:()=>{},currentTarget:{}});await run;
  assert.equal(saved?.get('amount_cents'),'150,25');assert.equal(saved?.get('version'),'7');assert.equal(saved?.get('inventory_query'),'buscar=Mazda+%26+blanco&estado=repairing&pendientes=all&orden=result-desc');
+});
+
+test('same-tick duplicate submit is locked until settlement, then failed save remains retryable',async()=>{
+ let saves=0;let resolve:(value:{error:string})=>void=()=>{};let run:Promise<void>|undefined;const states:unknown[]=[];
+ const Form=load('components/investments/InvestmentForm.tsx',{
+  react:{...React,useRef:(value:unknown)=>({current:value}),useEffect:()=>{},useState:(value:unknown)=>[value,(next:unknown)=>states.push(next)],useTransition:()=>[false,(callback:()=>Promise<void>)=>{run=callback();}]},
+  'next/navigation':{unstable_rethrow:()=>{}},'@/app/mi-cuenta/inversiones/actions':{saveInvestment:()=>{saves++;return new Promise(r=>{resolve=r;});}},
+  window:{location:{search:'?vista=table'}},FormData:function(){const data=new FormData();data.set('amount_cents','150,25');return data;},
+ }) as (props:unknown)=>React.ReactElement<any>;
+ const form=Form({children:null}).props.children;const event={preventDefault(){},currentTarget:{}};
+ form.props.onSubmit(event);form.props.onSubmit(event);assert.equal(saves,1);
+ resolve({error:'Revisa el importe.'});await run;assert.ok(states.includes('Revisa el importe.'));
+ form.props.onSubmit(event);assert.equal(saves,2);resolve({error:'Revisa el importe.'});await run;
+});
+test('error focus uses a live alert target, preserves input fields, and clears the sticky header',()=>{
+ const calls:unknown[][]=[];const target={focus:(o:unknown)=>calls.push(['focus',o]),scrollIntoView:(o:unknown)=>calls.push(['scroll',o])};let refs=0;let states=0;const effects:Array<()=>void>=[];
+ const Form=load('components/investments/InvestmentForm.tsx',{
+  react:{...React,useRef:()=>({current:++refs===1?false:target}),useEffect:(effect:()=>void)=>effects.push(effect),useState:()=>[++states===1?'Error de prueba':1,()=>{}],useTransition:()=>[false,()=>{}]},
+  'next/navigation':{unstable_rethrow:()=>{}},'@/app/mi-cuenta/inversiones/actions':{saveInvestment:()=>{}},
+ }) as (props:unknown)=>React.ReactElement<any>;
+ const field=React.createElement('input',{defaultValue:'150,25'});const tree=Form({children:field});effects.forEach(effect=>effect());
+ assert.deepEqual(calls,[['focus',{preventScroll:true}],['scroll',{block:'start',behavior:'instant'}]]);
+ const children=tree.props.children.props.children;assert.equal(children[0].props.children,field);assert.equal(children[1].props.role,'alert');assert.equal(children[1].props.tabIndex,-1);assert.equal(children[1].props.style.scrollMarginTop,110);
 });

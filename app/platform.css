@@ -40,6 +40,8 @@ body:has(.workspace-shell) .page-transition { animation:none; transform:none; }
 .contact-unavailable h2 { font-size:32px; margin:18px 0; }
 .contact-unavailable p { margin-bottom:24px; }
 .contact-unavailable .text-link { margin-left:18px; }
+.contact-vehicle-actions { display:flex; flex-wrap:wrap; gap:12px 20px; align-items:center; }
+.contact-vehicle-actions .text-link { margin:0; min-height:44px; }
 .system-state { padding-top:80px; padding-bottom:100px; min-height:60vh; }
 .system-state h1,.system-state h2 { margin:24px 0; max-width:800px; }
 .system-state p { max-width:620px; color:#555650; }

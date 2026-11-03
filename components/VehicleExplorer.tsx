@@ -1,9 +1,9 @@
 'use client';
 
 import { useSearchParams } from 'next/navigation';
-import { useSyncExternalStore } from 'react';
+import { useRef, useSyncExternalStore } from 'react';
 import type { CatalogueVehicle } from '@/data/vehicle-catalogue';
-import { filterCatalogue, readCatalogueFilters, vehicleMake, updateCatalogueParams, catalogueQuery, type CatalogueParam } from '@/lib/vehicles/catalogue';
+import { filterCatalogue, readCatalogueFilters, vehicleMake, updateCatalogueParams, catalogueQuery, type CatalogueParam, catalogueAvailability } from '@/lib/vehicles/catalogue';
 import { catalogueHistorySnapshot, replaceCatalogueHistory, subscribeCatalogueHistory } from '@/lib/vehicles/catalogue-history';
 import { useLiveCatalogue } from '@/lib/vehicles/use-live-catalogue';
 import VehicleCards from './VehicleCards';
@@ -12,6 +12,7 @@ import styles from '@/app/vehiculos/vehicles.module.css';
 
 export default function VehicleExplorer({ vehicles:initial }: { vehicles: CatalogueVehicle[] }) {
   const vehicles=useLiveCatalogue(initial);
+  const searchInput = useRef<HTMLInputElement>(null);
   // Keep Next's navigation subscription/SSR snapshot, but never control an input
   // with its delayed history reflection: rapid typing otherwise drops characters.
   const routerParams = useSearchParams();
@@ -20,7 +21,7 @@ export default function VehicleExplorer({ vehicles:initial }: { vehicles: Catalo
   const filters = readCatalogueFilters(params);
   const matches = filterCatalogue(vehicles, filters);
   const makes = [...new Set(vehicles.map(vehicleMake))];
-  const filtered = !!filters.query || !!filters.make;
+  const filtered = !!filters.query || !!filters.make || !!filters.availability;
 
   function update(key: CatalogueParam, value: string) {
     const next = updateCatalogueParams(new URLSearchParams(catalogueHistorySnapshot()), key, value);
@@ -28,14 +29,20 @@ export default function VehicleExplorer({ vehicles:initial }: { vehicles: Catalo
   }
   function reset() {
     const next = new URLSearchParams(catalogueHistorySnapshot());
-    ['buscar', 'marca', 'orden'].forEach(key => next.delete(key));
+    ['buscar', 'marca', 'orden', 'disponibilidad'].forEach(key => next.delete(key));
     replaceCatalogueHistory(next);
+    searchInput.current?.focus({preventScroll:true});
+    searchInput.current?.scrollIntoView({block:'center',behavior:'instant'});
   }
   return <section aria-labelledby="inventory-title">
     <div className={styles.inventoryLabel}><h2 id="inventory-title">Encuentra el que va contigo.</h2><span className={styles.inventoryCount}>{vehicles.length} vehículos publicados</span></div>
     <div className={styles.explorerControls}>
-      <label className={styles.searchField}><span>Busca por modelo o característica</span><div><svg viewBox="0 0 24 24" fill="none" aria-hidden="true"><circle cx="10.5" cy="10.5" r="6.5" /><path d="m16 16 4.5 4.5" /></svg><input type="search" value={filters.query} maxLength={100} onChange={event => update('buscar', event.target.value)} placeholder="Ej. Ford, 2016, blanco…" autoComplete="off" /></div></label>
+      <label className={styles.searchField}><span>Busca por modelo o característica</span><div><svg viewBox="0 0 24 24" fill="none" aria-hidden="true"><circle cx="10.5" cy="10.5" r="6.5" /><path d="m16 16 4.5 4.5" /></svg><input ref={searchInput} type="search" value={filters.query} maxLength={100} onChange={event => update('buscar', event.target.value)} placeholder="Ej. Ford, 2016, blanco…" autoComplete="off" /></div></label>
       <label className={styles.sortField}><span>Ordenar por</span><select value={filters.sort} onChange={event => update('orden', event.target.value)}><option value="featured">Orden del catálogo</option><option value="price-asc">Precio: menor a mayor</option><option value="price-desc">Precio: mayor a menor</option><option value="year-desc">Año: más reciente</option><option value="mileage-asc">Menor millaje</option></select></label>
+    </div>
+    <div className={styles.availabilityFilters} role="group" aria-label="Filtrar por disponibilidad">
+      <button data-dp-button="chip" type="button" aria-pressed={!filters.availability} onClick={() => update('disponibilidad', '')}>Todos <span>{vehicles.length}</span></button>
+      {catalogueAvailability.filter(status => vehicles.some(v => (v.availability ?? 'unverified') === status) || filters.availability === status).map(status => <button key={status} data-dp-button="chip" type="button" aria-pressed={filters.availability === status} onClick={() => update('disponibilidad', status)}>{{available:'Disponibles', 'coming-soon':'Próximamente', sold:'Vendidos', unverified:'Por confirmar'}[status]} <span>{vehicles.filter(v => (v.availability ?? 'unverified') === status).length}</span></button>)}
     </div>
     <div className={styles.explorerMeta}>
       <div className={styles.makeFilters} role="group" aria-label="Filtrar por marca"><button data-dp-button="chip" type="button" aria-pressed={!filters.make} onClick={() => update('marca', '')}>Todas las marcas</button>{makes.map(make => <button data-dp-button="chip" type="button" key={make} aria-pressed={filters.make.toLowerCase() === make.toLowerCase()} onClick={() => update('marca', make)}>{make}<span>{vehicles.filter(vehicle => vehicleMake(vehicle) === make).length}</span></button>)}</div>

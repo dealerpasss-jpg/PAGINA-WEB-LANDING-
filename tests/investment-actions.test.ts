@@ -107,19 +107,19 @@ test('successful save retains only bounded inventory context with fixed local de
  await assert.rejects(h.save(f),/TEST_REDIRECT/);
  const destination=new URL(String(h.calls.find(x=>x[0]==='redirect')?.[1]),'https://dealerpasss.com');
  assert.equal(destination.origin,'https://dealerpasss.com');assert.equal(destination.pathname,'/mi-cuenta/inversiones/'+vehicle);
- assert.deepEqual(Object.fromEntries(destination.searchParams),{buscar:'Ford & blanco',estado:'listed',pendientes:'purchase',orden:'result-desc',vista:'table',message:'Cambios guardados.'});
+ assert.deepEqual(Object.fromEntries(destination.searchParams),{buscar:'Ford & blanco',estado:'listed',pendientes:'purchase',orden:'result-desc',vista:'table',message:'Ficha actualizada.'});
  const data=h.calls.find(x=>x[0]==='update')?.[1] as Record<string,unknown>;assert.equal('inventory_query' in data,false);assert.equal(data.sale_cents,20050);assert.equal(data.version,2);
 });
 test('return-context tampering cannot redirect off-site or bypass save validation',async()=>{
  for(const query of ['//evil.test','https://evil.test/path','next=//evil.test&estado=constructor&orden=constructor','buscar=%2F%2Fevil.test%3Fnext%3Dhttps%3A%2F%2Fevil.test']) {
   const h=harness();const f=closingForm(h);f.set('inventory_query',query);await assert.rejects(h.save(f),/TEST_REDIRECT/);
-  const destination=new URL(String(h.calls.find(x=>x[0]==='redirect')?.[1]),'https://dealerpasss.com');assert.equal(destination.origin,'https://dealerpasss.com');assert.equal(destination.pathname,'/mi-cuenta/inversiones/'+vehicle);assert.equal(destination.searchParams.has('next'),false);assert.equal(destination.searchParams.get('message'),'Cambios guardados.');
+  const destination=new URL(String(h.calls.find(x=>x[0]==='redirect')?.[1]),'https://dealerpasss.com');assert.equal(destination.origin,'https://dealerpasss.com');assert.equal(destination.pathname,'/mi-cuenta/inversiones/'+vehicle);assert.equal(destination.searchParams.has('next'),false);assert.equal(destination.searchParams.get('message'),'Ficha actualizada.');
  }
  for(const query of ['x'.repeat(1501)]) {const h=harness();const f=closingForm(h);f.set('inventory_query',query);assert.ok((await h.save(f))?.error);assert.equal(h.calls.some(x=>['from','private-read','revalidate','redirect'].includes(String(x[0]))),false);}
  const failed=harness({data:[]});const f=closingForm(failed);f.set('inventory_query','estado=listed');assert.ok((await failed.save(f))?.error);assert.equal(failed.calls.some(x=>x[0]==='redirect'),false);
 });
 test('legacy submissions without inventory context retain their previous success destination',async()=>{
- const h=harness();await assert.rejects(h.save(closingForm(h)),/TEST_REDIRECT/);assert.deepEqual(h.calls.find(x=>x[0]==='redirect'),['redirect','/mi-cuenta/inversiones/'+vehicle+'?message=Cambios%20guardados.']);
+ const h=harness();await assert.rejects(h.save(closingForm(h)),/TEST_REDIRECT/);assert.deepEqual(h.calls.find(x=>x[0]==='redirect'),['redirect','/mi-cuenta/inversiones/'+vehicle+'?message=Ficha%20actualizada.#resumen-vehiculo']);
 });
 
 test('successful vehicle edit invalidates public catalogue and home without altering mutation payload',async()=>{
@@ -127,4 +127,11 @@ test('successful vehicle edit invalidates public catalogue and home without alte
  assert.ok(h.calls.some(c=>JSON.stringify(c)===JSON.stringify(['revalidate','/'])));
  assert.ok(h.calls.some(c=>JSON.stringify(c)===JSON.stringify(['revalidate','/vehiculos','layout'])));
  const update=h.calls.find(c=>c[0]==='update')?.[1] as Record<string,unknown>;assert.equal('publication' in update,false);assert.equal('photos' in update,false);
+});
+
+test('success redirects distinguish expense corrections and vehicle saves with fixed section anchors',async()=>{
+ for(const [action,hash,message] of [['expense','#gastos-vehiculo','Gasto registrado.'],['void-expense','#gastos-vehiculo','Gasto anulado.'],['revoke','#participantes-vehiculo','Acceso retirado.']] as const){
+  const h=harness();const f=new FormData();f.set('action',action);f.set('vehicle_id',vehicle);f.set('expense_id',record);f.set('member_id',record);f.set('category','other');f.set('description','Synthetic test');f.set('amount_cents','0.01');f.set('incurred_on','2026-10-30');f.set('inventory_query','vista=table&estado=listed');
+  await assert.rejects(h.save(f),/TEST_REDIRECT/);const url=new URL(String(h.calls.find(c=>c[0]==='redirect')?.[1]),'https://dealerpasss.com');assert.equal(url.hash,hash);assert.equal(url.searchParams.get('message'),message);assert.equal(url.searchParams.get('vista'),'table');assert.equal(url.searchParams.get('estado'),'listed');
+ }
 });

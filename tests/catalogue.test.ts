@@ -32,7 +32,7 @@ test('sort uses cents and numerical years/mileage without mutating source', () =
 });
 test('shared filter URLs validate sort and bound input length', () => {
   assert.deepEqual(readCatalogueFilters(new URLSearchParams()), defaultCatalogueFilters);
-  assert.deepEqual(readCatalogueFilters(new URLSearchParams('marca=Ford&buscar=2016&orden=price-asc')), { query: '2016', make: 'Ford', sort: 'price-asc' });
+  assert.deepEqual(readCatalogueFilters(new URLSearchParams('marca=Ford&buscar=2016&orden=price-asc')), { query: '2016', make: 'Ford', sort: 'price-asc', availability:'' });
   assert.equal(readCatalogueFilters(new URLSearchParams('orden=invalid')).sort, 'featured');
   assert.equal(readCatalogueFilters(new URLSearchParams({ buscar: 'a'.repeat(1000) })).query.length, 100);
 });
@@ -49,4 +49,25 @@ test('URL updates only treat featured as the sort default, never as search text'
   assert.equal(initial.get('buscar'), null);
   assert.equal(catalogueQuery(new URLSearchParams('buscar=Ford&marca=Ford&orden=price-asc&next=https://example.com')), 'buscar=Ford&marca=Ford&orden=price-asc');
   assert.equal(catalogueQuery(new URLSearchParams('orden=invalid&next=//example.com')), '');
+});
+
+test('availability combines with make/search and URL returns while rejecting unknown states',async()=>{
+ const {catalogueQuery,updateCatalogueParams}=await import('../lib/vehicles/catalogue.ts');
+ const cars=vehicleCatalogue.map((v,i)=>({...v,availability:i<2?'coming-soon' as const:'available' as const}));
+ const params=new URLSearchParams('disponibilidad=available&marca=Ford&buscar=blanco&orden=price-asc&next=https://evil.test');
+ const filtered=filterCatalogue(cars,readCatalogueFilters(params));assert.equal(filtered.length,2);assert.ok(filtered.every(v=>v.availability==='available'));
+ assert.equal(catalogueQuery(params),'buscar=blanco&marca=Ford&disponibilidad=available&orden=price-asc');
+ assert.equal(readCatalogueFilters(new URLSearchParams('disponibilidad=constructor')).availability,'');
+ assert.equal(updateCatalogueParams(params,'disponibilidad','').has('disponibilidad'),false);
+ assert.equal(filterCatalogue(cars,{...defaultCatalogueFilters,availability:'sold'}).length,0);
+ assert.equal(filterCatalogue([{...cars[0],availability:undefined}],{...defaultCatalogueFilters,availability:'unverified'}).length,1);
+});
+test('available related cars rank availability before make without mutating catalogue or inventing alternatives',async()=>{
+ const {relatedVehicles}=await import('../lib/vehicles/catalogue.ts');
+ const current={...vehicleCatalogue[0],availability:'available' as const};
+ const soon={...current,slug:'same-make-soon',availability:'coming-soon' as const};
+ const available=vehicleCatalogue.slice(-3).map(v=>({...v,availability:'available' as const}));
+ const source=[current,soon,...available];assert.deepEqual(relatedVehicles(source,current),available);assert.equal(source[1],soon);
+ assert.deepEqual(relatedVehicles([current,soon],current),[soon]);
+ assert.deepEqual(relatedVehicles(source,{...current,availability:'coming-soon'}),available);
 });

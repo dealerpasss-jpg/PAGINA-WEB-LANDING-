@@ -46,7 +46,7 @@ test('paste, deletion, subsequent make/sort updates and detail query keep curren
     replaceCatalogueHistory(updateCatalogueParams(new URLSearchParams(catalogueHistorySnapshot()), 'marca', 'Ford'));
     replaceCatalogueHistory(updateCatalogueParams(new URLSearchParams(catalogueHistorySnapshot()), 'orden', 'price-asc'));
     const snapshot = new URLSearchParams(catalogueHistorySnapshot());
-    assert.deepEqual(readCatalogueFilters(snapshot), { query: 'Ford & blanco', make: 'Ford', sort: 'price-asc' });
+    assert.deepEqual(readCatalogueFilters(snapshot), { query: 'Ford & blanco', make: 'Ford', sort: 'price-asc', availability:'' });
     assert.equal(new URLSearchParams(catalogueQuery(snapshot)).get('buscar'), 'Ford & blanco');
   } finally { browser.restore(); }
 });

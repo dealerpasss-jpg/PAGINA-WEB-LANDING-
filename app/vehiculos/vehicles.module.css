@@ -183,6 +183,9 @@
 .pricePending,.cardBody .price.pricePending { font-size:clamp(22px,2.2vw,30px); }
 @media(forced-colors:active) { .availability,.availability[data-availability=coming-soon],.availability[data-availability=sold],.availability[data-availability=unverified] { background:Canvas; color:CanvasText; border-color:CanvasText; }.card[data-availability=sold] .cardPrice .price,.availabilityMessage { color:CanvasText; } }
 
+
+.availabilityFilters{display:flex;flex-wrap:wrap;gap:8px;margin:0 0 18px;padding:0 0 18px;border-bottom:1px solid #d9d6d0}.availabilityFilters button{min-height:44px;max-width:100%;white-space:normal}.availabilityFilters span{font-variant-numeric:tabular-nums;margin-left:6px;font-size:12px;opacity:.8}
+
 /* A launch-style preview, not a reservation or purchase offer. The photo itself
    stays full-frame, unfiltered and uncovered; its provenance remains visible. */
 .card[data-availability=coming-soon] { border:1px solid #e89b74; border-radius:22px; background:linear-gradient(155deg,#fff9f3,#fff 65%); box-shadow:0 8px 30px #ff4d0012,0 0 0 4px #ff4d0008; }

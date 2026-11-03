@@ -12,7 +12,7 @@ const uuid = /^[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12}$/i;
 function text(f:FormData,key:string,max=500,required=false) {const v=String(f.get(key)||'').trim();if(v.length>max||required&&!v)throw new Error('Revisa los campos obligatorios y su longitud.');return v;}
 export async function saveInvestment(f:FormData) {
  const {db,admin}=await investmentIdentity(); if(!admin)throw new Error('Acceso de consulta. Solo el administrador puede editar.');
- const action=text(f,'action',30);const id=text(f,'vehicle_id',36);let next='/mi-cuenta/inversiones'+(uuid.test(id)?'/'+id:'');const message='Cambios guardados.';let context='';
+ const action=text(f,'action',30);const id=text(f,'vehicle_id',36);let next='/mi-cuenta/inversiones'+(uuid.test(id)?'/'+id:'');const outcome=({create:['Vehículo registrado.','resumen-vehiculo'],vehicle:['Ficha actualizada.','resumen-vehiculo'],expense:['Gasto registrado.','gastos-vehiculo'],'void-expense':['Gasto anulado.','gastos-vehiculo'],member:['Participante actualizado.','participantes-vehiculo'],revoke:['Acceso retirado.','participantes-vehiculo']} as Record<string,readonly string[]>)[action];let context='';
  try {
  context=investmentQuery(new URLSearchParams(text(f,'inventory_query',1500)));
  if(action!=='create'&&!uuid.test(id))throw new Error('Vehículo inválido.');
@@ -39,5 +39,5 @@ export async function saveInvestment(f:FormData) {
  } else throw new Error('Acción inválida.');
  } catch(e) {return {error:e instanceof Error && !('code' in e) ? e.message : 'No se pudo guardar. Tus datos siguen en el formulario. Revisa los datos e inténtalo de nuevo.'};}
  if(action==='vehicle'){revalidatePath('/');revalidatePath('/vehiculos','layout');}
- revalidatePath('/mi-cuenta/inversiones','layout');revalidatePath('/mi-cuenta');redirect(next+'?'+(context?context+'&':'')+'message='+encodeURIComponent(message));
+ revalidatePath('/mi-cuenta/inversiones','layout');revalidatePath('/mi-cuenta');redirect(next+'?'+(context?context+'&':'')+'message='+encodeURIComponent(outcome[0])+'#'+outcome[1]);
 }

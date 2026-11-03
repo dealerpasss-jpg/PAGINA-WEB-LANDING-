@@ -45,7 +45,7 @@ test('all public surfaces use the projection and never serialize server manifest
  const server=readFileSync(new URL('../lib/vehicles/publication-server.ts',import.meta.url),'utf8');assert.match(server,/import 'server-only'/);assert.match(server,/select\('id,catalogue_slug,status,asking_cents'\)/);assert.match(server,/await connection\(\)/);assert.doesNotMatch(server,/select\('\*'\)|sale_cents|purchase_cents|investment_photos/);
  for(const p of ['components/VehicleExplorer.tsx','components/VehicleDetailView.tsx','components/HomeInventory.tsx']){const source=readFileSync(new URL('../'+p,import.meta.url),'utf8');assert.match(source,/useLiveCatalogue/);assert.doesNotMatch(source,/publication-manifest|investment_vehicles|SUPABASE|service_role/);}
  const endpoint=readFileSync(new URL('../app/api/catalogue/route.ts',import.meta.url),'utf8');assert.match(endpoint,/'Cache-Control':'no-store, max-age=0'/);
- const detail=readFileSync(new URL('../components/VehicleDetailView.tsx',import.meta.url),'utf8');assert.match(detail,/vehicle.availability==='available'\?<><Link href="\/contacto"/);
+ const detail=readFileSync(new URL('../components/VehicleDetailView.tsx',import.meta.url),'utf8');assert.match(detail,/vehicle.availability==='available'\?<><Link href=\{`\/contacto\?vehiculo=\$\{encodeURIComponent\(vehicle.slug\)\}/);
  const source=readFileSync(new URL('../lib/vehicles/use-live-catalogue.ts',import.meta.url),'utf8');assert.match(source,/visibilityState==='hidden'/);assert.match(source,/60000/);assert.match(source,/pending\?\.abort\(\)/);assert.match(source,/unverifiedCatalogue\(previous.source===initial\?previous.values:initial\)/);assert.match(source,/cache:'no-store'/);
 });
 

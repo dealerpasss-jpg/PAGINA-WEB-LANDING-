@@ -48,7 +48,7 @@ export default function LeadForm({ available = true }: { available?: boolean }) 
     }
   }
 
-  if (!available) return <div className="contact-unavailable"><span className="kicker">CONTACTO EN PREPARACIÓN</span><h2>Estamos organizando la atención.</h2><p>El formulario estará disponible cuando podamos recibir y responder tus solicitudes. Mientras tanto, puedes consultar la formación y comparar los planes.</p><Link className="button" href="/planes">Explorar planes</Link><Link className="text-link" href="/academy">Conocer la academia</Link></div>;
+  if (!available) return <div className="contact-unavailable"><span className="kicker">CONTACTO EN PREPARACIÓN</span><h2>Estamos organizando la atención.</h2><p>El formulario estará disponible cuando podamos recibir y responder tus solicitudes. Mientras tanto, puedes explorar las fichas del inventario. Desde esta página no se envían consultas, pagos ni reservas.</p><Link className="button" href="/vehiculos?disponibilidad=available">Ver vehículos disponibles</Link></div>;
 
   if (status === "success") {
     return (
