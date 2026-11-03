@@ -1,26 +1,26 @@
 [
   {
     "slug": "nissan-versa-sr-2020",
-    "sha256": "c08bea7a9b68389889b9ac2e5e419c177d5fcf188b06a1928762d7010c16798d",
-    "bytes": 176192,
+    "sha256": "ffceac1d8507fd9ef845f937cda454fa369c17dacd4e67a947c9a446004657b7",
+    "bytes": 219694,
     "width": 1448,
     "height": 1086,
-    "kind": "generated-reference-not-actual-unit"
+    "kind": "real-reference-photo-background-edited-not-actual-unit"
   },
   {
     "slug": "audi-a4-premium-2017",
-    "sha256": "0601279bfd0cdfb6eb279e9c0cfb7f5dbdfbd4035f74366de04179f52c82323a",
-    "bytes": 183882,
+    "sha256": "14c1c83221efed992094b5a684c50ebe0b00439f710f9d4bb7701211c5d0a2ab",
+    "bytes": 235320,
     "width": 1448,
     "height": 1086,
-    "kind": "generated-reference-not-actual-unit"
+    "kind": "real-reference-photo-background-edited-not-actual-unit"
   },
   {
     "slug": "volvo-s60-inscription-2019",
-    "sha256": "cdf64aceb1a9db8eb5427b76f2e105fbc8158fdf8ee53a8398764f96df6aff64",
-    "bytes": 146582,
+    "sha256": "8195dcaee4a6316af7c8120a3425ecc45d0726b99bbf830394a7042d73e6370d",
+    "bytes": 179690,
     "width": 1448,
     "height": 1086,
-    "kind": "generated-reference-not-actual-unit"
+    "kind": "real-reference-photo-background-edited-not-actual-unit"
   }
 ]

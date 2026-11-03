@@ -35,7 +35,7 @@ export const vehicleCatalogue: CatalogueVehicle[] = [
     "price": 790000,
     "bodyStyle": "Sedán",
     "referenceImage": true,
-    "photoNotice": "Imagen de referencia generada. No representa la unidad real ni su condición actual.",
+    "photoNotice": "Foto de referencia con fondo de presentación editado. Corresponde a otro ejemplar, no a esta unidad ni a su condición actual.",
     "specs": [
       [
         "Año",
@@ -50,11 +50,11 @@ export const vehicleCatalogue: CatalogueVehicle[] = [
         "128.541 mi"
       ]
     ],
-    "description": "Nissan Versa SR con millaje reportado de 128.541 millas. Consulta su disponibilidad actual en esta ficha. Precio de referencia provisional, sujeto a revisión de la condición real. El estado mecánico y la documentación están pendientes de confirmar; no se afirma título limpio. La imagen generada es una referencia del modelo y no muestra esta unidad ni certifica su apariencia o equipamiento.",
+    "description": "Nissan Versa SR con millaje reportado de 128.541 millas. Consulta su disponibilidad actual en esta ficha. Precio de referencia provisional, sujeto a revisión de la condición real. El estado mecánico y la documentación están pendientes de confirmar; no se afirma título limpio. La foto de referencia corresponde a otro ejemplar del modelo, con fondo de presentación editado. No muestra esta unidad ni certifica su apariencia o equipamiento.",
     "photos": [
       {
-        "src": "/vehicles/nissan-versa-sr-2020/referencia.webp",
-        "caption": "Imagen de referencia generada del modelo · no es una fotografía de la unidad real"
+        "src": "/vehicles/nissan-versa-sr-2020/referencia-real.webp",
+        "caption": "Foto de referencia del modelo · fondo editado, no es esta unidad"
       }
     ]
   },
@@ -64,7 +64,7 @@ export const vehicleCatalogue: CatalogueVehicle[] = [
     "price": 1090000,
     "bodyStyle": "Sedán",
     "referenceImage": true,
-    "photoNotice": "Imagen de referencia generada. No representa la unidad real ni su condición actual.",
+    "photoNotice": "Foto de referencia con fondo de presentación editado. Corresponde a otro ejemplar, no a esta unidad ni a su condición actual.",
     "specs": [
       [
         "Año",
@@ -79,11 +79,11 @@ export const vehicleCatalogue: CatalogueVehicle[] = [
         "107.203 mi"
       ]
     ],
-    "description": "Audi A4 Premium con millaje reportado de 107.203 millas. Consulta su disponibilidad actual en esta ficha. Precio de referencia provisional, sujeto a revisión de la condición real. El estado mecánico y la documentación están pendientes de confirmar; no se afirma título limpio. La imagen generada es una referencia del modelo y no muestra esta unidad ni certifica su apariencia o equipamiento.",
+    "description": "Audi A4 Premium con millaje reportado de 107.203 millas. Consulta su disponibilidad actual en esta ficha. Precio de referencia provisional, sujeto a revisión de la condición real. El estado mecánico y la documentación están pendientes de confirmar; no se afirma título limpio. La foto de referencia corresponde a otro ejemplar del modelo, con fondo de presentación editado. No muestra esta unidad ni certifica su apariencia o equipamiento.",
     "photos": [
       {
-        "src": "/vehicles/audi-a4-premium-2017/referencia.webp",
-        "caption": "Imagen de referencia generada del modelo · no es una fotografía de la unidad real"
+        "src": "/vehicles/audi-a4-premium-2017/referencia-real.webp",
+        "caption": "Foto de referencia del modelo · fondo editado, no es esta unidad"
       }
     ]
   },
@@ -93,7 +93,7 @@ export const vehicleCatalogue: CatalogueVehicle[] = [
     "price": null,
     "bodyStyle": "Sedán",
     "referenceImage": true,
-    "photoNotice": "Imagen de referencia generada. No representa la unidad real ni su condición actual.",
+    "photoNotice": "Foto de referencia con fondo de presentación editado. Corresponde a otro ejemplar, no a esta unidad ni a su condición actual.",
     "specs": [
       [
         "Año",
@@ -108,11 +108,11 @@ export const vehicleCatalogue: CatalogueVehicle[] = [
         "134.820 mi"
       ]
     ],
-    "description": "Volvo S60 Inscription en uso del equipo DealerPass. No está en venta y esta ficha no admite reservas. Millaje reportado de 134.820 millas. La imagen generada es una referencia del modelo, no una fotografía de esta unidad ni una certificación de su condición, equipamiento o documentación.",
+    "description": "Volvo S60 Inscription en uso del equipo DealerPass. No está en venta y esta ficha no admite reservas. Millaje reportado de 134.820 millas. La foto de referencia corresponde a otro ejemplar del modelo, con fondo de presentación editado. No muestra esta unidad ni certifica su condición, equipamiento o documentación.",
     "photos": [
       {
-        "src": "/vehicles/volvo-s60-inscription-2019/referencia.webp",
-        "caption": "Imagen de referencia generada del modelo · no es una fotografía de la unidad real"
+        "src": "/vehicles/volvo-s60-inscription-2019/referencia-real.webp",
+        "caption": "Foto de referencia del modelo · fondo editado, no es esta unidad"
       }
     ]
   },
