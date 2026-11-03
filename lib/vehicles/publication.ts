@@ -1,10 +1,9 @@
 import type { CatalogueVehicle } from '../../data/vehicle-catalogue.ts';
 
-export type Availability = 'available'|'coming-soon'|'sold'|'unverified'|'not-for-sale';
-export type Publication = {slug:string;vehicleId:string;enabled:boolean;photoSources:readonly string[];salePolicy?:'not-for-sale'};
+export type Availability = 'available'|'coming-soon'|'sold'|'unverified';
+export type Publication = {slug:string;vehicleId:string;enabled:boolean;photoSources:readonly string[];previewPriceCents?:number};
 export type PublicInventoryRow = {id:string;catalogue_slug:string|null;status:string;asking_cents:number|null};
 export const availabilityCopy = {
- 'not-for-sale': {label:'Uso del equipo · No disponible',detail:'Este vehículo está en uso del equipo DealerPass y no se ofrece para compra.',action:'Ver ficha'},
  'available': {label:'Disponible',detail:'Disponible para consultar. Confirma su condición antes de comprar.',action:'Ver vehículo'},
  'coming-soon': {label:'Próximamente · No disponible',detail:'Un primer vistazo a lo que viene. Todavía no está disponible para comprar; puedes explorar sus fotos y detalles.',action:'Ver adelanto'},
  'sold': {label:'Vendido',detail:'Este vehículo ya se vendió. Conservamos su ficha para que puedas conocerlo; explora los vehículos que siguen disponibles.',action:'Ver ficha del vendido'},
@@ -17,7 +16,6 @@ export function availabilityFor(status:unknown,price:unknown):Availability {
  return status==='listed'&&validPublicPrice(price)?'available':'unverified';
 }
 export function publicPrice(vehicle:Pick<CatalogueVehicle,'price'|'availability'>) {
- if(vehicle.availability==='not-for-sale')return 'No está en venta';
  if(vehicle.availability==='sold')return 'Vendido';
  return validPublicPrice(vehicle.price)?new Intl.NumberFormat('es-US',{style:'currency',currency:'USD',maximumFractionDigits:vehicle.price%100?2:0}).format(vehicle.price/100):'Precio por confirmar';
 }
@@ -33,20 +31,25 @@ export function projectCatalogue(approved:readonly CatalogueVehicle[],manifest:r
   if(!selected.length||selected.some(p=>!p)||new Set(entry.photoSources).size!==entry.photoSources.length)return [];
   const matches=rows?.filter(row=>row.id===entry.vehicleId)??[];
   const row=matches.length===1&&(!matches[0].catalogue_slug||matches[0].catalogue_slug===entry.slug)?matches[0]:null;
-  const availability=entry.salePolicy==='not-for-sale'?'not-for-sale':row?availabilityFor(row.status,row.asking_cents):'unverified';
-  const price=row&&(availability==='available'||availability==='coming-soon')&&validPublicPrice(row.asking_cents)?row.asking_cents:null;
+  // Explicit public preview price is independent of private financial planning.
+  // It never makes a vehicle purchasable and cannot mask sold/failed source reads.
+  const preview=entry.previewPriceCents!==undefined;
+  const verifiedPreview=row&&['purchased','repairing','listed'].includes(row.status)&&validPublicPrice(entry.previewPriceCents);
+  const availability:Availability=preview?(row?.status==='sold'?'sold':verifiedPreview?'coming-soon':'unverified'):row?availabilityFor(row.status,row.asking_cents):'unverified';
+  const publicAmount=preview?entry.previewPriceCents:row?.asking_cents;
+  const price=row&&(availability==='available'||availability==='coming-soon')&&validPublicPrice(publicAmount)?publicAmount:null;
   return [{slug:source.slug,title:source.title,price,availability,description:source.description,
    specs:source.specs.filter(([key])=>key!=='Estado actual').map(([key,value])=>[key,value]),
    ...(source.bodyStyle?{bodyStyle:source.bodyStyle}:{}),...(source.photoNotice?{photoNotice:source.photoNotice}:{}),
    ...(source.originalPhotos?{originalPhotos:true}:{}),...(source.referenceImage?{referenceImage:true}:{}),photos:selected.map(p=>({src:p!.src,caption:p!.caption}))}];
  });
 }
-export function unverifiedCatalogue(vehicles:readonly CatalogueVehicle[]):CatalogueVehicle[] {return vehicles.map(v=>({...v,price:null,availability:v.availability==='not-for-sale'?'not-for-sale':'unverified'}));}
+export function unverifiedCatalogue(vehicles:readonly CatalogueVehicle[]):CatalogueVehicle[] {return vehicles.map(v=>({...v,price:null,availability:'unverified'}));}
 // API data is public, but still validate its shape before replacing a rendered snapshot.
 export function validCatalogueResponse(value:unknown):value is CatalogueVehicle[] {
  if(!Array.isArray(value)||value.length>100)return false;
  const slugs=new Set<string>();
  return value.every(v=>{if(!v||typeof v!=='object'||typeof v.slug!=='string'||slugs.has(v.slug)||!Object.hasOwn(availabilityCopy,v.availability))return false;slugs.add(v.slug);
-  if((v.availability==='available'&&!validPublicPrice(v.price))||((v.availability==='sold'||v.availability==='unverified'||v.availability==='not-for-sale')&&v.price!==null))return false;
+  if((v.availability==='available'&&!validPublicPrice(v.price))||((v.availability==='sold'||v.availability==='unverified')&&v.price!==null))return false;
   return typeof v.title==='string'&&typeof v.description==='string'&&(v.price===null||validPublicPrice(v.price))&&Array.isArray(v.specs)&&v.specs.every((s:unknown)=>Array.isArray(s)&&s.length===2&&s.every(x=>typeof x==='string'))&&Array.isArray(v.photos)&&v.photos.length>0&&v.photos.every((p:{src?:unknown;caption?:unknown})=>typeof p.src==='string'&&p.src.startsWith('/vehicles/')&&!p.src.includes('..')&&typeof p.caption==='string');});
 }

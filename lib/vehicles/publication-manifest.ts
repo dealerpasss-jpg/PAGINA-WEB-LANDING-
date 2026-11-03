@@ -19,7 +19,8 @@ const links = [
  ['subaru-forester-2015','876d7e39-9be5-499e-8af4-85fbc600d79f'],
  ['subaru-impreza-2016','288babdd-920e-4da6-ad52-2c47c762cfa7'],
 ] as const;
-export const publicationManifest:readonly Publication[]=links.map(([slug,vehicleId])=>({slug,vehicleId,enabled:true,...(slug==='volvo-s60-inscription-2019'?{salePolicy:'not-for-sale' as const}:{}),
+// Owner-approved public preview only; private asking remains undefined.
+export const publicationManifest:readonly Publication[]=links.map(([slug,vehicleId])=>({slug,vehicleId,enabled:true,...(slug==='volvo-s60-inscription-2019'?{previewPriceCents:1290000}:{}),
  // Source is the reviewed, versioned public catalogue, NEVER private photo storage.
  photoSources:vehicleCatalogue.find(v=>v.slug===slug)!.photos.map(p=>p.src),
 }));

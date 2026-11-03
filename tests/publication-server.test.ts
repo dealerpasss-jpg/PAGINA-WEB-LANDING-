@@ -8,10 +8,10 @@ const approved=vehicleCatalogue[0];
 const manifest=[{slug:approved.slug,vehicleId:'private-id',enabled:true,photoSources:approved.photos.map(p=>p.src)}];
 const source=readFileSync(new URL('../lib/vehicles/publication-server.ts',import.meta.url),'utf8');
 const code=ts.transpileModule(source,{compilerOptions:{module:ts.ModuleKind.CommonJS,target:ts.ScriptTarget.ES2022}}).outputText;
-function harness(result:{data:unknown;error:unknown}){
+function harness(result:{data:unknown;error:unknown}, selectedManifest:publication.Publication[]=manifest){
  const calls:unknown[][]=[];
  const query={select:(v:string)=>{calls.push(['select',v]);return query;},in:(key:string,values:string[])=>{calls.push(['in',key,values]);return query;},limit:(v:number)=>{calls.push(['limit',v]);return query;},abortSignal:async(signal:AbortSignal)=>{assert.ok(signal instanceof AbortSignal);return result;}};
- const imports:Record<string,unknown>={'server-only':{},react:{cache:(f:unknown)=>f},'next/server':{connection:async()=>calls.push(['connection'])},'@/lib/academy/server':{database:()=>({from:(name:string)=>{calls.push(['from',name]);return query;}})},'@/data/vehicle-catalogue':{vehicleCatalogue},'./publication-manifest':{publicationManifest:manifest},'./publication':publication};
+ const imports:Record<string,unknown>={'server-only':{},react:{cache:(f:unknown)=>f},'next/server':{connection:async()=>calls.push(['connection'])},'@/lib/academy/server':{database:()=>({from:(name:string)=>{calls.push(['from',name]);return query;}})},'@/data/vehicle-catalogue':{vehicleCatalogue},'./publication-manifest':{publicationManifest:selectedManifest},'./publication':publication};
  const module={exports:{} as any};new Function('require','module','exports',code)((key:string)=>{assert.ok(key in imports,key);return imports[key];},module,module.exports);
  return {calls,...module.exports};
 }
@@ -38,4 +38,13 @@ test('manifest is server-only, exact unique eleven approved links, and selects o
 });
 test('sitemap derives only enabled public slugs rather than keeping hidden static URLs',()=>{
  const source=readFileSync(new URL('../app/sitemap.ts',import.meta.url),'utf8');assert.match(source,/publicCatalogueFallback\(\)\.map/);assert.doesNotMatch(source,/investment_vehicles|vehicleId|sale_cents/);
+});
+
+test('Volvo metadata follows approved public preview without disclosing private owner use',async()=>{
+ const car=vehicleCatalogue.find(v=>v.slug==='volvo-s60-inscription-2019')!;
+ const entry={slug:car.slug,vehicleId:'private-volvo',enabled:true,photoSources:car.photos.map(p=>p.src),previewPriceCents:1290000};
+ const h=harness({data:[{id:entry.vehicleId,catalogue_slug:null,status:'purchased',asking_cents:null}],error:null},[entry]);
+ const meta=await h.publicVehicleMetadata(car.slug,'Volvo S60 Inscription 2019. Imagen de referencia.');
+ assert.match(meta.title,/\$12,900/);assert.match(meta.description,/Próximamente/);assert.doesNotMatch(JSON.stringify(meta),/equipo|private-volvo|No está en venta/);
+ assert.equal((await h.readPublicCatalogue())[0].availability,'coming-soon');
 });

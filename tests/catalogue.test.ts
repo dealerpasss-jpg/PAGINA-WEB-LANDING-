@@ -22,11 +22,12 @@ test('make combines with search and unknown matches remain honest empty results'
 test('sort uses cents and numerical years/mileage without mutating source', () => {
   const order = vehicleCatalogue.map(vehicle => vehicle.slug);
   assert.equal(filterCatalogue(vehicleCatalogue, { ...defaultCatalogueFilters, sort: 'price-asc' })[0].price, 365000);
-  assert.equal(filterCatalogue(vehicleCatalogue, { ...defaultCatalogueFilters, sort: 'price-desc' })[0].price, 1090000);
+  assert.equal(filterCatalogue(vehicleCatalogue, { ...defaultCatalogueFilters, sort: 'price-desc' })[0].price, 1290000);
   assert.equal(filterCatalogue(vehicleCatalogue, { ...defaultCatalogueFilters, sort: 'year-desc' })[0].slug, 'ford-edge-2021');
   assert.equal(filterCatalogue(vehicleCatalogue, { ...defaultCatalogueFilters, sort: 'mileage-asc' })[0].slug, 'ford-escape-se-2016');
-  assert.equal(filterCatalogue(vehicleCatalogue, { ...defaultCatalogueFilters, sort: 'price-desc' }).at(-1)?.slug, 'volvo-s60-inscription-2019');
-  assert.equal(filterCatalogue(vehicleCatalogue, { ...defaultCatalogueFilters, sort: 'price-asc' }).at(-1)?.slug, 'volvo-s60-inscription-2019');
+  const withUnknown=vehicleCatalogue.map(v=>v.slug==='volvo-s60-inscription-2019'?{...v,price:null}:v);
+  assert.equal(filterCatalogue(withUnknown, { ...defaultCatalogueFilters, sort: 'price-desc' }).at(-1)?.slug, 'volvo-s60-inscription-2019');
+  assert.equal(filterCatalogue(withUnknown, { ...defaultCatalogueFilters, sort: 'price-asc' }).at(-1)?.slug, 'volvo-s60-inscription-2019');
   assert.deepEqual(vehicleCatalogue.map(vehicle => vehicle.slug), order);
 });
 test('shared filter URLs validate sort and bound input length', () => {

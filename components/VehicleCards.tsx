@@ -29,7 +29,7 @@ export function VehicleCard({vehicle,priority=false,search=''}:{vehicle:Catalogu
           {comingSoon&&<p className={styles.launchIntro}>Un primer vistazo. Mira sus fotos y conoce los detalles de lo que viene.</p>}
           {vehicle.photoNotice&&<p className={styles.provisionalNote}>{vehicle.photoNotice}</p>}
           <div className={styles.chips}>{['Millaje','Transmisión','Exterior'].map(key=>vehicleSpec(vehicle,key)).filter(Boolean).map(value=><span key={value}>{value}</span>)}</div>
-          <div className={styles.cardPrice}><p className={`${styles.price}${vehicle.price===null?' '+styles.pricePending:''}`}>{publicPrice(vehicle)}</p><span className={styles.priceLabel}>{vehicle.availability==='not-for-sale'?'Vehículo de uso del equipo':vehicle.availability==='sold'?'Ya no disponible':vehicle.price===null?'Consulta el estado actual':'Precio de referencia · USD'}</span></div>
+          <div className={styles.cardPrice}><p className={`${styles.price}${vehicle.price===null?' '+styles.pricePending:''}`}>{publicPrice(vehicle)}</p><span className={styles.priceLabel}>{vehicle.availability==='sold'?'Ya no disponible':vehicle.price===null?'Consulta el estado actual':'Precio de referencia · USD'}</span></div>
           <Link href={href} prefetch={false} className={`${styles.primary}${comingSoon?' '+styles.launchAction:''}`} data-dp-button="primary" aria-label={`${availabilityCopy[vehicle.availability??'unverified'].action}: ${vehicle.title}`}>{availabilityCopy[vehicle.availability??'unverified'].action} <ArrowIcon direction="right" /></Link>
         </div>
       </article>;

@@ -1783,3 +1783,7 @@ a {
 @media (prefers-reduced-transparency:reduce), (forced-colors:active) {
   .brand-photo-frame::after { display:none; }
 }
+
+/* Owner-requested mirror of this exact reference photo only. Individual scale
+   composes with existing hover transforms; surrounding labels stay readable. */
+img[src*="audi-a4-premium-2017"][src*="referencia-real.webp"] { scale:-1 1; }

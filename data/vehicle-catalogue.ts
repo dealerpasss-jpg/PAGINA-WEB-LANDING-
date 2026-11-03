@@ -1,4 +1,4 @@
-export type CatalogueVehicle = {slug:string;title:string;price:number|null;availability?:'available'|'coming-soon'|'sold'|'unverified'|'not-for-sale';specs:string[][];description:string;bodyStyle?:string;photoNotice?:string;originalPhotos?:boolean;referenceImage?:boolean;photos:{src:string;caption:string}[]};
+export type CatalogueVehicle = {slug:string;title:string;price:number|null;availability?:'available'|'coming-soon'|'sold'|'unverified';specs:string[][];description:string;bodyStyle?:string;photoNotice?:string;originalPhotos?:boolean;referenceImage?:boolean;photos:{src:string;caption:string}[]};
 export const vehicleCatalogue: CatalogueVehicle[] = [
   {
     slug: 'mazda6-grand-touring-2016',
@@ -90,7 +90,7 @@ export const vehicleCatalogue: CatalogueVehicle[] = [
   {
     "slug": "volvo-s60-inscription-2019",
     "title": "Volvo S60 Inscription 2019",
-    "price": null,
+    "price": 1290000,
     "bodyStyle": "Sedán",
     "referenceImage": true,
     "photoNotice": "Foto de referencia con fondo de presentación editado. Corresponde a otro ejemplar, no a esta unidad ni a su condición actual.",
@@ -108,7 +108,7 @@ export const vehicleCatalogue: CatalogueVehicle[] = [
         "134.820 mi"
       ]
     ],
-    "description": "Volvo S60 Inscription en uso del equipo DealerPass. No está en venta y esta ficha no admite reservas. Millaje reportado de 134.820 millas. La foto de referencia corresponde a otro ejemplar del modelo, con fondo de presentación editado. No muestra esta unidad ni certifica su condición, equipamiento o documentación.",
+    "description": "Volvo S60 Inscription con millaje reportado de 134.820 millas. Consulta su disponibilidad actual en esta ficha. Precio de referencia provisional, sujeto a revisión de la condición real. La foto de referencia corresponde a otro ejemplar del modelo, con fondo de presentación editado. No muestra esta unidad ni certifica su condición, equipamiento o documentación.",
     "photos": [
       {
         "src": "/vehicles/volvo-s60-inscription-2019/referencia-real.webp",
