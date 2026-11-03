@@ -20,6 +20,7 @@ export function VehicleCard({vehicle,priority=false,search=''}:{vehicle:Catalogu
         </div>}
         <Link href={href} prefetch={false} className={`${styles.cover}${vehicle.photoNotice ? ' '+styles.provisionalCover : ''}`} aria-label={`Ver fotos y detalles de ${vehicle.title}`}>
           <Image src={vehicle.photos[0].src} alt={`${vehicle.title}: ${vehicle.photos[0].caption}`} width={1448} height={1086} sizes="(max-width: 640px) 100vw, (max-width: 1100px) 50vw, 33vw" priority={priority} />
+          {vehicle.referenceImage&&<span className={styles.referenceBadge}>Imagen de referencia</span>}
           <span className={styles.photoBadge}>{vehicle.photos.length} {vehicle.photos.length===1?'foto':'fotos'} <ArrowIcon direction="up-right" /></span>
         </Link>
         <div className={styles.cardBody}>{comingSoon?<p className={styles.launchAvailability}>No disponible para compra todavía.</p>:<CatalogueAvailability status={vehicle.availability}/>}
@@ -28,7 +29,7 @@ export function VehicleCard({vehicle,priority=false,search=''}:{vehicle:Catalogu
           {comingSoon&&<p className={styles.launchIntro}>Un primer vistazo. Mira sus fotos y conoce los detalles de lo que viene.</p>}
           {vehicle.photoNotice&&<p className={styles.provisionalNote}>{vehicle.photoNotice}</p>}
           <div className={styles.chips}>{['Millaje','Transmisión','Exterior'].map(key=>vehicleSpec(vehicle,key)).filter(Boolean).map(value=><span key={value}>{value}</span>)}</div>
-          <div className={styles.cardPrice}><p className={`${styles.price}${vehicle.price===null?' '+styles.pricePending:''}`}>{publicPrice(vehicle)}</p><span className={styles.priceLabel}>{vehicle.availability==='sold'?'Ya no disponible':vehicle.price===null?'Consulta el estado actual':'Precio de referencia · USD'}</span></div>
+          <div className={styles.cardPrice}><p className={`${styles.price}${vehicle.price===null?' '+styles.pricePending:''}`}>{publicPrice(vehicle)}</p><span className={styles.priceLabel}>{vehicle.availability==='not-for-sale'?'Vehículo de uso del equipo':vehicle.availability==='sold'?'Ya no disponible':vehicle.price===null?'Consulta el estado actual':'Precio de referencia · USD'}</span></div>
           <Link href={href} prefetch={false} className={`${styles.primary}${comingSoon?' '+styles.launchAction:''}`} data-dp-button="primary" aria-label={`${availabilityCopy[vehicle.availability??'unverified'].action}: ${vehicle.title}`}>{availabilityCopy[vehicle.availability??'unverified'].action} <ArrowIcon direction="right" /></Link>
         </div>
       </article>;

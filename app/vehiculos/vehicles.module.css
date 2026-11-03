@@ -221,3 +221,12 @@
  .card[data-availability=coming-soon] .launchAction { --action-bg:ButtonFace; --action-hover-bg:ButtonFace; --action-ink:ButtonText; --action-border:ButtonText; --action-hover-border:ButtonText; --action-shadow:none; }
  .card[data-availability=coming-soon] .launchAction[data-dp-button=primary] svg:global(.dp-arrow) { background:ButtonFace; color:ButtonText; }
 }
+
+/* Informational fleet vehicles never use upcoming-sale styling. */
+.availability[data-availability=not-for-sale] { background:#edf1f4; border-color:#b5c0c8; color:#314a5a; }
+.card[data-availability=not-for-sale] { border-color:#b5c0c8; }
+.card[data-availability=not-for-sale] .price { font-size:24px; }
+@media(forced-colors:active) { .availability[data-availability=not-for-sale] { background:Canvas; color:CanvasText; border-color:CanvasText; }.card[data-availability=not-for-sale] { border-color:CanvasText; } }
+
+.referenceBadge { position:absolute; left:10px; bottom:10px; max-width:calc(100% - 20px); padding:7px 10px; border:1px solid #c8c9c6; border-radius:6px; background:#fffffff2; color:#202624; font-size:11px; font-weight:600; line-height:1.4; }
+@media(forced-colors:active) { .referenceBadge { background:Canvas; color:CanvasText; border-color:CanvasText; } }

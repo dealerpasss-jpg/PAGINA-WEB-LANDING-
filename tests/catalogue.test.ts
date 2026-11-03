@@ -3,10 +3,10 @@ import assert from 'node:assert/strict';
 import { vehicleCatalogue } from '../data/vehicle-catalogue.ts';
 import { defaultCatalogueFilters, filterCatalogue, readCatalogueFilters } from '../lib/vehicles/catalogue.ts';
 
-test('catalogue includes approved Mazda and Elantra and preserves previous vehicles in their original order', () => {
-  assert.equal(vehicleCatalogue.length, 8);
+test('catalogue includes the three approved November references and preserves previous vehicle order', () => {
+  assert.equal(vehicleCatalogue.length, 11);
   assert.equal(vehicleCatalogue[0].slug,'mazda6-grand-touring-2016');
-  assert.deepEqual(vehicleCatalogue.slice(1).map(v=>v.slug),['hyundai-elantra-eco-2018','ford-escape-se-2016','ford-edge-2021','ford-edge-titanium-2018','ford-explorer-xlt-2013','subaru-forester-2015','subaru-impreza-2016']);
+  assert.deepEqual(vehicleCatalogue.filter(v=>!['nissan-versa-sr-2020','audi-a4-premium-2017','volvo-s60-inscription-2019'].includes(v.slug)).slice(1).map(v=>v.slug),['hyundai-elantra-eco-2018','ford-escape-se-2016','ford-edge-2021','ford-edge-titanium-2018','ford-explorer-xlt-2013','subaru-forester-2015','subaru-impreza-2016']);
   assert.deepEqual(filterCatalogue(vehicleCatalogue, defaultCatalogueFilters), vehicleCatalogue);
 });
 test('search is accent insensitive, case insensitive, and matches every word', () => {
@@ -22,9 +22,11 @@ test('make combines with search and unknown matches remain honest empty results'
 test('sort uses cents and numerical years/mileage without mutating source', () => {
   const order = vehicleCatalogue.map(vehicle => vehicle.slug);
   assert.equal(filterCatalogue(vehicleCatalogue, { ...defaultCatalogueFilters, sort: 'price-asc' })[0].price, 365000);
-  assert.equal(filterCatalogue(vehicleCatalogue, { ...defaultCatalogueFilters, sort: 'price-desc' })[0].price, 1080000);
+  assert.equal(filterCatalogue(vehicleCatalogue, { ...defaultCatalogueFilters, sort: 'price-desc' })[0].price, 1090000);
   assert.equal(filterCatalogue(vehicleCatalogue, { ...defaultCatalogueFilters, sort: 'year-desc' })[0].slug, 'ford-edge-2021');
   assert.equal(filterCatalogue(vehicleCatalogue, { ...defaultCatalogueFilters, sort: 'mileage-asc' })[0].slug, 'ford-escape-se-2016');
+  assert.equal(filterCatalogue(vehicleCatalogue, { ...defaultCatalogueFilters, sort: 'price-desc' }).at(-1)?.slug, 'volvo-s60-inscription-2019');
+  assert.equal(filterCatalogue(vehicleCatalogue, { ...defaultCatalogueFilters, sort: 'price-asc' }).at(-1)?.slug, 'volvo-s60-inscription-2019');
   assert.deepEqual(vehicleCatalogue.map(vehicle => vehicle.slug), order);
 });
 test('shared filter URLs validate sort and bound input length', () => {

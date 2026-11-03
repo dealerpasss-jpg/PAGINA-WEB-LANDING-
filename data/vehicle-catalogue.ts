@@ -1,4 +1,4 @@
-export type CatalogueVehicle = {slug:string;title:string;price:number|null;availability?:'available'|'coming-soon'|'sold'|'unverified';specs:string[][];description:string;bodyStyle?:string;photoNotice?:string;originalPhotos?:boolean;photos:{src:string;caption:string}[]};
+export type CatalogueVehicle = {slug:string;title:string;price:number|null;availability?:'available'|'coming-soon'|'sold'|'unverified'|'not-for-sale';specs:string[][];description:string;bodyStyle?:string;photoNotice?:string;originalPhotos?:boolean;referenceImage?:boolean;photos:{src:string;caption:string}[]};
 export const vehicleCatalogue: CatalogueVehicle[] = [
   {
     slug: 'mazda6-grand-touring-2016',
@@ -28,6 +28,93 @@ export const vehicleCatalogue: CatalogueVehicle[] = [
     specs: [['Año','2018'],['Versión','ECO'],['Millaje','104.609 mi'],['Combustible','Gasolina'],['Exterior','Blanco'],['Título','Limpio*'],['Estado actual','En proceso de pintura']],
     description: 'Elantra ECO blanco. Consulta su disponibilidad actual en esta ficha. El propietario reporta título limpio y buen funcionamiento del motor, la transmisión y el aire acondicionado; estos datos no sustituyen una inspección independiente. La única imagen disponible es una visualización de pintura, no una fotografía del acabado actual. Confirma la condición y disponibilidad antes de comprar.',
     photos: [{src:'/vehicles/hyundai-elantra-eco-2018/visualizacion-pintura.webp',caption:'Visualización de pintura · imagen editada, no representa necesariamente el estado actual'}],
+  },
+  {
+    "slug": "nissan-versa-sr-2020",
+    "title": "Nissan Versa SR 2020",
+    "price": 790000,
+    "bodyStyle": "Sedán",
+    "referenceImage": true,
+    "photoNotice": "Imagen de referencia generada. No representa la unidad real ni su condición actual.",
+    "specs": [
+      [
+        "Año",
+        "2020"
+      ],
+      [
+        "Versión",
+        "SR"
+      ],
+      [
+        "Millaje",
+        "128.541 mi"
+      ]
+    ],
+    "description": "Nissan Versa SR con millaje reportado de 128.541 millas. Consulta su disponibilidad actual en esta ficha. Precio de referencia provisional, sujeto a revisión de la condición real. El estado mecánico y la documentación están pendientes de confirmar; no se afirma título limpio. La imagen generada es una referencia del modelo y no muestra esta unidad ni certifica su apariencia o equipamiento.",
+    "photos": [
+      {
+        "src": "/vehicles/nissan-versa-sr-2020/referencia.webp",
+        "caption": "Imagen de referencia generada del modelo · no es una fotografía de la unidad real"
+      }
+    ]
+  },
+  {
+    "slug": "audi-a4-premium-2017",
+    "title": "Audi A4 Premium 2017",
+    "price": 1090000,
+    "bodyStyle": "Sedán",
+    "referenceImage": true,
+    "photoNotice": "Imagen de referencia generada. No representa la unidad real ni su condición actual.",
+    "specs": [
+      [
+        "Año",
+        "2017"
+      ],
+      [
+        "Versión",
+        "Premium"
+      ],
+      [
+        "Millaje",
+        "107.203 mi"
+      ]
+    ],
+    "description": "Audi A4 Premium con millaje reportado de 107.203 millas. Consulta su disponibilidad actual en esta ficha. Precio de referencia provisional, sujeto a revisión de la condición real. El estado mecánico y la documentación están pendientes de confirmar; no se afirma título limpio. La imagen generada es una referencia del modelo y no muestra esta unidad ni certifica su apariencia o equipamiento.",
+    "photos": [
+      {
+        "src": "/vehicles/audi-a4-premium-2017/referencia.webp",
+        "caption": "Imagen de referencia generada del modelo · no es una fotografía de la unidad real"
+      }
+    ]
+  },
+  {
+    "slug": "volvo-s60-inscription-2019",
+    "title": "Volvo S60 Inscription 2019",
+    "price": null,
+    "bodyStyle": "Sedán",
+    "referenceImage": true,
+    "photoNotice": "Imagen de referencia generada. No representa la unidad real ni su condición actual.",
+    "specs": [
+      [
+        "Año",
+        "2019"
+      ],
+      [
+        "Versión",
+        "Inscription"
+      ],
+      [
+        "Millaje",
+        "134.820 mi"
+      ]
+    ],
+    "description": "Volvo S60 Inscription en uso del equipo DealerPass. No está en venta y esta ficha no admite reservas. Millaje reportado de 134.820 millas. La imagen generada es una referencia del modelo, no una fotografía de esta unidad ni una certificación de su condición, equipamiento o documentación.",
+    "photos": [
+      {
+        "src": "/vehicles/volvo-s60-inscription-2019/referencia.webp",
+        "caption": "Imagen de referencia generada del modelo · no es una fotografía de la unidad real"
+      }
+    ]
   },
   {
     "slug": "ford-escape-se-2016",

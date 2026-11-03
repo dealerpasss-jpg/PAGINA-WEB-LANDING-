@@ -31,9 +31,9 @@ test('sold metadata suppresses both asking and closing amounts and hidden slugs 
  const metadata=await h.publicVehicleMetadata(approved.slug,'Approved description');assert.match(metadata.title,/Vendido/);assert.doesNotMatch(metadata.title,/\$/);
  assert.equal((await h.publicVehicleMetadata('not-published','')).robots.index,false);
 });
-test('manifest is server-only, exact unique eight links, and selects only reviewed static public photos',()=>{
+test('manifest is server-only, exact unique eleven approved links, and selects only reviewed static public photos',()=>{
  const file=readFileSync(new URL('../lib/vehicles/publication-manifest.ts',import.meta.url),'utf8');assert.match(file,/import 'server-only'/);
- const links=[...file.matchAll(/\['([^']+)','([a-f0-9-]{36})'\]/g)].map(m=>[m[1],m[2]]);assert.equal(links.length,8);assert.equal(new Set(links.map(r=>r[0])).size,8);assert.equal(new Set(links.map(r=>r[1])).size,8);assert.deepEqual(links.map(r=>r[0]),vehicleCatalogue.map(v=>v.slug));
+ const links=[...file.matchAll(/\['([^']+)','([a-f0-9-]{36})'\]/g)].map(m=>[m[1],m[2]]);assert.equal(links.length,11);assert.equal(new Set(links.map(r=>r[0] )).size,11);assert.equal(new Set(links.map(r=>r[1] )).size,11);assert.deepEqual(links.map(r=>r[0]),vehicleCatalogue.map(v=>v.slug));
  assert.match(file,/photoSources:vehicleCatalogue\.find/);assert.doesNotMatch(file,/investment_photos|storage\.from|api\/investments/);
 });
 test('sitemap derives only enabled public slugs rather than keeping hidden static URLs',()=>{
