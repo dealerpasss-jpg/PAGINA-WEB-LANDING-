@@ -6,7 +6,7 @@ import { availabilityFor, projectCatalogue, publicPrice, validCatalogueResponse,
 import { filterCatalogue, defaultCatalogueFilters } from '../lib/vehicles/catalogue.ts';
 const approved=vehicleCatalogue.slice(0,2);
 const manifest:Publication[]=approved.map((v,i)=>({slug:v.slug,vehicleId:'private-'+i,enabled:true,photoSources:v.photos.map(p=>p.src)}));
-const rows:PublicInventoryRow[]=manifest.map(p=>({id:p.vehicleId,catalogue_slug:null,status:'listed',asking_cents:750000}));
+const rows:PublicInventoryRow[]=manifest.map(p=>({id:p.vehicleId!,catalogue_slug:null,status:'listed',asking_cents:750000}));
 test('availability follows current status, never equates purchased or repair with available',()=>{
  assert.deepEqual(['repairing','listed','sold','repairing','purchased','unknown'].map(status=>availabilityFor(status,750000)),['coming-soon','available','sold','coming-soon','coming-soon','unverified']);
  for(const value of [null,0,-1,1.01,NaN,Infinity,'750000',100_000_000_000])assert.equal(availabilityFor('listed',value),'unverified');

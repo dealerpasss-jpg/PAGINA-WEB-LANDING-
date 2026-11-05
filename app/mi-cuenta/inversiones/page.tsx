@@ -10,7 +10,7 @@ import VehicleForm, {type Vehicle} from '@/components/investments/VehicleForm';
 import { investmentIdentity, allRows } from '@/lib/investments/server';
 import { database } from '@/lib/academy/server';
 import { totals, statuses } from '@/lib/investments/money';
-import { publishedVehicleForInvestment } from '@/lib/vehicles/publication-manifest';
+import { publishedVehicleForInvestment } from '@/lib/vehicles/publication-registry';
 export const dynamic='force-dynamic';
 export default async function Page({searchParams}:{searchParams:Promise<{message?:string}>}) {
  const {db,admin}=await investmentIdentity();const {message}=await searchParams;

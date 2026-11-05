@@ -7,7 +7,7 @@ import { projectCatalogue, unverifiedCatalogue, validCatalogueResponse, publicPr
 const slugs=['nissan-versa-sr-2020','audi-a4-premium-2017','volvo-s60-inscription-2019'];
 const cars=slugs.map(slug=>vehicleCatalogue.find(v=>v.slug===slug)!);
 const manifest:Publication[]=cars.map((v,i)=>({slug:v.slug,vehicleId:'private-'+i,enabled:true,photoSources:v.photos.map(p=>p.src),...(i===2?{previewPriceCents:1290000}:{})}));
-const rows=manifest.map((v,i)=>({id:v.vehicleId,catalogue_slug:null,status:'purchased',asking_cents:[790000,1090000,null][i]}));
+const rows=manifest.map((v,i)=>({id:v.vehicleId!,catalogue_slug:null,status:'purchased',asking_cents:[790000,1090000,null][i]}));
 test('three explicitly approved entries retain known mileage and label real reference photos with edited backgrounds',()=>{
  assert.deepEqual(cars.map(v=>v.specs.find(([key])=>key==='Millaje')?.[1]),['128.541 mi','107.203 mi','134.820 mi']);
  assert.deepEqual(cars.map(v=>v.price),[790000,1090000,1290000]);

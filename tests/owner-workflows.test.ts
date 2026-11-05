@@ -16,8 +16,8 @@ function load(path:string,overrides:Record<string,unknown>={}) {
 }
 const volvo=vehicleCatalogue.find(v=>v.slug==='volvo-s60-inscription-2019')!;
 const normal=vehicleCatalogue[0];
-const entries=[{slug:volvo.slug,vehicleId:'volvo-private',enabled:true,previewPriceCents:1290000,photoSources:volvo.photos.map(p=>p.src)},{slug:normal.slug,vehicleId:'normal-private',enabled:true,photoSources:normal.photos.map(p=>p.src)}];
-const Panel=load('components/investments/PublicationStatus.tsx',{'@/lib/vehicles/publication-manifest':{publicationManifest:entries}});
+const entries=[{slug:volvo.slug,vehicleId:'volvo-private',enabled:true,previewPriceCents:1290000,photoSources:volvo.photos.map(p=>p.src)},{slug:normal.slug,vehicleId:'normal-private',enabled:true,photoSources:normal.photos.map(p=>p.src)},{slug:'jeep-wrangler-2017',inventorySlug:'jeep-wrangler-2017',enabled:true,photoSources:vehicleCatalogue.find(v=>v.slug==='jeep-wrangler-2017')!.photos.map(p=>p.src)}];
+const Panel=load('components/investments/PublicationStatus.tsx',{'@/lib/vehicles/publication-registry':{publicationManifest:entries}});
 test('admin publication panel projects current state and explicitly distinguishes approved preview price',()=>{
  const html=renderToStaticMarkup(React.createElement(Panel,{id:'volvo-private',catalogueSlug:null,status:'purchased',asking:null}));
  assert.match(html,/Próximamente · No disponible/);assert.match(html,/\$12,900/);assert.match(html,/aprobado por separado/);assert.match(html,/No utiliza tu referencia privada/);assert.doesNotMatch(html,/volvo-private|asking_cents|photoSources/);
@@ -56,4 +56,9 @@ test('invalid or duplicate vehicle context is not echoed or converted to an unre
  const Lead=load('components/LeadForm.tsx',{'@/lib/analytics':{track:()=>{}}});
  const html=renderToStaticMarkup(React.createElement(Lead,{available:false}));
  assert.match(html,/href="\/vehiculos\?disponibilidad=available"/);assert.doesNotMatch(html,/href="\/planes|href="\/academy|<form/);
+});
+
+test('admin publication status recognizes a slug-linked record without serializing its private ID',()=>{
+ const html=renderToStaticMarkup(React.createElement(Panel,{id:'private-new-record',catalogueSlug:'jeep-wrangler-2017',status:'purchased',asking:null}));
+ assert.match(html,/Así aparece en la página/);assert.match(html,/Próximamente/);assert.match(html,/Precio por confirmar/);assert.match(html,/href="\/vehiculos\/jeep-wrangler-2017"/);assert.doesNotMatch(html,/private-new-record|inventorySlug/);
 });

@@ -9,7 +9,7 @@ import VehicleForm, {type Vehicle} from '@/components/investments/VehicleForm';
 import Submit from '@/components/investments/Submit';
 import PhotoUpload from '@/components/investments/PhotoUpload';
 import { investmentIdentity, allRows } from '@/lib/investments/server';
-import { publishedVehicleForInvestment } from '@/lib/vehicles/publication-manifest';
+import { publishedVehicleForInvestment } from '@/lib/vehicles/publication-registry';
 import { checked, database } from '@/lib/academy/server';
 import { usd, totals, categories } from '@/lib/investments/money';
 import InvestmentForm from '@/components/investments/InvestmentForm';

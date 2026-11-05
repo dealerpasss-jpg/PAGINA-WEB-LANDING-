@@ -1,13 +1,13 @@
 import 'server-only';
 import Link from 'next/link';
 import { vehicleCatalogue } from '@/data/vehicle-catalogue';
-import { publicationManifest } from '@/lib/vehicles/publication-manifest';
+import { publicationManifest } from '@/lib/vehicles/publication-registry';
 import { availabilityCopy, projectCatalogue, publicPrice } from '@/lib/vehicles/publication';
 
 // Render only inside the administrator gate. Accept only the source fields that
 // determine the public state; never serialize notes, expenses or private media.
 export default function PublicationStatus({id,catalogueSlug,status,asking}:{id:string;catalogueSlug?:string|null;status:string;asking:number|null}) {
- const entry=publicationManifest.find(p=>p.enabled&&p.vehicleId===id);
+ const entry=publicationManifest.find(p=>p.enabled&&(p.vehicleId?p.vehicleId===id:p.inventorySlug===catalogueSlug));
  const vehicle=entry&&projectCatalogue(vehicleCatalogue,[entry],[{id,catalogue_slug:catalogueSlug??null,status,asking_cents:asking}])[0];
  return <section className="account-card investment-publication" aria-labelledby="publication-heading">
   <div><span className="kicker">CATÁLOGO PÚBLICO</span><h2 id="publication-heading">{vehicle?'Así aparece en la página':'Solo en tu inventario privado'}</h2></div>

@@ -1,7 +1,7 @@
 import type { CatalogueVehicle } from '../../data/vehicle-catalogue.ts';
 
 export type Availability = 'available'|'coming-soon'|'sold'|'unverified';
-export type Publication = {slug:string;vehicleId:string;enabled:boolean;photoSources:readonly string[];previewPriceCents?:number};
+export type Publication = {slug:string;vehicleId?:string;inventorySlug?:string;enabled:boolean;photoSources:readonly string[];previewPriceCents?:number};
 export type PublicInventoryRow = {id:string;catalogue_slug:string|null;status:string;asking_cents:number|null};
 export const availabilityCopy = {
  'available': {label:'Disponible',detail:'Disponible para consultar. Confirma su condición antes de comprar.',action:'Ver vehículo'},
@@ -22,14 +22,16 @@ export function publicPrice(vehicle:Pick<CatalogueVehicle,'price'|'availability'
 // A fresh DTO, never a spread of a private row. Photos can only be selected from
 // the already approved public asset set; private uploads/paths never enter it.
 export function projectCatalogue(approved:readonly CatalogueVehicle[],manifest:readonly Publication[],rows:readonly PublicInventoryRow[]|null):CatalogueVehicle[] {
- const slugs=new Set<string>();const ids=new Set<string>();
+ const slugs=new Set<string>();const identities=new Set<string>();
+ const identity=(entry:Publication)=>entry.vehicleId&&!entry.inventorySlug?`id:${entry.vehicleId}`:entry.inventorySlug===entry.slug&&!entry.vehicleId?`slug:${entry.inventorySlug}`:null;
  return manifest.flatMap(entry=>{
-  if(!entry.enabled||slugs.has(entry.slug)||ids.has(entry.vehicleId)||manifest.filter(p=>p.enabled&&p.slug===entry.slug).length!==1||manifest.filter(p=>p.enabled&&p.vehicleId===entry.vehicleId).length!==1)return [];
-  slugs.add(entry.slug);ids.add(entry.vehicleId);
+  const key=identity(entry);
+  if(!entry.enabled||!key||slugs.has(entry.slug)||identities.has(key)||manifest.filter(p=>p.enabled&&p.slug===entry.slug).length!==1||manifest.filter(p=>p.enabled&&identity(p)===key).length!==1)return [];
+  slugs.add(entry.slug);identities.add(key);
   const source=approved.find(v=>v.slug===entry.slug);if(!source)return [];
   const selected=entry.photoSources.map(src=>source.photos.find(p=>p.src===src));
   if(!selected.length||selected.some(p=>!p)||new Set(entry.photoSources).size!==entry.photoSources.length)return [];
-  const matches=rows?.filter(row=>row.id===entry.vehicleId)??[];
+  const matches=rows?.filter(row=>entry.vehicleId?row.id===entry.vehicleId:row.catalogue_slug===entry.inventorySlug)??[];
   const row=matches.length===1&&(!matches[0].catalogue_slug||matches[0].catalogue_slug===entry.slug)?matches[0]:null;
   // Explicit public preview price is independent of private financial planning.
   // It never makes a vehicle purchasable and cannot mask sold/failed source reads.

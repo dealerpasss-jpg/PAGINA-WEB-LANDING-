@@ -4,18 +4,25 @@ import { connection } from 'next/server';
 import type { Metadata } from 'next';
 import { database } from '@/lib/academy/server';
 import { vehicleCatalogue } from '@/data/vehicle-catalogue';
-import { publicationManifest } from './publication-manifest';
+import { publicationManifest } from './publication-registry';
 import { projectCatalogue, availabilityCopy, publicPrice, type PublicInventoryRow } from './publication';
 
 export function publicCatalogueFallback(){return projectCatalogue(vehicleCatalogue,publicationManifest,null);}
 // Keep the read narrow even on the server. No costs, sold price, notes, members,
 // private photos, VIN or credentials are part of the public response.
-export async function loadPublicCatalogue(read=async(ids:string[])=>{
- const result=await database().from('investment_vehicles').select('id,catalogue_slug,status,asking_cents').in('id',ids).limit(ids.length+1).abortSignal(AbortSignal.timeout(6000));
- if(result.error||!Array.isArray(result.data))throw new Error('Catalogue unavailable');
- return result.data as PublicInventoryRow[];
+export async function loadPublicCatalogue(read=async(ids:string[],slugs:string[])=>{
+ const groups:[string,string[]][]=[['id',ids],['catalogue_slug',slugs]];
+ const rows:PublicInventoryRow[]=[];
+ for(const [column,values] of groups){
+  if(!values.length)continue;
+  const result=await database().from('investment_vehicles').select('id,catalogue_slug,status,asking_cents').in(column,values).limit(values.length+1).abortSignal(AbortSignal.timeout(6000));
+  if(result.error||!Array.isArray(result.data))throw new Error('Catalogue unavailable');
+  rows.push(...result.data as PublicInventoryRow[]);
+ }
+ return rows;
 }) {
- try {return projectCatalogue(vehicleCatalogue,publicationManifest,await read(publicationManifest.filter(p=>p.enabled).map(p=>p.vehicleId)));}
+ const enabled=publicationManifest.filter(p=>p.enabled);
+ try {return projectCatalogue(vehicleCatalogue,publicationManifest,await read(enabled.flatMap(p=>p.vehicleId?[p.vehicleId]:[]),enabled.flatMap(p=>p.inventorySlug?[p.inventorySlug]:[])));}
  catch {return publicCatalogueFallback();}
 }
 // Request-only memoization, not a shared stale catalogue cache. connection() keeps

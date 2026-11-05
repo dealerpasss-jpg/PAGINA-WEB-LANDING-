@@ -1,0 +1,29 @@
+[
+  {
+    "slug": "jeep-wrangler-2017",
+    "file": "original.jpeg",
+    "sha256": "30373d506f4294b66f253e935a7e21a4df36c9b6aa8782f39abb95ea681d9a7f",
+    "bytes": 496771,
+    "width": 1152,
+    "height": 1536,
+    "originalUnedited": true
+  },
+  {
+    "slug": "ford-escape-2014",
+    "file": "original.jpeg",
+    "sha256": "702a3ac3de0b9e07f1ac97e96561c59013631f20ff5121a68fec926769be2e97",
+    "bytes": 707068,
+    "width": 1152,
+    "height": 1536,
+    "originalUnedited": true
+  },
+  {
+    "slug": "mercedes-benz-gla-250-2016",
+    "file": "original.jpeg",
+    "sha256": "6e4093d406803c36291a12a84a0ffc21f5851f21113e024e418a41b60e1f41ed",
+    "bytes": 607420,
+    "width": 1152,
+    "height": 1536,
+    "originalUnedited": true
+  }
+]

@@ -3,10 +3,10 @@ import assert from 'node:assert/strict';
 import { vehicleCatalogue } from '../data/vehicle-catalogue.ts';
 import { defaultCatalogueFilters, filterCatalogue, readCatalogueFilters } from '../lib/vehicles/catalogue.ts';
 
-test('catalogue includes the three approved November references and preserves previous vehicle order', () => {
-  assert.equal(vehicleCatalogue.length, 11);
+test('catalogue includes the approved November vehicles and preserves previous vehicle order', () => {
+  assert.equal(vehicleCatalogue.length, 14);
   assert.equal(vehicleCatalogue[0].slug,'mazda6-grand-touring-2016');
-  assert.deepEqual(vehicleCatalogue.filter(v=>!['nissan-versa-sr-2020','audi-a4-premium-2017','volvo-s60-inscription-2019'].includes(v.slug)).slice(1).map(v=>v.slug),['hyundai-elantra-eco-2018','ford-escape-se-2016','ford-edge-2021','ford-edge-titanium-2018','ford-explorer-xlt-2013','subaru-forester-2015','subaru-impreza-2016']);
+  assert.deepEqual(vehicleCatalogue.filter(v=>!['nissan-versa-sr-2020','audi-a4-premium-2017','volvo-s60-inscription-2019','jeep-wrangler-2017','ford-escape-2014','mercedes-benz-gla-250-2016'].includes(v.slug)).slice(1).map(v=>v.slug),['hyundai-elantra-eco-2018','ford-escape-se-2016','ford-edge-2021','ford-edge-titanium-2018','ford-explorer-xlt-2013','subaru-forester-2015','subaru-impreza-2016']);
   assert.deepEqual(filterCatalogue(vehicleCatalogue, defaultCatalogueFilters), vehicleCatalogue);
 });
 test('search is accent insensitive, case insensitive, and matches every word', () => {
@@ -26,8 +26,8 @@ test('sort uses cents and numerical years/mileage without mutating source', () =
   assert.equal(filterCatalogue(vehicleCatalogue, { ...defaultCatalogueFilters, sort: 'year-desc' })[0].slug, 'ford-edge-2021');
   assert.equal(filterCatalogue(vehicleCatalogue, { ...defaultCatalogueFilters, sort: 'mileage-asc' })[0].slug, 'ford-escape-se-2016');
   const withUnknown=vehicleCatalogue.map(v=>v.slug==='volvo-s60-inscription-2019'?{...v,price:null}:v);
-  assert.equal(filterCatalogue(withUnknown, { ...defaultCatalogueFilters, sort: 'price-desc' }).at(-1)?.slug, 'volvo-s60-inscription-2019');
-  assert.equal(filterCatalogue(withUnknown, { ...defaultCatalogueFilters, sort: 'price-asc' }).at(-1)?.slug, 'volvo-s60-inscription-2019');
+  assert.deepEqual(filterCatalogue(withUnknown, { ...defaultCatalogueFilters, sort: 'price-desc' }).slice(-4).map(v=>v.slug), ['volvo-s60-inscription-2019','jeep-wrangler-2017','ford-escape-2014','mercedes-benz-gla-250-2016']);
+  assert.deepEqual(filterCatalogue(withUnknown, { ...defaultCatalogueFilters, sort: 'price-asc' }).slice(-4).map(v=>v.slug), ['volvo-s60-inscription-2019','jeep-wrangler-2017','ford-escape-2014','mercedes-benz-gla-250-2016']);
   assert.deepEqual(vehicleCatalogue.map(vehicle => vehicle.slug), order);
 });
 test('shared filter URLs validate sort and bound input length', () => {
