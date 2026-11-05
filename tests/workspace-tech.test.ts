@@ -46,7 +46,7 @@ test('workspace glass keeps opaque fallback, static input surfaces and mobile na
     assert.ok(!rule.nodes.some(node => node.type === 'decl' && node.prop === 'padding-bottom'));
   });
   const base = read('app/workspace.css');
-  assert.match(base, /grid-template-columns:repeat\(5,minmax\(0,1fr\)\)/);
+  assert.match(base, /grid-template-columns:repeat\(6,minmax\(0,1fr\)\)/);
   assert.match(base, /padding-bottom:calc\(82px \+ env\(safe-area-inset-bottom,0px\)\)/);
   assert.match(base, /article:first-child>strong \{ flex:0 0 auto; text-align:right/);
 });

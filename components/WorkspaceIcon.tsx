@@ -1,5 +1,6 @@
-export type WorkspaceIconName = "home" | "learn" | "calculator" | "car" | "profile" | "team";
+export type WorkspaceIconName = "home" | "learn" | "calculator" | "car" | "profile" | "team" | "wallet";
 const paths: Record<WorkspaceIconName, string> = {
+  wallet: "M20 7H5a2 2 0 0 1 0-4h13v4M3 5v14a2 2 0 0 0 2 2h15V7m0 5h-6v5h6M17 14.5h.01",
   home: "M3 10 12 3l9 7v10a1 1 0 0 1-1 1h-5v-7H9v7H4a1 1 0 0 1-1-1Z",
   learn: "m2 8 10-5 10 5-10 5Zm4 3v6l6 4 6-4v-6M22 8v8",
   calculator: "M6 3h12v18H6ZM9 7h6M9 11h1m4 0h1m-6 4h1m4 0h1m-6 3h1m4 0h1",

@@ -9,6 +9,7 @@ const links: {href:string;label:string;mark:WorkspaceIconName}[] = [
   { href: "/aula", label: "Mi formación", mark: "learn" },
   { href: "/mi-cuenta/calculadora", label: "Calculadora", mark: "calculator" },
   { href: "/mi-cuenta/inversiones", label: "Inversiones", mark: "car" },
+  { href: "/mi-cuenta/finanzas", label: "Mis finanzas", mark: "wallet" },
   { href: "/mi-cuenta/perfil", label: "Mi perfil", mark: "profile" },
 ];
 export default function WorkspaceFrame({ children, team = false }: { children: React.ReactNode; team?: boolean }) {
