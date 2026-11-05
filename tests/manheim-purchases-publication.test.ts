@@ -14,7 +14,7 @@ test('three Manheim previews use verified years and mileage without invented pri
  assert.deepEqual(cars.map(v=>v.title),['Jeep Wrangler 2017','Ford Escape 2014','Mercedes-Benz GLA 250 2016']);
  assert.deepEqual(cars.map(v=>v.specs.find(([key])=>key==='Millaje')?.[1]),['155.965 mi','160.383 mi','108.119 mi']);
  assert.deepEqual(cars.map(v=>v.price),[null,null,null]);
- for(const car of cars){assert.ok(car.originalPhotos);assert.ok(!car.referenceImage);assert.equal(car.photos.length,1);assert.match(car.description,/estado mecánico y la documentación están pendientes de confirmar/);assert.ok(!car.specs.some(([key])=>['Título','Transmisión','Reparaciones','Exterior'].includes(key)));assert.doesNotMatch(JSON.stringify(car),/VIN|purchase_cents|asking_cents|fee|expenses/);}
+ for(const car of cars){assert.ok(!car.originalPhotos);assert.ok(!car.referenceImage);assert.equal(car.photos.length,2);assert.match(car.photoNotice??'',/Portada con fondo editado/);assert.equal(car.photos[0].src,'/vehicles/'+car.slug+'/portada.webp');assert.match(car.photos[0].caption,/fondo editado/);assert.equal(car.photos[1].src,'/vehicles/'+car.slug+'/original.jpeg');assert.match(car.photos[1].caption,/fotografía original de esta unidad/);assert.match(car.description,/estado mecánico y la documentación están pendientes de confirmar/);assert.ok(!car.specs.some(([key])=>['Título','Transmisión','Reparaciones','Exterior'].includes(key)));assert.doesNotMatch(JSON.stringify(car),/VIN|purchase_cents|asking_cents|fee|expenses/);}
 });
 test('purchased Manheim vehicles show coming soon with price to confirm and leak no private fields',()=>{
  const output=projectCatalogue(cars,manifest,rows);
@@ -44,4 +44,13 @@ test('new publication registry stores only approved public slugs, never new priv
  const source=readFileSync(new URL('../lib/vehicles/publication-registry.ts',import.meta.url),'utf8');
  assert.match(source,/import 'server-only'/);assert.match(source,/inventorySlug:slug/);assert.doesNotMatch(source,/[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f-]{23}/);
  for(const slug of slugs)assert.ok(source.includes("'"+slug+"'"));
+});
+
+test('presentation covers are disclosed and preserve exact source originals as the second photo',()=>{
+ const assets=JSON.parse(readFileSync(new URL('../docs/manheim-presentation-assets.json',import.meta.url),'utf8')) as {slug:string;file:string;sha256:string;bytes:number;width:number;height:number;backgroundEdited:boolean;originalFile:string}[];
+ assert.deepEqual(assets.map(v=>v.slug),slugs);
+ for(const a of assets){
+  const bytes=readFileSync(new URL('../public/vehicles/'+a.slug+'/'+a.file,import.meta.url));assert.equal(bytes.length,a.bytes);assert.equal(createHash('sha256').update(bytes).digest('hex'),a.sha256);assert.equal(bytes.toString('ascii',0,4),'RIFF');assert.equal(bytes.toString('ascii',8,12),'WEBP');assert.equal(a.width/a.height,4/3);assert.equal(a.backgroundEdited,true);assert.equal(a.originalFile,'original.jpeg');
+  const car=cars.find(v=>v.slug===a.slug)!;assert.match(car.description,/fondo de presentación editado/);assert.match(car.description,/fotografía original de esta unidad está disponible/);assert.equal(car.photos[1].src,'/vehicles/'+a.slug+'/'+a.originalFile);
+ }
 });

@@ -1,0 +1,32 @@
+[
+  {
+    "slug": "jeep-wrangler-2017",
+    "file": "portada.webp",
+    "sha256": "bf29584cabff5ea6af3c25b7dd4e3cda69d74b532abd68d00cc2238a726a1f81",
+    "bytes": 295834,
+    "width": 1448,
+    "height": 1086,
+    "backgroundEdited": true,
+    "originalFile": "original.jpeg"
+  },
+  {
+    "slug": "ford-escape-2014",
+    "file": "portada.webp",
+    "sha256": "a183360b6f3979fdaa6dff80ab9cc92c27005b0c8bdb70bf77b20085ec4b67d8",
+    "bytes": 321638,
+    "width": 1448,
+    "height": 1086,
+    "backgroundEdited": true,
+    "originalFile": "original.jpeg"
+  },
+  {
+    "slug": "mercedes-benz-gla-250-2016",
+    "file": "portada.webp",
+    "sha256": "73f9141193cb4238b3d1883e3cf64df1598d89408620ec16c8afaf2e374e6d7d",
+    "bytes": 297716,
+    "width": 1448,
+    "height": 1086,
+    "backgroundEdited": true,
+    "originalFile": "original.jpeg"
+  }
+]
