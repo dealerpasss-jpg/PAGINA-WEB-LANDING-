@@ -3,8 +3,15 @@
 import { useEffect, useRef, useState, type KeyboardEvent, type TouchEvent } from 'react';
 import Image from 'next/image';
 import ArrowIcon from './ArrowIcon';
+import { photoCredits } from '@/data/photo-credits';
 import type { CatalogueVehicle } from '@/data/vehicle-catalogue';
 import styles from '@/app/vehiculos/vehicles.module.css';
+
+function PhotoAttribution({src}:{src:string}) {
+  const credit=photoCredits[src];
+  if(!credit)return null;
+  return <p className={styles.note}>Foto de referencia: <a href={credit.sourceUrl} target="_blank" rel="noreferrer">{credit.author} / Wikimedia Commons</a> · <a href={credit.licenseUrl} target="_blank" rel="noreferrer">{credit.license}</a>. {credit.changes}</p>;
+}
 
 export default function VehicleGallery({ photos, vehicle, notice, originalPhotos = false }: { photos: CatalogueVehicle['photos']; vehicle: string; notice?:string; originalPhotos?:boolean }) {
   const [selectedSrc, setSelectedSrc] = useState(()=>photos[0]?.src??'');
@@ -76,12 +83,14 @@ export default function VehicleGallery({ photos, vehicle, notice, originalPhotos
       {photos.length>1&&<><button type="button" data-dp-button="icon" className={styles.previous} aria-label="Foto anterior" onClick={() => move(-1)}><ArrowIcon direction="left" /></button><button type="button" data-dp-button="icon" className={styles.next} aria-label="Foto siguiente" onClick={() => move(1)}><ArrowIcon direction="right" /></button></>}
     </div>
     <p className={styles.caption} aria-live="polite" aria-atomic="true"><span>{photo.caption}</span><span>{selected + 1} / {photos.length}</span></p>
+    <PhotoAttribution src={photo.src}/>
     {photos.length>1&&<div ref={thumbnails} className={styles.thumbnails} role="group" aria-label="Seleccionar foto del vehículo">{photos.map((item, index) => <button type="button" key={item.src} aria-label={`Foto ${index + 1}: ${item.caption}`} aria-pressed={index === selected} onClick={() => setSelected(index)}><Image src={item.src} alt="" width={144} height={108} sizes="94px" /></button>)}</div>}
     <p className={styles.note}>{notice ?? (originalPhotos ? 'Fotografías originales proporcionadas por el vendedor, sin retoques de la apariencia del vehículo.' : 'La portada tiene el fondo editado para unificar el catálogo. Las demás fotografías muestran el vehículo en su entorno original.')}</p>
     <dialog ref={dialog} className={styles.photoDialog} aria-label={`Galería ampliada de ${vehicle}`} onClose={() => setExpanded(false)} onKeyDown={onKeyDown} onClick={event => { if (event.target === event.currentTarget) dialog.current?.close(); }}>
       <div className={styles.dialogInner}>
         <div className={styles.dialogHeader}><div><strong>{vehicle}</strong><span>{selected + 1} / {photos.length}</span></div><button data-dp-button="inverse" type="button" autoFocus onClick={() => dialog.current?.close()} aria-label="Cerrar galería ampliada">Cerrar <span aria-hidden="true">×</span></button></div>
         {expanded && <div className={styles.expandedPhoto} onTouchStart={onTouchStart} onTouchEnd={onTouchEnd}><Image key={photo.src} src={photo.src} alt={`${vehicle}: ${photo.caption}`} width={1448} height={1086} sizes="100vw" />{photos.length>1&&<><button type="button" data-dp-button="icon" className={styles.previous} aria-label="Foto anterior ampliada" onClick={() => move(-1)}><ArrowIcon direction="left" /></button><button type="button" data-dp-button="icon" className={styles.next} aria-label="Foto siguiente ampliada" onClick={() => move(1)}><ArrowIcon direction="right" /></button></>}</div>}
+        <PhotoAttribution src={photo.src}/>
         <p className={styles.dialogCaption} aria-live="polite">{photo.caption}<span>{photos.length>1?'Desliza o usa ← → · ':''}Esc para cerrar</span></p>
       </div>
     </dialog>

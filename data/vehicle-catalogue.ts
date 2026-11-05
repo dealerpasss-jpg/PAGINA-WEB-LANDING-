@@ -121,7 +121,7 @@ export const vehicleCatalogue: CatalogueVehicle[] = [
     "title": "Jeep Wrangler 2017",
     "price": null,
     "bodyStyle": "SUV",
-    "photoNotice": "Portada con fondo editado. Foto original de esta unidad en la galería.",
+    "originalPhotos": true,
     "specs": [
       [
         "Año",
@@ -132,12 +132,8 @@ export const vehicleCatalogue: CatalogueVehicle[] = [
         "155.965 mi"
       ]
     ],
-    "description": "Jeep Wrangler 2017, con millaje reportado de 155.965 millas. La portada usa un fondo de presentación editado; la fotografía original de esta unidad está disponible en la galería. El estado mecánico y la documentación están pendientes de confirmar. Consulta la disponibilidad actual en esta ficha.",
+    "description": "Jeep Wrangler 2017, con millaje reportado de 155.965 millas. La fotografía original muestra esta unidad desde el frente en diagonal. El estado mecánico y la documentación están pendientes de confirmar. Consulta la disponibilidad actual en esta ficha.",
     "photos": [
-      {
-        "src": "/vehicles/jeep-wrangler-2017/portada.webp",
-        "caption": "Portada de esta unidad · fondo editado"
-      },
       {
         "src": "/vehicles/jeep-wrangler-2017/original.jpeg",
         "caption": "Vista delantera en diagonal · fotografía original de esta unidad"
@@ -149,7 +145,8 @@ export const vehicleCatalogue: CatalogueVehicle[] = [
     "title": "Ford Escape 2014",
     "price": null,
     "bodyStyle": "SUV",
-    "photoNotice": "Portada con fondo editado. Foto original de esta unidad en la galería.",
+    "referenceImage": true,
+    "photoNotice": "Portada de referencia con fondo editado: es otro ejemplar, no esta unidad ni su condición actual. Foto original en la galería.",
     "specs": [
       [
         "Año",
@@ -160,11 +157,11 @@ export const vehicleCatalogue: CatalogueVehicle[] = [
         "160.383 mi"
       ]
     ],
-    "description": "Ford Escape 2014, con millaje reportado de 160.383 millas. La portada usa un fondo de presentación editado; la fotografía original de esta unidad está disponible en la galería. El estado mecánico y la documentación están pendientes de confirmar. Consulta la disponibilidad actual en esta ficha.",
+    "description": "Ford Escape 2014, con millaje reportado de 160.383 millas. La portada es una imagen de referencia de otro ejemplar con fondo de presentación editado. La referencia muestra una Escape Titanium 2014 plateada; la versión y el equipamiento pueden diferir de esta unidad. La fotografía original de esta unidad está disponible en la galería. El estado mecánico y la documentación están pendientes de confirmar. Consulta la disponibilidad actual en esta ficha.",
     "photos": [
       {
         "src": "/vehicles/ford-escape-2014/portada.webp",
-        "caption": "Portada de esta unidad · fondo editado"
+        "caption": "Referencia del modelo · fondo editado, no es esta unidad"
       },
       {
         "src": "/vehicles/ford-escape-2014/original.jpeg",
@@ -177,7 +174,7 @@ export const vehicleCatalogue: CatalogueVehicle[] = [
     "title": "Mercedes-Benz GLA 250 2016",
     "price": null,
     "bodyStyle": "SUV",
-    "photoNotice": "Portada con fondo editado. Foto original de esta unidad en la galería.",
+    "originalPhotos": true,
     "specs": [
       [
         "Año",
@@ -192,12 +189,8 @@ export const vehicleCatalogue: CatalogueVehicle[] = [
         "108.119 mi"
       ]
     ],
-    "description": "Mercedes-Benz GLA 250 2016, con millaje reportado de 108.119 millas. La portada usa un fondo de presentación editado; la fotografía original de esta unidad está disponible en la galería. El estado mecánico y la documentación están pendientes de confirmar. Consulta la disponibilidad actual en esta ficha.",
+    "description": "Mercedes-Benz GLA 250 2016, con millaje reportado de 108.119 millas. La fotografía original muestra esta unidad desde el frente en diagonal. El estado mecánico y la documentación están pendientes de confirmar. Consulta la disponibilidad actual en esta ficha.",
     "photos": [
-      {
-        "src": "/vehicles/mercedes-benz-gla-250-2016/portada.webp",
-        "caption": "Portada de esta unidad · fondo editado"
-      },
       {
         "src": "/vehicles/mercedes-benz-gla-250-2016/original.jpeg",
         "caption": "Vista delantera en diagonal · fotografía original de esta unidad"
