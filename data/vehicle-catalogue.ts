@@ -121,7 +121,6 @@ export const vehicleCatalogue: CatalogueVehicle[] = [
     "title": "Jeep Wrangler 2017",
     "price": null,
     "bodyStyle": "SUV",
-    "originalPhotos": true,
     "specs": [
       [
         "Año",
@@ -132,13 +131,19 @@ export const vehicleCatalogue: CatalogueVehicle[] = [
         "155.965 mi"
       ]
     ],
-    "description": "Jeep Wrangler 2017, con millaje reportado de 155.965 millas. La fotografía original muestra esta unidad desde el frente en diagonal. El estado mecánico y la documentación están pendientes de confirmar. Consulta la disponibilidad actual en esta ficha.",
+    "description": "Jeep Wrangler 2017, con millaje reportado de 155.965 millas. La portada es una visualización de referencia recreada con IA a partir de otro Wrangler JK Unlimited 2018. Se adaptaron el fondo, el techo, los rines, los estribos y la apariencia del parachoques; no es una fotografía de esta unidad ni confirma su condición o equipamiento. La fotografía original de esta unidad está disponible en la galería. El estado mecánico y la documentación están pendientes de confirmar. Consulta la disponibilidad actual en esta ficha.",
     "photos": [
+      {
+        "src": "/vehicles/jeep-wrangler-2017/portada.webp",
+        "caption": "Referencia recreada con IA · otro ejemplar, no esta unidad"
+      },
       {
         "src": "/vehicles/jeep-wrangler-2017/original.jpeg",
         "caption": "Vista delantera en diagonal · fotografía original de esta unidad"
       }
-    ]
+    ],
+    "referenceImage": true,
+    "photoNotice": "Portada de referencia recreada con IA, basada en otro ejemplar: no es esta unidad ni su condición actual. Foto original en la galería."
   },
   {
     "slug": "ford-escape-2014",
@@ -174,7 +179,6 @@ export const vehicleCatalogue: CatalogueVehicle[] = [
     "title": "Mercedes-Benz GLA 250 2016",
     "price": null,
     "bodyStyle": "SUV",
-    "originalPhotos": true,
     "specs": [
       [
         "Año",
@@ -189,13 +193,19 @@ export const vehicleCatalogue: CatalogueVehicle[] = [
         "108.119 mi"
       ]
     ],
-    "description": "Mercedes-Benz GLA 250 2016, con millaje reportado de 108.119 millas. La fotografía original muestra esta unidad desde el frente en diagonal. El estado mecánico y la documentación están pendientes de confirmar. Consulta la disponibilidad actual en esta ficha.",
+    "description": "Mercedes-Benz GLA 250 2016, con millaje reportado de 108.119 millas. La portada es una visualización de referencia recreada con IA a partir de otro GLA 250 4MATIC 2015 de la misma generación. Se adaptaron el fondo, el color, los rines y el techo; el año, la tracción y el equipamiento del ejemplar usado como base pueden diferir de esta unidad. La fotografía original de esta unidad está disponible en la galería. El estado mecánico y la documentación están pendientes de confirmar. Consulta la disponibilidad actual en esta ficha.",
     "photos": [
+      {
+        "src": "/vehicles/mercedes-benz-gla-250-2016/portada.webp",
+        "caption": "Referencia recreada con IA · otro ejemplar, no esta unidad"
+      },
       {
         "src": "/vehicles/mercedes-benz-gla-250-2016/original.jpeg",
         "caption": "Vista delantera en diagonal · fotografía original de esta unidad"
       }
-    ]
+    ],
+    "referenceImage": true,
+    "photoNotice": "Portada de referencia recreada con IA, basada en otro ejemplar: no es esta unidad ni su condición actual. Foto original en la galería."
   },
   {
     "slug": "ford-escape-se-2016",
