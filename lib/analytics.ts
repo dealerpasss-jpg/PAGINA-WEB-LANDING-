@@ -43,6 +43,6 @@ export function track(event: DealerPassEvent, params: Record<string, unknown> = 
 export function getWhatsappUrl(customMessage?: string) {
   const number = process.env.NEXT_PUBLIC_WHATSAPP_NUMBER || "";
   const message = customMessage || process.env.NEXT_PUBLIC_WHATSAPP_MESSAGE || "Hola, quiero información sobre DealerPass";
-  if (!number) return "#";
+  if (!number) return "/contacto";
   return `https://wa.me/${number}?text=${encodeURIComponent(message)}`;
 }

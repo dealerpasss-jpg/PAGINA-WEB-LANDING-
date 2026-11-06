@@ -1,17 +1,21 @@
 import type { Metadata } from "next";
-import { Barlow_Condensed, Inter } from "next/font/google";
+import { Inter } from "next/font/google";
 import "./globals.css";
 import Header from "@/components/Header";
+import MotionEffects from "@/components/MotionEffects";
 import Footer from "@/components/Footer";
-import CardSpotlight from "@/components/CardSpotlight";
-import WhatsAppFloat from "@/components/WhatsAppFloat";
-import Preloader from "@/components/Preloader";
 
-const display = Barlow_Condensed({
-  subsets: ["latin"],
-  variable: "--font-display",
-  weight: ["700", "800"],
-});
+import "./account.css";
+import "./motion.css";
+import "./film.css";
+import "./lower.css";
+import "./readability.css";
+import "./plan-comparison.css";
+import "./sales-journey.css";
+import "./platform.css";
+import "./workspace.css";
+import "./workspace-tech.css";
+import "./buttons.css";
 
 const body = Inter({
   subsets: ["latin"],
@@ -35,15 +39,17 @@ export const metadata: Metadata = {
   ],
 };
 
-export default function RootLayout({ children }: { children: React.ReactNode }) {
+export default function RootLayout({
+  children,
+}: {
+  children: React.ReactNode;
+}) {
   return (
     <html lang="es">
-      <body className={`${display.variable} ${body.variable}`}>
-        <Preloader />
-        <CardSpotlight />
-        <WhatsAppFloat />
+      <body className={body.variable}>
+        <MotionEffects />
         <Header />
-        <main>{children}</main>
+        <main id="main-content" tabIndex={-1}>{children}</main>
         <Footer />
       </body>
     </html>

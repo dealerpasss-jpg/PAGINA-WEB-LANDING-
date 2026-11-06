@@ -1,0 +1,300 @@
+.account-shell {
+  max-width: 1240px;
+  margin: auto;
+  padding: 64px 48px 96px;
+  min-height: 65vh;
+  color: var(--ink);
+}
+.account-top {
+  display: flex;
+  justify-content: space-between;
+  gap: 20px;
+  font-size: 10px;
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+  color: var(--muted);
+  margin-bottom: 30px;
+}
+.account-top > span:before {
+  content: "";
+  display: inline-block;
+  width: 5px;
+  height: 5px;
+  background: var(--accent);
+  margin-right: 9px;
+}
+.account-shell h1 {
+  font-size: clamp(34px, 4vw, 52px);
+  max-width: 850px;
+  line-height: 1.1;
+  margin-bottom: 24px;
+}
+.account-shell h2 {
+  font-size: 26px;
+  margin: 26px 0 16px;
+}
+.account-shell p {
+  color: var(--muted);
+  line-height: 1.7;
+  margin-bottom: 20px;
+}
+.account-card {
+  background: #fff;
+  border: 1px solid var(--line);
+  border-radius: 12px;
+  padding: 28px;
+  margin-top: 24px;
+  color: var(--ink);
+}
+.account-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(245px, 1fr));
+  gap: 20px;
+}
+.account-form {
+  max-width: 620px;
+  display: grid;
+  gap: 20px;
+  background: #faf9f7;
+}
+.account-form label {
+  display: grid;
+  gap: 8px;
+  font-size: 13px;
+  font-weight: 500;
+}
+.account-form input,
+.account-form select,
+.account-form textarea {
+  width: 100%;
+  background: #fff;
+  border: 1px solid #73756e;
+  border-radius: 6px;
+  color: var(--ink);
+  padding: 13px;
+  font:
+    400 16px var(--font-body),
+    sans-serif;
+  min-height: 48px;
+}
+.account-form textarea {
+  min-height: 110px;
+}
+.account-form .account-check {
+  display: flex;
+  align-items: flex-start;
+  line-height: 1.6;
+  font-size: 12px;
+  font-weight: 400;
+}
+.account-check input {
+  width: 18px;
+  height: 18px;
+  min-height: 18px;
+  flex-shrink: 0;
+  margin-top: 3px;
+  accent-color: var(--ink);
+}
+.account-links {
+  display: flex;
+  gap: 24px;
+  flex-wrap: wrap;
+  margin: 24px 0;
+  font-size: 13px;
+}
+.account-links a,
+.account-check a,
+.account-shell article a:not(.btn-primary) {
+  color: var(--ink);
+  text-decoration: underline;
+  text-underline-offset: 4px;
+}
+.account-notice,
+.account-shell .account-notice {
+  color: var(--ink);
+  padding: 18px;
+  border-left: 2px solid var(--accent);
+  background: var(--ivory);
+  margin: 24px 0;
+  font-size: 13px;
+}
+.account-tag {
+  font-size: 10px;
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+  color: var(--muted);
+}
+.account-row {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  gap: 20px;
+  padding: 20px 0;
+  border-bottom: 1px solid var(--line);
+}
+.account-row h3 {
+  font-size: 20px;
+}
+.account-shell button:disabled {
+  opacity: 0.45;
+  cursor: not-allowed;
+}
+.account-prose {
+  white-space: pre-wrap;
+  line-height: 1.9;
+}
+.account-shell video {
+  max-width: 100%;
+  width: 100%;
+  border-radius: 12px;
+  background: #000;
+}
+.account-shell small,
+.account-card small {
+  color: var(--muted);
+  font-size: 11px;
+}
+.account-form input::placeholder,
+.account-form textarea::placeholder {
+  color: #656760;
+  opacity: 1;
+}
+.account-shell-compact {
+  max-width: 560px;
+  padding-top: 48px;
+  padding-bottom: 72px;
+}
+.account-shell-compact h1 {
+  font-size: 40px;
+  margin-bottom: 14px;
+}
+.account-shell-compact > p {
+  font-size: 14px;
+}
+.account-shell-compact .account-form {
+  box-shadow: 0 20px 60px #11131505;
+}
+.account-shell-compact .btn-primary {
+  width: 100%;
+  justify-content: center;
+  min-height: 48px;
+}
+.account-shell-compact .account-links {
+  justify-content: space-between;
+  gap: 16px;
+  font-size: 12px;
+}
+.account-card h3 {
+  font-size: 22px;
+}
+.account-card .btn-primary {
+  margin-top: 12px;
+}
+.account-shell ul {
+  padding-left: 18px;
+  line-height: 1.8;
+}
+.account-form small {
+  font-weight: 400;
+}
+@media (max-width: 600px) {
+  .account-shell {
+    padding: 40px 20px 64px;
+  }
+  .account-row {
+    align-items: flex-start;
+    flex-direction: column;
+  }
+  .account-card {
+    padding: 22px;
+  }
+  .account-shell-compact h1 {
+    font-size: 36px;
+  }
+  .account-top {
+    font-size: 8px;
+    letter-spacing: 0.08em;
+  }
+}
+
+.profile-fields-grid { display:grid; grid-template-columns:1fr 1fr; gap:18px; }
+.profile-fields-grid label { min-width:0; }
+.profile-consents { border:1px solid #d9d4cd; border-radius:8px; padding:18px; display:grid; gap:16px; margin:0; min-width:0; }
+.profile-consents legend { font-size:14px; padding:0 6px; }
+.profile-consents small { line-height:1.6; }
+@media(max-width:600px) { .profile-fields-grid { grid-template-columns:1fr; } }
+
+/* Student workspace: editorial ivory, clear white surfaces, restrained orange. */
+.student-dashboard { margin-top:32px; }
+.dashboard-nav { display:flex; flex-wrap:wrap; gap:8px; border-bottom:1px solid #d9d4cd; padding-bottom:18px; }
+.dashboard-nav a { display:flex; align-items:center; gap:10px; padding:12px 16px; border-radius:30px; font-size:13px; text-decoration:none; transition:background .18s ease; }
+.dashboard-nav a:hover { background:#e9e3d9; }
+.dashboard-profile { display:flex; flex-wrap:wrap; justify-content:space-between; gap:12px; padding:18px 0; font-size:13px; }
+.dashboard-profile a,.dashboard-text-link { display:inline-flex; align-items:center; gap:10px; text-decoration:underline; text-underline-offset:4px; }
+.dashboard-hero { display:grid; grid-template-columns:1.25fr 1fr; overflow:hidden; background:#111315; border-radius:18px; color:#fff; margin:24px 0; }
+.dashboard-hero>div:first-child { padding:40px; }
+.dashboard-eyebrow { font-size:11px; letter-spacing:.12em; line-height:1.5; font-weight:600; }
+.dashboard-eyebrow::before { content:"";display:inline-block;width:6px;height:6px;background:#ff4d00;margin-right:8px; }
+.dashboard-hero h2 { font-size:clamp(28px,3.2vw,42px); line-height:1.12; letter-spacing:-.04em; margin:20px 0; }
+.account-shell .dashboard-hero p,.account-shell .dashboard-dark p { color:#d9d8d3; }
+.dashboard-art { position:relative; min-height:300px; }
+.dashboard-art img { object-fit:cover; }
+.dashboard-cta { display:inline-flex; gap:15px; align-items:center; padding:16px 22px; border-radius:6px; background:#f2eee7; color:#111315; font-size:14px; font-weight:600; }
+.dashboard-stats { display:grid; grid-template-columns:repeat(3,1fr);gap:16px;margin:24px 0; }
+.dashboard-stats article { background:#fff; border:1px solid #d9d4cd;border-radius:12px;padding:24px;display:grid;gap:12px; }
+.dashboard-stats span {font-size:10px;letter-spacing:.13em;color:#555;}.dashboard-stats strong {font-size:28px;letter-spacing:-.04em}.account-shell .dashboard-stats small {font-size:12px;line-height:1.5;color:#555;}
+.dashboard-columns {display:grid;grid-template-columns:1.35fr 1fr;gap:20px;align-items:start;}
+.dashboard-panel {padding:30px;background:white;border:1px solid #d9d4cd;border-radius:14px;margin:0 0 22px;min-width:0;}
+.dashboard-panel h2 {font-size:28px;letter-spacing:-.03em;line-height:1.2;margin:20px 0;}.dashboard-panel h3 {font-size:18px;line-height:1.4;}
+.dashboard-section-title {display:flex;justify-content:space-between;align-items:center;gap:16px;flex-wrap:wrap}.dashboard-section-title a {font-size:12px;display:inline-flex;gap:8px;align-items:center;}
+.dashboard-panel progress {width:100%;height:8px;accent-color:#ff4d00;display:block;margin:12px 0 20px;}.dashboard-progress-label{display:flex;justify-content:space-between;font-size:13px;}
+.dashboard-lesson {display:flex;justify-content:space-between;align-items:center;gap:20px;padding:18px 0;border-top:1px solid #e7e2da;text-decoration:none;}.dashboard-lesson small{font-size:11px;}.dashboard-lesson span{font-size:12px;color:#555;}.dashboard-lesson h3{margin:5px 0;}
+.dashboard-dark {background:#202426;color:#f2eee7;border-color:#202426;}.dashboard-dark a{color:#f2eee7!important;}.dashboard-outline-tag{display:inline-block;border:1px solid #666;padding:10px;font-size:10px;letter-spacing:.1em;}.dashboard-help{border-top:1px solid #555;margin-top:36px;padding-top:22px;}.dashboard-help a{font-size:13px;display:inline-flex;gap:12px;align-items:center;}.account-shell .dashboard-dark small{color:#d9d8d3;}
+.dashboard-resources{display:grid;grid-template-columns:repeat(3,1fr);gap:24px;}.dashboard-resources article{border-top:1px solid #d9d4cd;padding-top:22px;}.dashboard-resources p{font-size:14px;}.dashboard-resources a{display:inline-flex;align-items:center;gap:8px;font-size:13px;}.dashboard-resource-number{font-size:12px;color:#a93100;}.dashboard-resources h3{margin:16px 0;}
+.account-shell .dashboard-purchases{padding:0;list-style:none;}.dashboard-purchases li{display:flex;gap:20px;justify-content:space-between;border-bottom:1px solid #e7e2da;padding:16px 0;font-size:14px;}.account-shell .dashboard-footnote{font-size:12px;margin:20px 0 0;}.dashboard-plan-section{padding-top:30px;}.student-dashboard section[id],.dashboard-plan-section{scroll-margin-top:0;}
+@media(max-width:760px){.dashboard-hero{grid-template-columns:1fr;}.dashboard-hero>div:first-child{padding:28px;}.dashboard-art{min-height:200px;max-height:240px;}.dashboard-columns{grid-template-columns:1fr}.dashboard-resources{grid-template-columns:1fr}.dashboard-stats{gap:8px}.dashboard-stats article{padding:14px}.dashboard-stats strong{font-size:20px}.dashboard-panel{padding:22px}.dashboard-stats span{font-size:9px}.dashboard-nav a{padding:10px;font-size:12px}}
+@media(max-width:400px){.dashboard-stats{grid-template-columns:1fr}.dashboard-stats article{padding:18px}}
+
+.team-search{margin:24px 0;display:grid;gap:10px;font-size:13px}.team-search>div{display:flex;flex-wrap:wrap;gap:12px;align-items:center}.team-search input,.team-search select{padding:13px;border:1px solid #73756e;border-radius:6px;background:white;color:#111315;font:inherit;min-height:48px;max-width:100%}.team-search input{flex:1;min-width:180px}.team-search .btn-primary{min-height:48px}.team-table-wrap{overflow:auto}.team-table{width:100%;border-collapse:collapse;text-align:left;font-size:14px}.team-table th{font-size:11px;text-transform:uppercase;letter-spacing:.06em;color:#555}.team-table th,.team-table td{padding:18px 12px;border-bottom:1px solid #e7e2da}.team-table td:first-child{overflow-wrap:anywhere;min-width:180px}.team-table a{white-space:nowrap;text-decoration:underline}.team-facts{display:grid;grid-template-columns:1fr 1.3fr;gap:15px;font-size:14px;line-height:1.6}.team-facts dt{color:#555}.team-facts dd{margin:0;overflow-wrap:anywhere}.team-editor{margin-top:24px}.team-editor summary{cursor:pointer;font-weight:600;padding:12px 0}.team-editor form{padding-top:24px;max-width:100%}.team-editor fieldset{padding:18px;border:1px solid #ccc;border-radius:8px;display:grid;gap:12px}.team-editor .account-check{align-items:center}
+
+.password-help { font-size: 13px; margin-top: 20px; }
+
+/* Account controls: clear hierarchy and generous touch targets. */
+.account-welcome { display:flex; flex-wrap:wrap; align-items:center; gap:12px; font-size:15px; }
+.account-role { display:inline-flex; padding:6px 11px; border:1px solid #d9d4cd; border-radius:999px; color:#343735; background:#f2eee7; font-size:12px; font-weight:600; }
+.account-actions { display:flex; flex-wrap:wrap; align-items:stretch; gap:12px; margin:28px 0 32px; }
+.account-actions form { display:flex; margin:0; }
+.account-action { display:inline-flex; align-items:center; justify-content:center; gap:16px; min-height:48px; padding:13px 18px; border:1px solid #d0ccc5; border-radius:12px; background:#fff; color:#111314; font-size:14px; font-weight:600; text-decoration:none; cursor:pointer; transition:background .18s ease,border-color .18s ease,transform .18s ease; }
+.account-action-primary { background:#111314; color:#fff; border-color:#111314; }
+.account-action-primary svg { color:#ff4d00; }
+.account-action-quiet { background:transparent; border-color:transparent; color:#5c605b; font-weight:400; }
+.account-action:hover { background:#f2eee7; border-color:#aaa59b; transform:translateY(-1px); }
+.account-action-primary:hover { background:#292d2b; color:#fff; border-color:#292d2b; }
+.account-shell a:focus-visible,.account-shell button:focus-visible { outline:3px solid #ff4d00; outline-offset:4px; }
+.dashboard-nav { padding:8px; border:1px solid #dedad3; border-radius:16px; background:#f2eee7; gap:8px; }
+.dashboard-nav a { flex:1; min-height:46px; justify-content:center; border:1px solid #ddd8d0; border-radius:10px; background:#fff; font-weight:500; white-space:nowrap; }
+.dashboard-nav a:hover { background:#111314; color:#fff; border-color:#111314; }
+.dashboard-profile { align-items:center; padding:20px 0; }
+.dashboard-profile a,.dashboard-section-title a,.dashboard-resources a,.dashboard-help a,.dashboard-text-link { min-height:44px; padding:10px 14px; border:1px solid #d9d4cd; border-radius:10px; text-decoration:none!important; font-weight:500; }
+.dashboard-help a { border-color:#6b716f; }
+.dashboard-profile a:hover,.dashboard-resources a:hover,.dashboard-section-title a:hover { background:#f2eee7; }
+.dashboard-cta { min-height:48px; border-radius:10px; }
+@media(max-width:600px) {
+  .account-actions { display:grid; grid-template-columns:1fr 1fr; gap:10px; margin:24px 0; }
+  .account-action { width:100%; font-size:13px; padding:13px 12px; gap:10px; }
+  .account-action-primary { grid-column:1/-1; }
+  .account-actions form { grid-column:1/-1; justify-content:center; }
+  .account-actions form .account-action { width:auto; }
+  .dashboard-nav { display:grid; grid-template-columns:1fr 1fr; }
+  .dashboard-nav a { font-size:13px; padding:12px; }
+  .account-welcome { font-size:14px; }
+}
+@media(prefers-reduced-motion:reduce) { .account-action,.dashboard-nav a { transition:none; transform:none; } }
+
+.recovery-confirmation { background:#f2eee7; border:1px solid #dedad3; border-radius:18px; padding:28px; }
+.recovery-mail-icon { width:64px; height:64px; border-radius:16px; background:#111314; color:#ff4d00; display:grid; place-items:center; margin-bottom:24px; }
+.account-shell .recovery-confirmation h2 { font-size:24px; line-height:1.25; margin:0 0 16px; }
+.recovery-confirmation ol { list-style:decimal; padding-left:22px; margin:22px 0; }
+.recovery-confirmation li { padding-left:5px; margin-bottom:12px; font-size:15px; line-height:1.6; }
+.account-shell .recovery-help { font-size:13px; margin-bottom:0; border-top:1px solid #d5d0c7; padding-top:20px; }
+@media(max-width:600px) { .recovery-confirmation { padding:22px; } .account-shell-compact .account-actions { grid-template-columns:1fr; } }

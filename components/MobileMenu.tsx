@@ -6,6 +6,7 @@ import Logo from "./Logo";
 import { getWhatsappUrl, track } from "@/lib/analytics";
 
 const links = [
+  { href: "/mi-cuenta", label: "Mi cuenta" },
   { href: "/#como-funciona", label: "Cómo funciona" },
   { href: "/academy", label: "Academia" },
   { href: "/planes", label: "Planes" },

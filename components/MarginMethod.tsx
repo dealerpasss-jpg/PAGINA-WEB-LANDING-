@@ -1,61 +1,75 @@
 "use client";
+import ArrowIcon from "@/components/ArrowIcon";
 
-import { useEffect, useState } from "react";
+import { useState } from "react";
+import Link from "next/link";
 import { marginMethod } from "@/data/margen";
-
-export default function MarginMethod() {
+export default function MarginMethod({
+  compact = false,
+}: {
+  compact?: boolean;
+}) {
   const [active, setActive] = useState(0);
-  const [autoplay, setAutoplay] = useState(true);
   const current = marginMethod[active];
-
-  useEffect(() => {
-    if (!autoplay) return;
-    const id = setInterval(() => {
-      setActive((a) => (a + 1) % marginMethod.length);
-    }, 2600);
-    return () => clearInterval(id);
-  }, [autoplay]);
-
-  function handleSelect(i: number) {
-    setAutoplay(false);
-    setActive(i);
-  }
-
   return (
-    <section id="metodo-margen" className="relative overflow-hidden bg-texture-black py-16 md:py-24">
-      <div aria-hidden className="glow-neon absolute -z-10 -right-20 top-10 h-64 w-64 rounded-full" />
-      <div className="container-content">
-        <span className="eyebrow">Método MARGEN</span>
-        <h2 className="mt-4 max-w-xl text-3xl text-cream md:text-4xl">
-          No te enseñamos a &ldquo;ganar subastas&rdquo;. Te enseñamos a evaluar negocios.
-        </h2>
-        <p className="mt-4 max-w-lg text-sm leading-relaxed text-cream/60">
-          El Método MARGEN organiza las seis variables que debes revisar antes de pujar.
-        </p>
-
-        <div className="mt-12 flex gap-1.5 overflow-x-auto pb-2 sm:gap-2">
+    <section id="metodo-margen" className="section wrap method-section">
+      <div className="section-heading">
+        <span className="kicker">
+          <i />
+          {compact ? "02 / EL MÉTODO" : "MÉTODO MARGEN"}
+        </span>
+        <div>
+          <h2>
+            Menos intuición.
+            <br />
+            Más perspectiva.
+          </h2>
+          <p>
+            Seis variables para evaluar una oportunidad antes de levantar la
+            mano. Explora cada una.
+          </p>
+        </div>
+      </div>
+      <div className="method-grid">
+        <div
+          className="method-tabs"
+          role="group"
+          aria-label="Variables del método MARGEN"
+        >
           {marginMethod.map((m, i) => (
             <button
               key={m.letter}
-              onClick={() => handleSelect(i)}
               aria-pressed={active === i}
-              className={`flex h-14 w-14 flex-none items-center justify-center rounded-md border font-display text-xl font-extrabold transition-colors sm:h-16 sm:w-16 ${
-                active === i ? "border-neon bg-neon text-black" : "border-edge bg-charcoal text-cream/50 hover:text-cream"
-              }`}
+              onClick={() => setActive(i)}
+              className={active === i ? "active" : ""}
             >
-              {m.letter}
+              <span>{m.letter}</span>
+              <span>{m.word}</span>
+              <span aria-hidden>
+                <ArrowIcon />
+              </span>
             </button>
           ))}
         </div>
-
-        <div className="mt-8 max-w-xl rounded-card border border-edge bg-charcoal p-6">
-          <p className="section-label">
-            {current.letter} — {current.word}
-          </p>
-          <p className="mt-2 text-lg leading-relaxed text-cream">{current.description}</p>
+        <div className="method-panel" aria-live="polite">
+          <span className="method-ghost" aria-hidden>
+            {current.letter}
+          </span>
+          <span className="kicker">MARGEN / 0{active + 1}</span>
+          <div>
+            <h3>{current.word}</h3>
+            <p>{current.description}</p>
+          </div>
+          <Link
+            href={compact ? "/metodo-margen#calculadora" : "#calculadora"}
+            className="text-link"
+          >
+            Llevarlo a los números{" "}
+            <span aria-hidden>
+              <ArrowIcon />
+            </span>
+          </Link>
         </div>
-
-        <p className="mt-10 font-display text-xl font-extrabold text-neon">Compra con números, no con emoción.</p>
       </div>
     </section>
   );

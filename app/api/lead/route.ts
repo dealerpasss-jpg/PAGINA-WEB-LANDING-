@@ -1,26 +1,19 @@
-import { NextRequest, NextResponse } from "next/server";
-
-// Reenvía el lead al webhook configurado (GoHighLevel, HubSpot o webhook genérico).
-// Configura LEAD_FORM_WEBHOOK_URL en tus variables de entorno.
-export async function POST(req: NextRequest) {
-  const body = await req.json();
+import { NextResponse } from "next/server";
+import { readLead } from "@/lib/lead";
+export async function POST(req: Request) {
+  const origin = process.env.APP_URL;
+  if (!origin || req.headers.get("origin") !== new URL(origin).origin) return NextResponse.json({ ok:false }, { status:403 });
   const webhookUrl = process.env.LEAD_FORM_WEBHOOK_URL;
-
-  if (!webhookUrl) {
-    // eslint-disable-next-line no-console
-    console.warn("LEAD_FORM_WEBHOOK_URL no está configurada. Lead recibido:", body);
-    return NextResponse.json({ ok: true, forwarded: false });
-  }
-
+  if (!webhookUrl) return NextResponse.json({ ok:false, error:"contact_unavailable" }, { status:503 });
   try {
-    const res = await fetch(webhookUrl, {
-      method: "POST",
-      headers: { "Content-Type": "application/json" },
-      body: JSON.stringify({ source: "dealerpass-website", ...body }),
-    });
-    if (!res.ok) throw new Error("webhook_failed");
-    return NextResponse.json({ ok: true, forwarded: true });
-  } catch (err) {
-    return NextResponse.json({ ok: false, error: "webhook_failed" }, { status: 502 });
+    const raw = await req.text();
+    if (raw.length > 8192) return NextResponse.json({ ok:false }, { status:413 });
+    const lead = readLead(JSON.parse(raw));
+    if (!lead) return NextResponse.json({ ok:false, error:"invalid_fields" }, { status:400 });
+    const result = await fetch(webhookUrl, { method:"POST", headers:{"Content-Type":"application/json"}, body:JSON.stringify(lead), signal:AbortSignal.timeout(10000) });
+    if (!result.ok) return NextResponse.json({ ok:false, error:"delivery_failed" }, { status:502 });
+    return NextResponse.json({ ok:true, forwarded:true });
+  } catch (error) {
+    return NextResponse.json({ ok:false, error:error instanceof SyntaxError ? "invalid_json" : "delivery_failed" }, { status:error instanceof SyntaxError ? 400 : 502 });
   }
 }

@@ -1,0 +1,2 @@
+import Link from "next/link";
+export default function NotFound() { return <section className="system-state wrap"><span className="kicker">404 / RUTA NO DISPONIBLE</span><h1>Volvamos al camino.</h1><p>Esta página no existe o cambió de ubicación. Puedes volver al inicio o entrar a tu espacio.</p><div className="plans-actions"><Link className="button" href="/">Volver al inicio</Link><Link className="btn-outline" href="/mi-cuenta">Ir a mi espacio</Link></div></section>; }
