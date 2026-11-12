@@ -21,6 +21,7 @@ export default function WorkspaceFrame({ children, team = false }: { children: R
     <aside className="workspace-sidebar">
       <div className="workspace-label"><span className="workspace-dot" /> MI ESPACIO</div>
       <nav aria-label="Navegación de mi espacio">{links.map(l => <Link key={l.href} href={l.href} aria-current={(l.href === "/mi-cuenta" ? path === l.href : path === l.href || path.startsWith(l.href + "/")) ? "page" : undefined}><span className="workspace-icon"><WorkspaceIcon name={l.mark} /></span>{l.label}<ArrowIcon direction="right" /></Link>)}</nav>
+      {team && <Link className="workspace-team" href="/mi-cuenta/ventas" aria-current={path.startsWith("/mi-cuenta/ventas") ? "page" : undefined}><WorkspaceIcon name="wallet" /> Historial de ventas <ArrowIcon /></Link>}
       {(team || path.startsWith("/equipo")) && <Link className="workspace-team" href="/equipo" aria-current={path.startsWith("/equipo") ? "page" : undefined}><WorkspaceIcon name="team" /> Panel del equipo <ArrowIcon /></Link>}
       <div className="workspace-support"><strong>A tu ritmo. Con dirección.</strong><p>Consulta tus herramientas y continúa desde donde quedaste.</p><Link href="/contacto">Ayuda y contacto <ArrowIcon /></Link></div>
       <form className="workspace-logout" action="/api/account" method="post"><input type="hidden" name="action" value="logout" /><button type="submit">Cerrar sesión <ArrowIcon /></button></form>
