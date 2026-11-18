@@ -753,6 +753,7 @@ export const vehicleCatalogue: CatalogueVehicle[] = [
   "price": null,
   "bodyStyle": "Crossover",
   "originalPhotos": true,
+  "photoNotice": "Portada con fondo industrial editado. Fotografía original de esta unidad en la galería.",
   "specs": [
     [
       "Año",
@@ -767,10 +768,14 @@ export const vehicleCatalogue: CatalogueVehicle[] = [
       "130.763 mi"
     ]
   ],
-  "description": "Toyota C-HR XLE 2018 con 130.763 millas reportadas al momento de compra. Fotografía original de esta unidad proporcionada por el propietario. Precio de venta, documentación y disponibilidad para entrega pendientes de confirmar.",
+  "description": "Toyota C-HR XLE 2018 con 130.763 millas reportadas al momento de compra. Portada con fondo industrial editado a partir de la foto de esta unidad; la fotografía original se conserva en la galería. Precio de venta, documentación y disponibilidad para entrega pendientes de confirmar.",
   "photos": [
     {
-      "src": "/vehicles/toyota-c-hr-xle-2018/portada.webp",
+      "src": "/vehicles/toyota-c-hr-xle-2018/portada-industrial.webp",
+      "caption": "Esta unidad · fondo industrial editado"
+    },
+    {
+      "src": "/vehicles/toyota-c-hr-xle-2018/original.webp",
       "caption": "Fotografía original de esta unidad · vista delantera en diagonal"
     }
   ]
@@ -781,7 +786,7 @@ export const vehicleCatalogue: CatalogueVehicle[] = [
   "price": null,
   "bodyStyle": "Sedán",
   "referenceImage": true,
-  "photoNotice": "Foto de referencia de un Civic LX. No corresponde a la unidad DX-VP en inventario.",
+  "photoNotice": "Foto de referencia de un Civic LX con fondo industrial editado. No corresponde a la unidad DX-VP en inventario.",
   "specs": [
     [
       "Año",
@@ -800,11 +805,11 @@ export const vehicleCatalogue: CatalogueVehicle[] = [
       "Gris"
     ]
   ],
-  "description": "Honda Civic sedán DX-VP 2010, con 146.093 millas reportadas al momento de compra. Precio de venta, estado mecánico y documentación pendientes de confirmar. La fotografía muestra otro Civic LX: no representa esta unidad DX-VP, su condición, color exacto ni equipamiento. Fotos reales pendientes.",
+  "description": "Honda Civic sedán DX-VP 2010, con 146.093 millas reportadas al momento de compra. Precio de venta, estado mecánico y documentación pendientes de confirmar. La fotografía, con fondo industrial editado, muestra otro Civic LX: no representa esta unidad DX-VP, su condición, color exacto ni equipamiento. Fotos reales pendientes.",
   "photos": [
     {
-      "src": "/vehicles/honda-civic-dx-vp-2010/portada.webp",
-      "caption": "Referencia de otro Civic LX 2010 · no es la unidad DX-VP en inventario"
+      "src": "/vehicles/honda-civic-dx-vp-2010/portada-industrial.webp",
+      "caption": "Referencia de otro Civic LX 2010 · fondo industrial editado, no es la unidad DX-VP en inventario"
     }
   ]
 },

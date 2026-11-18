@@ -9,7 +9,7 @@ test('Nov 18 purchases retain unspecified prices, exact mileage, and disclosed p
  const cars=['toyota-c-hr-xle-2018','honda-civic-dx-vp-2010'].map(slug=>vehicleCatalogue.find(v=>v.slug===slug)!);
  assert.deepEqual(cars.map(c=>c.price),[null,null]);
  assert.deepEqual(cars.map(c=>c.specs.find(([k])=>k==='Millaje')?.[1]),['130.763 mi','146.093 mi']);
- assert.ok(cars[0].originalPhotos); assert.ok(cars[1].referenceImage);
+ assert.ok(cars[0].originalPhotos); assert.equal(cars[0].photos.length,2); assert.match(cars[0].photoNotice!,/fondo industrial editado/); assert.match(cars[0].photos[1].caption,/Fotografía original/); assert.ok(cars[1].referenceImage);
  assert.match(cars[1].photoNotice!,/No corresponde a la unidad DX-VP/);
  for(const c of cars){
   assert.doesNotMatch(JSON.stringify(c),/NMTKHMBX6JR061269|2HGFA1F37AH503165|6,425|985|purchase_cents|title date/i);
