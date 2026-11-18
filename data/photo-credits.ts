@@ -1,5 +1,12 @@
 export type PhotoCredit = { author:string; sourceUrl:string; license:string; licenseUrl:string; changes:string };
 export const photoCredits:Record<string,PhotoCredit>={
+"/vehicles/honda-civic-dx-vp-2010/portada.webp": {
+  "author": "RL GNZLZ",
+  "sourceUrl": "https://commons.wikimedia.org/wiki/File:Honda_Civic_LX_2010_(50193844442).jpg",
+  "license": "CC BY-SA 2.0",
+  "licenseUrl": "https://creativecommons.org/licenses/by-sa/2.0/",
+  "changes": "Redimensionada y convertida a WebP; sin cambios de apariencia. Adaptación bajo CC BY-SA 2.0. Es otro Civic LX, no esta unidad DX-VP."
+},
   "/vehicles/jeep-wrangler-2017/portada.webp": {
     "author": "HJUdall",
     "sourceUrl": "https://commons.wikimedia.org/wiki/File:18_Jeep_Wrangler_JK_Unlimited_Sport_S.jpg",

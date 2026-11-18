@@ -746,5 +746,66 @@ export const vehicleCatalogue: CatalogueVehicle[] = [
         "caption": "Panel de la puerta"
       }
     ]
-  }
+  },
+  {
+  "slug": "toyota-c-hr-xle-2018",
+  "title": "Toyota C-HR XLE 2018",
+  "price": null,
+  "bodyStyle": "Crossover",
+  "originalPhotos": true,
+  "specs": [
+    [
+      "Año",
+      "2018"
+    ],
+    [
+      "Versión",
+      "XLE"
+    ],
+    [
+      "Millaje",
+      "130.763 mi"
+    ]
+  ],
+  "description": "Toyota C-HR XLE 2018 con 130.763 millas reportadas al momento de compra. Fotografía original de esta unidad proporcionada por el propietario. Precio de venta, documentación y disponibilidad para entrega pendientes de confirmar.",
+  "photos": [
+    {
+      "src": "/vehicles/toyota-c-hr-xle-2018/portada.webp",
+      "caption": "Fotografía original de esta unidad · vista delantera en diagonal"
+    }
+  ]
+},
+{
+  "slug": "honda-civic-dx-vp-2010",
+  "title": "Honda Civic DX-VP 2010",
+  "price": null,
+  "bodyStyle": "Sedán",
+  "referenceImage": true,
+  "photoNotice": "Foto de referencia de un Civic LX. No corresponde a la unidad DX-VP en inventario.",
+  "specs": [
+    [
+      "Año",
+      "2010"
+    ],
+    [
+      "Versión",
+      "DX-VP"
+    ],
+    [
+      "Millaje",
+      "146.093 mi"
+    ],
+    [
+      "Exterior",
+      "Gris"
+    ]
+  ],
+  "description": "Honda Civic sedán DX-VP 2010, con 146.093 millas reportadas al momento de compra. Precio de venta, estado mecánico y documentación pendientes de confirmar. La fotografía muestra otro Civic LX: no representa esta unidad DX-VP, su condición, color exacto ni equipamiento. Fotos reales pendientes.",
+  "photos": [
+    {
+      "src": "/vehicles/honda-civic-dx-vp-2010/portada.webp",
+      "caption": "Referencia de otro Civic LX 2010 · no es la unidad DX-VP en inventario"
+    }
+  ]
+},
 ];

@@ -6,6 +6,7 @@ import type { Publication } from './publication';
 // explicitly linked here despite null catalogue_slug; no fuzzy match or DB write.
 // The three Nov 2 purchases were explicitly approved for reference-image publication.
 // Only these reviewed listings are enabled. This is not an auto-publish rule.
+// Two new purchases approved for public display on November 18, 2026.
 const links = [
  ['mazda6-grand-touring-2016','9ed4405e-0fb2-400d-b6bd-993f90adba93'],
  ['hyundai-elantra-eco-2018','4a3a2492-e2c7-4e12-8785-908cfc6b1b49'],
@@ -18,6 +19,8 @@ const links = [
  ['ford-explorer-xlt-2013','5d28a003-3168-4492-8d2d-8ee35bf99f04'],
  ['subaru-forester-2015','876d7e39-9be5-499e-8af4-85fbc600d79f'],
  ['subaru-impreza-2016','288babdd-920e-4da6-ad52-2c47c762cfa7'],
+ ['toyota-c-hr-xle-2018','d152bcc4-8d52-4dc8-9fab-71f51d600759'],
+ ['honda-civic-dx-vp-2010','dea057e8-2353-46ee-9542-892a6aa96b76'],
 ] as const;
 // Owner-approved public preview only; private asking remains undefined.
 export const publicationManifest:readonly Publication[]=links.map(([slug,vehicleId])=>({slug,vehicleId,enabled:true,...(slug==='volvo-s60-inscription-2019'?{previewPriceCents:1290000}:{}),
