@@ -3,7 +3,7 @@
 import { useSearchParams } from 'next/navigation';
 import { useRef, useSyncExternalStore } from 'react';
 import type { CatalogueVehicle } from '@/data/vehicle-catalogue';
-import { filterCatalogue, readCatalogueFilters, vehicleMake, updateCatalogueParams, catalogueQuery, type CatalogueParam, catalogueAvailability } from '@/lib/vehicles/catalogue';
+import { filterCatalogue, readCatalogueFilters, vehicleMake, updateCatalogueParams, catalogueQuery, catalogueParams, type CatalogueParam, catalogueAvailability, catalogueBodyTypes } from '@/lib/vehicles/catalogue';
 import { catalogueHistorySnapshot, replaceCatalogueHistory, subscribeCatalogueHistory } from '@/lib/vehicles/catalogue-history';
 import { useLiveCatalogue } from '@/lib/vehicles/use-live-catalogue';
 import VehicleCards from './VehicleCards';
@@ -21,7 +21,7 @@ export default function VehicleExplorer({ vehicles:initial }: { vehicles: Catalo
   const filters = readCatalogueFilters(params);
   const matches = filterCatalogue(vehicles, filters);
   const makes = [...new Set(vehicles.map(vehicleMake))];
-  const filtered = !!filters.query || !!filters.make || !!filters.availability;
+  const filtered = !!filters.query || !!filters.make || !!filters.availability || !!filters.bodyType;
 
   function update(key: CatalogueParam, value: string) {
     const next = updateCatalogueParams(new URLSearchParams(catalogueHistorySnapshot()), key, value);
@@ -29,7 +29,7 @@ export default function VehicleExplorer({ vehicles:initial }: { vehicles: Catalo
   }
   function reset() {
     const next = new URLSearchParams(catalogueHistorySnapshot());
-    ['buscar', 'marca', 'orden', 'disponibilidad'].forEach(key => next.delete(key));
+    catalogueParams.forEach(key => next.delete(key));
     replaceCatalogueHistory(next);
     searchInput.current?.focus({preventScroll:true});
     searchInput.current?.scrollIntoView({block:'center',behavior:'instant'});
@@ -38,6 +38,7 @@ export default function VehicleExplorer({ vehicles:initial }: { vehicles: Catalo
     <div className={styles.inventoryLabel}><h2 id="inventory-title">Encuentra el que va contigo.</h2><span className={styles.inventoryCount}>{vehicles.length} vehículos publicados</span></div>
     <div className={styles.explorerControls}>
       <label className={styles.searchField}><span>Busca por modelo o característica</span><div><svg viewBox="0 0 24 24" fill="none" aria-hidden="true"><circle cx="10.5" cy="10.5" r="6.5" /><path d="m16 16 4.5 4.5" /></svg><input ref={searchInput} type="search" value={filters.query} maxLength={100} onChange={event => update('buscar', event.target.value)} placeholder="Ej. Ford, 2016, blanco…" autoComplete="off" /></div></label>
+      <label className={styles.sortField}><span>Tipo de carro</span><select value={filters.bodyType} onChange={event => update('tipo', event.target.value)}><option value="">Todos los tipos</option>{catalogueBodyTypes.map(({value,label}) => <option key={value} value={value}>{label}</option>)}</select></label>
       <label className={styles.sortField}><span>Ordenar por</span><select value={filters.sort} onChange={event => update('orden', event.target.value)}><option value="featured">Orden del catálogo</option><option value="price-asc">Precio: menor a mayor</option><option value="price-desc">Precio: mayor a menor</option><option value="year-desc">Año: más reciente</option><option value="mileage-asc">Menor millaje</option></select></label>
     </div>
     <div className={styles.availabilityFilters} role="group" aria-label="Filtrar por disponibilidad">
@@ -48,7 +49,7 @@ export default function VehicleExplorer({ vehicles:initial }: { vehicles: Catalo
       <div className={styles.makeFilters} role="group" aria-label="Filtrar por marca"><button data-dp-button="chip" type="button" aria-pressed={!filters.make} onClick={() => update('marca', '')}>Todas las marcas</button>{makes.map(make => <button data-dp-button="chip" type="button" key={make} aria-pressed={filters.make.toLowerCase() === make.toLowerCase()} onClick={() => update('marca', make)}>{make}<span>{vehicles.filter(vehicle => vehicleMake(vehicle) === make).length}</span></button>)}</div>
       <p className={styles.resultCount} role="status" aria-live="polite" aria-atomic="true">{filtered ? `${matches.length} de ${vehicles.length} vehículos` : `${matches.length} vehículos`}{(filtered || filters.sort !== 'featured') && <button data-dp-button="quiet" type="button" onClick={reset}>Restablecer</button>}</p>
     </div>
-    {matches.length ? <VehicleCards vehicles={matches} priority search={catalogueQuery(params)} /> : <div className={styles.emptyResults}><span className={styles.eyebrow}>SIN COINCIDENCIAS</span><h3>Probemos con otra búsqueda.</h3><p>No hay vehículos que coincidan con estos filtros. Prueba otra marca, un modelo o un año.</p><button data-dp-button="primary" type="button" onClick={reset}>Ver todo el inventario <ArrowIcon direction="right" /></button></div>}
+    {matches.length ? <VehicleCards vehicles={matches} priority search={catalogueQuery(params)} /> : <div className={styles.emptyResults}><span className={styles.eyebrow}>SIN COINCIDENCIAS</span><h3>Probemos con otra búsqueda.</h3><p>No hay vehículos que coincidan con estos filtros. Prueba otro tipo de carro, marca o disponibilidad.</p><button data-dp-button="primary" type="button" onClick={reset}>Ver todo el inventario <ArrowIcon direction="right" /></button></div>}
     <p className={styles.catalogueNote}>Datos proporcionados por el vendedor. Revisa las notas de cada imagen: algunas portadas son editadas o provisionales. Solicita fotos actuales antes de comprar.</p>
   </section>;
 }

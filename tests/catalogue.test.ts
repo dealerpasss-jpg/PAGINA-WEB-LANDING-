@@ -1,7 +1,7 @@
 import test from 'node:test';
 import assert from 'node:assert/strict';
 import { vehicleCatalogue } from '../data/vehicle-catalogue.ts';
-import { defaultCatalogueFilters, filterCatalogue, readCatalogueFilters } from '../lib/vehicles/catalogue.ts';
+import { defaultCatalogueFilters, filterCatalogue, readCatalogueFilters, vehicleBodyType } from '../lib/vehicles/catalogue.ts';
 
 test('catalogue includes the approved November vehicles and preserves previous vehicle order', () => {
   assert.equal(vehicleCatalogue.length, 16);
@@ -32,9 +32,37 @@ test('sort uses cents and numerical years/mileage without mutating source', () =
 });
 test('shared filter URLs validate sort and bound input length', () => {
   assert.deepEqual(readCatalogueFilters(new URLSearchParams()), defaultCatalogueFilters);
-  assert.deepEqual(readCatalogueFilters(new URLSearchParams('marca=Ford&buscar=2016&orden=price-asc')), { query: '2016', make: 'Ford', sort: 'price-asc', availability:'' });
+  assert.deepEqual(readCatalogueFilters(new URLSearchParams('marca=Ford&buscar=2016&orden=price-asc')), { query: '2016', make: 'Ford', sort: 'price-asc', availability:'', bodyType:'' });
   assert.equal(readCatalogueFilters(new URLSearchParams('orden=invalid')).sort, 'featured');
   assert.equal(readCatalogueFilters(new URLSearchParams({ buscar: 'a'.repeat(1000) })).query.length, 100);
+});
+
+test('body type classifies all approved listings and includes crossovers in SUV', () => {
+  const byType = (tipo: string) => filterCatalogue(vehicleCatalogue, readCatalogueFilters(new URLSearchParams({tipo}))).map(v=>v.slug);
+  const suvs = byType('suv');
+  assert.deepEqual(suvs, [
+    'jeep-wrangler-2017', 'ford-escape-2014', 'mercedes-benz-gla-250-2016',
+    'ford-escape-se-2016', 'ford-edge-2021', 'ford-edge-titanium-2018',
+    'ford-explorer-xlt-2013', 'subaru-forester-2015', 'toyota-c-hr-xle-2018',
+  ]);
+  assert.equal(byType('Sedán').length, 6);
+  assert.ok(byType('sedan').includes('honda-civic-dx-vp-2010'));
+  assert.deepEqual(byType('hatchback'), ['subaru-impreza-2016']);
+  assert.equal(vehicleCatalogue.filter(v=>!vehicleBodyType(v)).length, 0);
+});
+
+test('body type composes with availability, make, search and canonical return URL', async () => {
+  const {catalogueQuery,updateCatalogueParams} = await import('../lib/vehicles/catalogue.ts');
+  const cars = vehicleCatalogue.map(v=>({...v,availability:v.slug==='ford-escape-2014'?'coming-soon' as const:'available' as const}));
+  const params = new URLSearchParams('tipo=SUV&disponibilidad=available&marca=Ford&orden=year-desc&next=https://example.com');
+  assert.deepEqual(filterCatalogue(cars,readCatalogueFilters(params)).map(v=>v.slug),[
+    'ford-edge-2021', 'ford-edge-titanium-2018', 'ford-escape-se-2016', 'ford-explorer-xlt-2013',
+  ]);
+  assert.equal(catalogueQuery(params),'marca=Ford&tipo=suv&disponibilidad=available&orden=year-desc');
+  assert.equal(filterCatalogue(cars,readCatalogueFilters(updateCatalogueParams(params,'buscar','Edge'))).length,2);
+  assert.equal(updateCatalogueParams(params,'tipo','').has('tipo'),false);
+  assert.equal(readCatalogueFilters(new URLSearchParams('tipo=constructor')).bodyType,'');
+  assert.equal(catalogueQuery(new URLSearchParams('tipo=//example.com')),'');
 });
 
 test('URL updates only treat featured as the sort default, never as search text', async () => {
